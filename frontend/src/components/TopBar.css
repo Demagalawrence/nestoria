@@ -1,0 +1,90 @@
+.logisco-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f7ede2;
+  height: 40px;
+  position: relative;
+  z-index: 1002;
+  font-size: 0.8rem;
+  color: #555;
+  width: 100%;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding-left: 4rem;
+  flex: 1;
+}
+
+.topbar-info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.loc-item {
+  margin-left: auto;
+  margin-right: 50px;
+}
+
+.loc-item strong {
+  color: #333;
+}
+
+/* Orange Slanted Background */
+.topbar-right-bg {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 25%;
+  background-color: var(--accent-orange);
+  clip-path: polygon(20px 0, 100% 0, 100% 100%, 0% 100%);
+  z-index: 1;
+}
+
+.topbar-right-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding-right: 4rem;
+  color: white;
+  height: 100%;
+}
+
+.reach-us {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.topbar-socials {
+  display: flex;
+  gap: 12px;
+}
+
+.topbar-socials a {
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s;
+}
+
+.topbar-socials a:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 992px) {
+  .topbar-right-bg { width: 35%; }
+  .loc-item { margin-right: 20px; }
+  .topbar-left { padding-left: 2rem; gap: 15px; font-size: 0.75rem; }
+}
+
+@media (max-width: 768px) {
+  .logisco-topbar { display: none; } /* Hide on mobile for cleaner navbar */
+}

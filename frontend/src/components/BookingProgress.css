@@ -1,0 +1,96 @@
+.booking-progress-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 40px auto;
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.progress-track {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.step-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.step-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  border: 2px solid #165c56;
+}
+
+.step-circle.completed {
+  background-color: #165c56;
+  color: white;
+}
+
+.step-circle.pending {
+  background-color: white;
+  color: #7da09d;
+  border: 2px solid #dbe2e0;
+}
+
+.check-icon {
+  color: white;
+}
+
+.step-number {
+  font-weight: 600;
+}
+
+.step-label {
+  position: absolute;
+  top: 45px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  white-space: nowrap;
+}
+
+.step-label.active-label {
+  color: #165c56;
+  font-weight: 700;
+}
+
+.progress-line {
+  flex: 1;
+  height: 8px;
+  margin: 0 -5px; /* Pull line slightly under circles */
+  z-index: 1;
+}
+
+.progress-line.completed-line {
+  background-color: #165c56;
+}
+
+.progress-line.pending-line {
+  background-color: #dbe2e0;
+}
+
+@media (max-width: 600px) {
+  .step-label {
+    font-size: 10px;
+    top: 40px;
+  }
+  .step-circle {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,19 @@
+.blank-input, .blank-select {
+  border: none;
+  background: transparent;
+  padding: 4px 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  font-family: inherit;
+  width: 100%;
+}
+
+.blank-input:focus, .blank-select:focus {
+  outline: none;
+}
+
+.blank-select {
+  cursor: pointer;
+  appearance: none; /* Hide default arrow since we have our custom chevron in label */
+}

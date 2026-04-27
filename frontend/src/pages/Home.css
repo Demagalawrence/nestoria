@@ -1,0 +1,305 @@
+/* Home.css - NESTTORI Landing Page Refining */
+
+.nesttori-landing-container {
+  font-family: 'Inter', sans-serif;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #fff;
+}
+
+.nesttori-bg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(to right,
+      rgba(14, 25, 34, 0.85) 0%,
+      rgba(14, 25, 34, 0.7) 40%,
+      rgba(14, 25, 34, 0) 100%);
+  z-index: 1;
+}
+
+.nesttori-content-wrapper {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Header */
+.nesttori-header {
+  display: flex;
+  align-items: center;
+  padding: 2.5rem 5rem;
+  width: 100%;
+}
+
+.nesttori-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 5rem;
+}
+
+.nesttori-logo-icon-wrapper {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  background: transparent;
+}
+
+.nesttori-logo-waves {
+  position: absolute;
+  bottom: 8px;
+  width: 20px;
+  height: 2px;
+  border-bottom: 2px solid white;
+  border-top: 2px solid white;
+}
+
+.nesttori-logo-icon {
+  margin-bottom: 6px;
+  color: white;
+}
+
+.nesttori-brand-text {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.text-nest {
+  color: #ffffff;
+}
+
+.text-tori {
+  color: #ff6b52;
+  /* Dull reddish orange from the image */
+}
+
+.nesttori-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.nesttori-nav-links a {
+  color: #fff;
+  text-decoration: none;
+  transition: opacity 0.3s;
+}
+
+.nesttori-nav-links a:hover {
+  opacity: 0.7;
+}
+
+.nav-dot {
+  font-size: 0.5rem;
+  opacity: 0.5;
+}
+
+/* Main Content */
+.nesttori-main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 5rem;
+  padding-bottom: 2rem;
+}
+
+.nesttori-hero-left {
+  max-width: 600px;
+}
+
+.nesttori-brain-icon-wrapper {
+  background: #0b1120;
+  width: 85px;
+  height: 85px;
+  border-radius: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.brain-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nesttori-brain-icon {
+  color: #fff;
+}
+
+.brain-inner-home {
+  position: absolute;
+  color: #0b1120;
+  /* Same as bg to create negative space effect */
+  background: #fff;
+  /* Fill color to make it look like part of brain */
+  border-radius: 50%;
+  padding: 1px;
+}
+
+.nesttori-hero-title {
+  font-size: 4.8rem;
+  font-weight: 700;
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  letter-spacing: -1px;
+}
+
+.nesttori-hero-subtitle {
+  font-size: 1.15rem;
+  font-weight: 400;
+  margin-bottom: 3rem;
+  opacity: 0.9;
+}
+
+.nesttori-hero-buttons {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.nesttori-btn-solid {
+  background-color: #fff;
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  padding: 15px 35px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nesttori-btn-solid:hover {
+  background-color: #f0f0f0;
+}
+
+.nesttori-btn-outline {
+  background-color: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  padding: 15px 35px;
+  font-size: 1rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nesttori-btn-outline:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Social Footer */
+.nesttori-social-footer {
+  display: flex;
+  gap: 3rem;
+  padding: 2rem 5rem 3rem 5rem;
+  align-items: flex-start;
+}
+
+.social-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.social-item:hover {
+  opacity: 1;
+}
+
+.social-icon {
+  color: #fff;
+}
+
+.social-icon-x {
+  color: #fff;
+  font-size: 22px;
+  line-height: 20px;
+  font-weight: 300;
+}
+
+.social-icon-svg {
+  width: 20px;
+  height: 20px;
+  color: #fff;
+}
+
+.social-handle {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 1024px) {
+  .nesttori-header, .nesttori-main-content, .nesttori-social-footer {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  .nesttori-hero-title {
+    font-size: 3.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .nesttori-landing-container {
+    overflow-y: auto;
+    height: auto;
+    min-height: 100vh;
+  }
+  .nesttori-header {
+    padding: 1.5rem 1rem;
+  }
+  .nesttori-main-content {
+    padding: 1rem;
+    margin-top: 2rem;
+  }
+  .nesttori-hero-title {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+  }
+  .nesttori-nav-links {
+    display: none;
+  }
+  .nesttori-hero-buttons {
+    flex-direction: column;
+  }
+  .nesttori-btn-solid, .nesttori-btn-outline {
+    width: 100%;
+  }
+  .nesttori-social-footer {
+    padding: 2rem 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+}
