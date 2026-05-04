@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary-teal: #0F766E; /* Deep Teal from Nestoria */
-  --primary-color: var(--primary-teal);
-  --secondary-color: #0d5f56;
-  --accent-orange: #ff6b52; /* Tori Orange from Nestoria */
-  --accent-color: var(--accent-orange);
+  --primary-blue: #1D4ED8; /* Deep Teal from Nestoria */
+  --primary-color: var(--primary-blue);
+  --secondary-color: #1e40af;
+  --accent-green: #10B981; /* Tori Orange from Nestoria */
+  --accent-color: var(--accent-green);
   --text-dark: #0f172a;
   --text-light: #475569;
   --text-white: #ffffff;
-  --bg-color: #f8fafc; /* Clean neutral background */
+  --bg-color: #F1F5F9; /* Clean neutral background */
   
   --card-bg: #ffffff;
   --border-radius-lg: 16px;
@@ -129,13 +129,13 @@ img {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary-teal) 0%, var(--secondary-color) 100%);
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-color) 100%);
   color: white;
   border: none;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, var(--secondary-color) 0%, #0a4a43 100%);
+  background: linear-gradient(135deg, var(--secondary-color) 0%, #1e3a8a 100%);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
 }

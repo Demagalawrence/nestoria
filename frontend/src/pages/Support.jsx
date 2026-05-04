@@ -130,16 +130,16 @@ const Support = () => {
               </div>
               <div className="faq-list">
                 <div className="faq-item">
-                  <h3>How do I book a property?</h3>
-                  <p>Browse our listings, select your preferred property, choose your dates, and complete the booking process with secure payment.</p>
+                  <h3>How do I reserve a property?</h3>
+                  <p>Browse our listings, select your preferred property, choose your dates, and complete the reservation process with secure payment.</p>
                 </div>
                 <div className="faq-item">
                   <h3>What payment methods do you accept?</h3>
                   <p>We accept all major credit cards, debit cards, and secure online payment methods through our protected payment system.</p>
                 </div>
                 <div className="faq-item">
-                  <h3>Can I cancel my booking?</h3>
-                  <p>Yes, you can cancel your booking according to our cancellation policy. Check the specific terms for your property.</p>
+                  <h3>Can I cancel my reservation?</h3>
+                  <p>Yes, you can cancel your reservation according to our cancellation policy. Check the specific terms for your property.</p>
                 </div>
                 <div className="faq-item">
                   <h3>How do I list my property?</h3>

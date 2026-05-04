@@ -44,7 +44,7 @@ const Login = () => {
       if (loginResult.user?.role === 'admin') {
         navigate('/admin');
       } else {
-        navigate('/');
+        navigate('/properties');
       }
     } catch (err) {
       console.error('Login error:', err);

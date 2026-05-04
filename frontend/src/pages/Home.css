@@ -87,7 +87,7 @@
 }
 
 .text-tori {
-  color: #ff6b52;
+  color: #10B981;
   /* Dull reddish orange from the image */
 }
 
@@ -261,10 +261,14 @@
 }
 
 @media (max-width: 1024px) {
-  .nesttori-header, .nesttori-main-content, .nesttori-social-footer {
+
+  .nesttori-header,
+  .nesttori-main-content,
+  .nesttori-social-footer {
     padding-left: 2rem;
     padding-right: 2rem;
   }
+
   .nesttori-hero-title {
     font-size: 3.8rem;
   }
@@ -276,26 +280,34 @@
     height: auto;
     min-height: 100vh;
   }
+
   .nesttori-header {
     padding: 1.5rem 1rem;
   }
+
   .nesttori-main-content {
     padding: 1rem;
     margin-top: 2rem;
   }
+
   .nesttori-hero-title {
     font-size: 2.8rem;
     margin-bottom: 1rem;
   }
+
   .nesttori-nav-links {
     display: none;
   }
+
   .nesttori-hero-buttons {
     flex-direction: column;
   }
-  .nesttori-btn-solid, .nesttori-btn-outline {
+
+  .nesttori-btn-solid,
+  .nesttori-btn-outline {
     width: 100%;
   }
+
   .nesttori-social-footer {
     padding: 2rem 1rem;
     flex-wrap: wrap;

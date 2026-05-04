@@ -38,14 +38,14 @@
    justify-content: center;
    align-items: center;
    border-radius: 50%;
-   background: linear-gradient(135deg, #0F766E 0%, #0d5f56 100%);
+   background: linear-gradient(135deg, #1D4ED8 0%, #1e40af 100%);
    border: 2px solid rgba(15, 118, 110, 0.2);
    transition: all 0.3s ease;
    box-shadow: 0 2px 8px rgba(15, 118, 110, 0.2);
 }
 
 .logo-icon-wrapper:hover {
-   background: linear-gradient(135deg, #0d5f56 0%, #0a4a43 100%);
+   background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
    border-color: rgba(15, 118, 110, 0.4);
    transform: translateY(-2px);
 }
@@ -114,11 +114,11 @@
 }
 
 .text-nest {
-   color: #0F766E;
+   color: #1D4ED8;
 }
 
 .text-tori {
-   color: #ff6b52; 
+   color: #10B981; 
 }
 
 .navbar-nav-links {
@@ -138,12 +138,12 @@
 }
 
 .navbar-nav-links a:hover {
-   color: #0F766E;
+   color: #1D4ED8;
    transform: translateY(-1px);
 }
 
 .navbar-nav-links a.active {
-   color: #0F766E;
+   color: #1D4ED8;
    font-weight: 700;
 }
 
@@ -170,7 +170,7 @@
    width: 36px;
    height: 36px;
    border-radius: 50%;
-   background: linear-gradient(135deg, #0F766E 0%, #0d5f56 100%);
+   background: linear-gradient(135deg, #1D4ED8 0%, #1e40af 100%);
    border: 2px solid rgba(15, 118, 110, 0.2);
    display: flex;
    justify-content: center;
@@ -188,7 +188,7 @@
 
 .call-text strong {
    font-size: 0.9rem;
-   color: #0F766E;
+   color: #1D4ED8;
    font-weight: 700;
 }
 
@@ -207,7 +207,7 @@
 .req-quote-btn {
    padding: 8px 20px;
    border-radius: 8px;
-   background: linear-gradient(135deg, #0F766E 0%, #0d5f56 100%);
+   background: linear-gradient(135deg, #1D4ED8 0%, #1e40af 100%);
    color: white;
    text-decoration: none;
    font-weight: 600;
@@ -219,7 +219,7 @@
 }
 
 .req-quote-btn:hover {
-   background: linear-gradient(135deg, #0d5f56 0%, #0a4a43 100%);
+   background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
    transform: translateY(-1px);
    box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
 }
@@ -231,19 +231,19 @@
 }
 
 .logout-btn:hover {
-   background: #f8fafc;
+   background: #F1F5F9;
    border-color: #cbd5e1;
    color: #475569;
 }
 
 .register-btn {
    background: transparent;
-   color: #0F766E;
-   border: 1px solid #0F766E;
+   color: #1D4ED8;
+   border: 1px solid #1D4ED8;
 }
 
 .register-btn:hover {
-   background: #0F766E;
+   background: #1D4ED8;
    color: white;
 }
 
@@ -402,7 +402,7 @@
    align-items: center;
    padding: 16px 20px;
    border-bottom: 1px solid #e2e8f0;
-   background: #f8fafc;
+   background: #F1F5F9;
 }
 
 .notification-header h4 {
@@ -415,7 +415,7 @@
 .mark-all-read-btn {
    background: none;
    border: none;
-   color: #0F766E;
+   color: #1D4ED8;
    font-size: 12px;
    font-weight: 500;
    cursor: pointer;
@@ -444,7 +444,7 @@
 }
 
 .notification-item:hover {
-   background: #f8fafc;
+   background: #F1F5F9;
 }
 
 .notification-item.unread {
@@ -498,7 +498,7 @@
    right: 16px;
    width: 8px;
    height: 8px;
-   background: #0F766E;
+   background: #1D4ED8;
    border-radius: 50%;
 }
 

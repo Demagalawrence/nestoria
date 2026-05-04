@@ -143,7 +143,7 @@ const Reservations = () => {
         <div className="reservations-header-section">
           <div className="reservations-container">
             <h1 className="page-title">My Reservations</h1>
-            <p className="page-subtitle">Manage your current and past bookings</p>
+            <p className="page-subtitle">Manage your current and past reservations</p>
           </div>
         </div>
         <div className="reservations-container">
@@ -161,7 +161,7 @@ const Reservations = () => {
       <div className="reservations-header-section">
         <div className="reservations-container">
           <h1 className="page-title">My Reservations</h1>
-          <p className="page-subtitle">Manage your current and past bookings</p>
+          <p className="page-subtitle">Manage your current and past reservations</p>
         </div>
       </div>
 
@@ -179,7 +179,7 @@ const Reservations = () => {
               <Calendar size={48} />
             </div>
             <h2>No Reservations Found</h2>
-            <p>Looks like you haven't booked any properties yet. Start exploring our premium properties today!</p>
+            <p>Looks like you haven't reserved any properties yet. Start exploring our premium properties today!</p>
             <button className="browse-btn" onClick={() => navigate('/search')}>
               Browse Properties
             </button>
@@ -190,7 +190,7 @@ const Reservations = () => {
               <div key={booking.id} className="reservation-card">
                 <div className="reservation-header">
                   <div className="reservation-id">
-                    <span className="label">Booking Ref:</span>
+                    <span className="label">Reservation Ref:</span>
                     <span className="value">{booking.booking_reference || `#${booking.id}`}</span>
                   </div>
                   <div className={`reservation-status ${booking.status?.toLowerCase()}`}>
@@ -245,7 +245,7 @@ const Reservations = () => {
                   <div className="reservation-actions">
                     {booking.status?.toLowerCase() !== 'cancelled' && booking.status?.toLowerCase() !== 'completed' ? (
                       <button 
-                        className="cancel-booking-btn"
+                        className="cancel-reservation-btn"
                         onClick={() => handleCancelBooking(booking.id, booking.booking_reference)}
                         disabled={cancellingId === booking.id}
                       >
@@ -257,7 +257,7 @@ const Reservations = () => {
                         ) : (
                           <>
                             <XCircle size={16} />
-                            Cancel Booking
+                            Cancel Reservation
                           </>
                         )}
                       </button>

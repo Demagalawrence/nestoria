@@ -41,7 +41,7 @@
   top: 0;
   height: 100%;
   width: 25%;
-  background-color: var(--accent-orange);
+  background-color: var(--accent-green);
   clip-path: polygon(20px 0, 100% 0, 100% 100%, 0% 100%);
   z-index: 1;
 }

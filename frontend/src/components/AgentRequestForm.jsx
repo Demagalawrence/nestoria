@@ -101,8 +101,8 @@ const AgentRequestForm = ({
       },
       booking_assistance: {
         icon: <Calendar size={16} />,
-        title: 'Booking Assistance',
-        description: 'Help with booking process',
+        title: 'Reservation Assistance',
+        description: 'Help with reservation process',
         color: '#10b981'
       },
       negotiation: {
@@ -202,7 +202,7 @@ const AgentRequestForm = ({
               {Object.entries({
                 property_viewing: 'Schedule Property Visit',
                 property_consultation: 'Property Information',
-                booking_assistance: 'Booking Help',
+                booking_assistance: 'Reservation Help',
                 negotiation: 'Price Negotiation',
                 document_help: 'Document Assistance',
                 general_inquiry: 'General Questions'

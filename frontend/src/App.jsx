@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import Home from './pages/Home'
@@ -19,15 +19,21 @@ import About from './pages/About'
 import Support from './pages/Support'
 import Location from './pages/Location'
 import Reservations from './pages/Reservations'
+import TermsOfService from './pages/TermsOfService'
+import PrivacyPolicy from './pages/PrivacyPolicy'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import AIChat from './components/AIChat'
+import SplashScreen from './components/SplashScreen'
 import './App.css'
 
 function App() {
+  const [loading, setLoading] = useState(true);
+
   return (
     <AuthProvider>
       <Router>
+        {loading && <SplashScreen finishLoading={() => setLoading(false)} />}
         <div className="global-page-wrapper">
           {/* Clean global wrapper without obsolete shapes */}
           <div className="global-content-wrapper">
@@ -51,6 +57,8 @@ function App() {
                         <Route path="/about" element={<About />} />
             <Route path="/location" element={<Location />} />
             <Route path="/support" element={<Support />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
           </Routes>
           <Footer />
           </div>

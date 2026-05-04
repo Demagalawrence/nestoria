@@ -46,7 +46,7 @@
   padding: 48px 24px;
   border: 2px dashed #e2e8f0;
   border-radius: 12px;
-  background: #f8fafc;
+  background: #F1F5F9;
 }
 
 .map-placeholder svg {
@@ -130,7 +130,7 @@
 }
 
 .stat {
-  background: #f8fafc;
+  background: #F1F5F9;
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 12px;
@@ -139,7 +139,7 @@
 }
 
 .location-cta {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1D4ED8 0%, #064E3B 100%);
   color: white;
   padding: 48px;
   border-radius: 16px;

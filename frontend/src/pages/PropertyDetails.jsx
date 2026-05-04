@@ -130,7 +130,7 @@ const PropertyDetails = () => {
             <div className="contact-card sticky-card">
               <h3>Contact Agent</h3>
               <div className="agent-info">
-                <div className="agent-avatar"><User size={24} color="#ff6b52" /></div>
+                <div className="agent-avatar"><User size={24} color="#10B981" /></div>
                 <div className="agent-details">
                   <span className="agent-name">{property.contact_person || 'Agent'}</span>
                   <span className="agent-role">Property Manager</span>
@@ -182,7 +182,7 @@ const PropertyDetails = () => {
                 </button>
               ) : (
                 <Link to={`/booking/${property.id}`} className="book-btn">
-                  Book this Property
+                  Reserve this Property
                 </Link>
               )}
               

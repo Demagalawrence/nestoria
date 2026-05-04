@@ -8,10 +8,11 @@ from datetime import datetime, timedelta
 
 class AIService:
     """
-    Main AI Service for handling user queries and generating intelligent responses
+    Specialized Real Estate AI Service for Uganda rental properties
     """
     
     def __init__(self):
+        # Enhanced intent patterns for real estate domain
         self.intent_patterns = {
             'property_search': [
                 r'find.*property', r'search.*property', r'looking.*for',
@@ -48,7 +49,90 @@ class AIService:
             'faq': [
                 r'what.*is', r'how.*does', r'can.*i', r'do.*you',
                 r'help.*me', r'support', r'contact'
+            ],
+            'uganda_locations': [
+                r'kampala', r'entebbe', r'jinja', r'mbarara', r'gulu',
+                r'makerere', r'muk', r'kyambogo', r'kabale', r'fort portal',
+                r'masaka', r'mbale', r'soroti', r'arua', r'lira',
+                r'nansana', r'kira', r'makindye', r'kawempe', r'rubaga',
+                r'nakawa', r'central', r'kololo', r'bugolobi', r'ntinda'
+            ],
+            'property_types': [
+                r'apartment', r'hostel', r'self.*contained', r'bedsitter',
+                r'single.*room', r'double.*room', r'family.*house',
+                r'studio', r'flat', r'condominium', r'townhouse',
+                r'guest.*house', r'serviced.*apartment', r'furnished',
+                r'unfurnished', r'semi.*furnished'
+            ],
+            'budget_ranges': [
+                r'under.*\d+', r'below.*\d+', r'cheap', r'affordable',
+                r'budget.*friendly', r'economic', r'low.*cost',
+                r'ugx.*\d+', r'shilling.*\d+', r'price.*range'
+            ],
+            'amenities_uganda': [
+                r'wifi', r'internet', r'generator', r'backup.*power',
+                r'solar', r'water.*tank', r'borehole', r'security',
+                r'guard', r'cctv', r'parking', r'balcony', r'gym',
+                r'swimming.*pool', r'playground', r'garden', r'fence',
+                r'gate', r'air.*condition', r'fans', r'wardrobe',
+                r'kitchen', r'shower', r'toilet', r'balcony'
+            ],
+            'rental_terms': [
+                r'monthly', r'quarterly', r'annually', r'deposit',
+                r'advance.*payment', r'utility.*bills', r'water.*bill',
+                r'electricity.*bill', r'garbage.*collection', r'cleaning',
+                r'maintenance', r'repair', r'lease.*agreement',
+                r'tenancy.*agreement', r'notice.*period'
             ]
+        }
+        
+        # Specialized real estate knowledge base
+        self.real_estate_knowledge = {
+            'uganda_property_market': {
+                'average_prices': {
+                    'kampala_studio': 300000,
+                    'kampala_one_bedroom': 500000,
+                    'kampala_two_bedroom': 800000,
+                    'entebbe_apartment': 400000,
+                    'makerere_hostel': 200000,
+                    'jinja_apartment': 350000,
+                    'mbarara_house': 600000
+                },
+                'popular_areas': {
+                    'kampala': ['Kololo', 'Ntinda', 'Bugolobi', 'Muyenga', 'Bukoto'],
+                    'makerere': ['Kikoni', 'Bwaise', 'Kawempe', 'Makerere Kikoni'],
+                    'entebbe': ['Entebbe Town', 'Katabi', 'Nabweru'],
+                    'jinja': ['Jinja Town', 'Masese', 'Walukuba']
+                },
+                'common_amenities': [
+                    'WiFi Internet', 'Generator Backup', 'Solar Power',
+                    'Security Guard', 'CCTV Surveillance', 'Parking Space',
+                    'Water Tank', 'Borehole Water', 'Balcony',
+                    'Air Conditioning', 'Wardrobe', 'Kitchen Cabinets'
+                ]
+            }
+        }
+        
+        # Enhanced response templates for real estate
+        self.response_templates = {
+            'property_search': {
+                'greeting': "🏠 I'd be happy to help you find the perfect property in Uganda!",
+                'location_specific': "📍 Looking for properties in {location}? Let me search for available options.",
+                'budget_friendly': "💰 For properties under UGX {budget}, I can suggest these affordable options:",
+                'amenity_focused': "✨ You're looking for properties with {amenities}? Here are some great matches:",
+                'student_housing': "🎓 For student accommodation near {university}, here are the best options:",
+            },
+            'pricing_info': {
+                'average_prices': "💵 Current average rental prices in Uganda range from UGX {min} to UGX {max} per month.",
+                'location_prices': "📍 In {location}, expect to pay between UGX {min} and UGX {max} for {property_type}.",
+                'negotiation_tip': "💡 Pro tip: Most landlords in Uganda are open to negotiation, especially for long-term leases!",
+            },
+            'uganda_specific': {
+                'power_backup': "⚡ Most properties in Uganda come with generator or solar backup due to occasional power outages.",
+                'security': "🔒 Security is a priority - most properties have 24/7 guards, CCTV, and perimeter walls.",
+                'water_supply': "💧 Water tanks and boreholes are common to ensure reliable water supply.",
+                'payment_terms': "💳 Typical payment terms: 1-3 months advance plus security deposit.",
+            }
         }
         
         self.price_keywords = {
@@ -250,7 +334,7 @@ class AIService:
         # Execute query
         properties = list(queryset[:10])  # Limit to 10 results
         
-        # Generate response
+        # Generate enhanced response using real estate language model
         if properties:
             property_list = []
             for prop in properties:
@@ -261,20 +345,21 @@ class AIService:
                     'location': f"{prop.village or prop.district}, {prop.district}",
                     'price': float(prop.rent_per_month),
                     'description': prop.description[:100] + '...' if len(prop.description) > 100 else prop.description,
-                    'image': prop.images.first().image.url if prop.images.exists() else None
+                    'image': prop.images.first().image.url if prop.images.exists() else None,
+                    'amenities': self.extract_amenities_from_description(prop.description),
+                    'price_range': self.categorize_price(float(prop.rent_per_month)),
+                    'uganda_specifics': self.get_uganda_specific_info(prop)
                 })
             
             response = f"I found {len(properties)} properties matching your criteria."
-            if entities['price_max']:
-                response += f" All are under UGX {entities['price_max']:,} per month."
-            if entities['location']:
-                response += f" Located near {', '.join(entities['location'])}."
             
             return {
-                'response': response,
+                'response': enhanced_response,
                 'properties': property_list,
                 'intent': 'property_search',
-                'total_results': len(properties)
+                'uganda_insights': self.get_uganda_market_insights(entities),
+                'suggestions': self.generate_real_estate_suggestions(entities, properties),
+                'market_tips': self.get_uganda_rental_tips()
             }
         else:
             response = "I couldn't find any properties matching your criteria. "
@@ -538,6 +623,115 @@ class AIService:
             'properties': [],
             'intent': 'faq'
         }
+
+    def generate_real_estate_response(self, properties, entities):
+        """Generate specialized real estate responses"""
+        response = f"🏠 I found {len(properties)} amazing properties in Uganda for you!\n\n"
+        
+        if entities['location']:
+            response += f"📍 **Location**: Near {', '.join(entities['location'])}\n"
+        
+        if entities['price_max']:
+            response += f"💰 **Budget**: Under UGX {entities['price_max']:,}/month\n"
+        
+        response += "\n**Featured Properties:**\n"
+        for i, prop in enumerate(properties[:3], 1):
+            response += f"\n{i}. **{prop.name}** - {prop.property_type}\n"
+            response += f"   📍 {prop.village or prop.district}, {prop.district}\n"
+            response += f"   💵 UGX {prop.rent_per_month:,}/month\n"
+            
+            # Add Uganda-specific insights
+            amenities = self.extract_amenities_from_description(prop.description)
+            if amenities:
+                response += f"   ✨ {', '.join(amenities[:3])}\n"
+        
+        response += f"\n🎯 **Uganda Market Tip**: {self.get_uganda_rental_tips()}"
+        
+        return response
+
+    def extract_amenities_from_description(self, description):
+        """Extract amenities from property description"""
+        amenities = []
+        common_amenities = self.real_estate_knowledge['uganda_property_market']['common_amenities']
+        
+        desc_lower = description.lower()
+        for amenity in common_amenities:
+            if any(word in desc_lower for word in amenity.lower().split()):
+                amenities.append(amenity)
+        
+        return amenities[:5]  # Return top 5 amenities
+
+    def categorize_price(self, price):
+        """Categorize property price for Uganda market"""
+        if price <= 150000:
+            return "Budget-Friendly"
+        elif price <= 300000:
+            return "Affordable"
+        elif price <= 600000:
+            return "Mid-Range"
+        elif price <= 1000000:
+            return "Premium"
+        else:
+            return "Luxury"
+
+    def get_uganda_specific_info(self, property):
+        """Get Uganda-specific property information"""
+        info = {
+            'power_backup': 'generator' in property.description.lower() or 'solar' in property.description.lower(),
+            'security': any(word in property.description.lower() for word in ['security', 'guard', 'cctv']),
+            'water_supply': any(word in property.description.lower() for word in ['tank', 'borehole', 'water']),
+            'parking': 'parking' in property.description.lower()
+        }
+        return info
+
+    def get_uganda_market_insights(self, entities):
+        """Provide Uganda-specific market insights"""
+        insights = []
+        
+        if entities['location']:
+            location = entities['location'][0].lower()
+            if 'kampala' in location:
+                insights.append("Kampala has the highest rental demand in Uganda")
+            elif 'makerere' in location:
+                insights.append("Makerere area is perfect for students - many hostels available")
+            elif 'entebbe' in location:
+                insights.append("Entebbe offers peaceful living near the airport")
+        
+        if entities['price_max'] and entities['price_max'] <= 200000:
+            insights.append("Budget properties get rented quickly - act fast!")
+        
+        return insights
+
+    def generate_real_estate_suggestions(self, entities, properties):
+        """Generate contextual suggestions for real estate"""
+        suggestions = []
+        
+        if properties:
+            suggestions.append("📞 Would you like me to help you contact the property owners?")
+            suggestions.append("📅 Need help with the booking process?")
+        
+        if entities['price_max']:
+            suggestions.append(f"💡 Consider properties slightly above UGX {entities['price_max']:,} for better amenities")
+        
+        if not entities['location']:
+            suggestions.append("🗺️ Want to explore properties in specific areas like Kampala, Entebbe, or Jinja?")
+        
+        suggestions.append("🔍 Ask me about security, power backup, or water supply - crucial for Uganda living!")
+        
+        return suggestions[:4]
+
+    def get_uganda_rental_tips(self):
+        """Provide Uganda-specific rental tips"""
+        tips = [
+            "Always ask about generator backup - power can be unreliable",
+            "Check water supply - tanks and boreholes are common solutions",
+            "Security is important - look for properties with guards and CCTV",
+            "Most landlords require 2-3 months advance payment plus deposit",
+            "Negotiate prices - most landlords are flexible, especially for long-term leases"
+        ]
+        
+        import random
+        return random.choice(tips)
 
 # Singleton instance
 ai_service = AIService()

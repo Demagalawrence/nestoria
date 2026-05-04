@@ -244,8 +244,13 @@
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Modern Summary */
@@ -315,7 +320,7 @@
 
 /* Price Section */
 .price-section {
-  background: #f8fafc;
+  background: #F1F5F9;
 }
 
 .price-item {
@@ -436,7 +441,7 @@
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  
+
   .modern-booking-summary {
     position: static;
   }
@@ -446,20 +451,20 @@
   .modern-booking-title {
     font-size: 2rem;
   }
-  
+
   .modern-form-row {
     grid-template-columns: 1fr;
     gap: 16px;
   }
-  
+
   .modern-booking-layout {
     gap: 30px;
   }
-  
+
   .modern-booking-form {
     padding: 24px;
   }
-  
+
   .modern-property-features {
     flex-direction: column;
     gap: 8px;

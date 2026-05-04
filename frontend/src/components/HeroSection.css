@@ -6,7 +6,7 @@
   height: 100vh;
   position: relative;
   max-width: 100%;
-  overflow: hidden; 
+  overflow: hidden;
   /* Family with modern house in warm sunset colors - golden hour */
   background-image: url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2500&q=80');
   background-size: cover;
@@ -22,13 +22,11 @@
   width: 65%;
   height: 100%;
   /* Warm sunset yellow/orange gradient that complements the golden hour colors */
-  background: linear-gradient(
-    to right, 
-    rgba(45, 25, 15, 0.92) 0%, 
-    rgba(65, 45, 25, 0.85) 30%, 
-    rgba(85, 65, 35, 0.75) 60%, 
-    rgba(105, 85, 45, 0) 100%
-  );
+  background: linear-gradient(to right,
+      rgba(45, 25, 15, 0.92) 0%,
+      rgba(65, 45, 25, 0.85) 30%,
+      rgba(85, 65, 35, 0.75) 60%,
+      rgba(105, 85, 45, 0) 100%);
   z-index: 1;
 }
 
@@ -65,7 +63,7 @@
   .right-side-person {
     right: 40px;
   }
-  
+
   .right-person-image {
     width: 100%;
     max-width: 450px;
@@ -87,7 +85,7 @@
     justify-content: center;
     margin: 20px 0;
   }
-  
+
   .right-person-image {
     width: 380px;
     max-height: 900px;
@@ -161,7 +159,7 @@
 }
 
 .text-tori {
-  color: #ff6b52; 
+  color: #10B981;
 }
 
 .nesttori-nav-links {
@@ -210,7 +208,8 @@
 
 .nesttori-hero-left {
   max-width: 650px;
-  margin-top: -50px; /* Shift content slightly up */
+  margin-top: -50px;
+  /* Shift content slightly up */
 }
 
 .nesttori-hero-title {
@@ -237,7 +236,7 @@
   font-size: 0.95rem;
   color: #333;
   outline: none;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .search-input::placeholder {
@@ -317,8 +316,8 @@
 
 .brain-inner-home {
   position: absolute;
-  color: #0b1120; 
-  background: #fff; 
+  color: #0b1120;
+  background: #fff;
   border-radius: 50%;
   padding: 1px;
 }
@@ -342,7 +341,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
   transition: transform 0.3s ease;
   cursor: pointer;
   color: #333;
@@ -530,13 +529,18 @@
 }
 
 @media (max-width: 1024px) {
-  .nesttori-header, .nesttori-main-content, .nesttori-social-footer {
+
+  .nesttori-header,
+  .nesttori-main-content,
+  .nesttori-social-footer {
     padding-left: 2rem;
     padding-right: 2rem;
   }
+
   .nesttori-hero-title {
     font-size: 3.5rem;
   }
+
   .floating-properties-row {
     left: 10%;
     transform: none;
@@ -550,25 +554,33 @@
     height: auto;
     min-height: 100vh;
   }
-  .nesttori-header, .nesttori-main-content, .nesttori-social-footer {
+
+  .nesttori-header,
+  .nesttori-main-content,
+  .nesttori-social-footer {
     padding-left: 1rem;
     padding-right: 1rem;
   }
+
   .nesttori-hero-title {
     font-size: 2.5rem;
     margin-top: 40px;
   }
+
   .search-bar-container {
     flex-direction: column;
     align-items: stretch;
   }
+
   .search-btn {
     width: 100%;
   }
+
   .categories-row {
     flex-wrap: wrap;
     gap: 1.5rem;
   }
+
   .floating-properties-row {
     position: relative;
     left: 0;
@@ -576,6 +588,7 @@
     margin-bottom: 2rem;
     justify-content: center;
   }
+
   .nesttori-social-footer {
     flex-wrap: wrap;
     justify-content: center;

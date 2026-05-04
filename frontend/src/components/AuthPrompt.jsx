@@ -21,7 +21,7 @@ const AuthPrompt = ({ isOpen, onClose, onLogin, onRegister }) => {
           </div>
           
           <h4>Login to Continue</h4>
-          <p>You need to be logged in to book a property. Please login or create an account to continue.</p>
+          <p>You need to be logged in to reserve a property. Please login or create an account to continue.</p>
           
           <div className="auth-actions">
             <button onClick={onLogin} className="btn-login">

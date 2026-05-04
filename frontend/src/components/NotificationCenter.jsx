@@ -32,9 +32,9 @@ const NotificationCenter = () => {
       setNotifications([
         {
           id: 1,
-          title: 'Booking Confirmed',
-          message: 'Your booking for Ocean Breeze Villa has been confirmed. Check-in is on March 20, 2024.',
-          type: 'booking',
+          title: 'Reservation Confirmed',
+          message: 'Your reservation for Ocean Breeze Villa has been confirmed. Check-in is on March 20, 2024.',
+          type: 'reservation',
           is_read: false,
           created_at: '2 hours ago',
           icon: Calendar
@@ -118,7 +118,7 @@ const NotificationCenter = () => {
 
   const getNotificationIcon = (type) => {
     switch (type) {
-      case 'booking':
+      case 'reservation':
         return Calendar;
       case 'payment':
         return DollarSign;
@@ -135,7 +135,7 @@ const NotificationCenter = () => {
 
   const getNotificationColor = (type) => {
     switch (type) {
-      case 'booking':
+      case 'reservation':
         return '#3b82f6';
       case 'payment':
         return '#10b981';

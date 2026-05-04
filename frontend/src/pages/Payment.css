@@ -1,6 +1,6 @@
 .payment-container {
   min-height: calc(100vh - 80px);
-  background: #f8fafc;
+  background: #F1F5F9;
   padding: 40px 20px 80px;
   margin-top: 80px;
 }
@@ -53,15 +53,15 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.booking-summary {
+.reservation-summary {
   margin-bottom: 32px;
   padding: 24px;
-  background: #f8fafc;
+  background: #F1F5F9;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
 }
 
-.booking-summary h3 {
+.reservation-summary h3 {
   margin: 0 0 20px 0;
   font-size: 18px;
   font-weight: 600;
@@ -172,7 +172,7 @@
 .payment-submit {
   padding: 16px 24px;
   border: none;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1D4ED8 0%, #064E3B 100%);
   color: white;
   border-radius: 8px;
   cursor: pointer;
@@ -319,7 +319,7 @@
   font-size: 12px;
   font-weight: 600;
   color: #64748b;
-  background: #f8fafc;
+  background: #F1F5F9;
 }
 
 .card-logo.visa {
@@ -428,7 +428,7 @@
 
 /* Receipt Styles */
 .receipt-details {
-  background: #f8fafc;
+  background: #F1F5F9;
   border: 2px solid #10b981;
   border-radius: 12px;
   padding: 24px;
@@ -572,4 +572,570 @@
   padding: 4px 12px;
   background: #d1fae5;
   border-radius: 20px;
+}
+
+/* Redesign Styles */
+.payment-page-wrapper {
+  min-height: calc(100vh - 80px);
+  background-color: #F1F5F9;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  margin-top: 80px;
+}
+
+.payment-modal {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  padding: 40px;
+}
+
+.payment-breadcrumb {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.payment-breadcrumb .arrow {
+  margin: 0 4px;
+}
+
+.payment-breadcrumb .current {
+  color: #6c5ce7;
+}
+
+.payment-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0 0 24px 0;
+}
+
+.payment-methods-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.payment-method-card {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.payment-method-card:hover {
+  border-color: #cbd5e1;
+}
+
+.payment-method-card.selected {
+  border: 2px solid transparent;
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(to right, #1a202c, #d946ef) border-box;
+}
+
+.method-logo-container {
+  width: 60px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-right: 16px;
+}
+
+.visa-logo {
+  color: #1a44a5;
+  font-style: italic;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.mc-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mc-red, .mc-orange {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.mc-red {
+  background-color: #eb001b;
+  margin-right: -10px;
+  z-index: 1;
+}
+
+.mc-orange {
+  background-color: #f79e1b;
+}
+
+.pp-logo {
+  color: #003087;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 20px;
+}
+
+.pp-logo .p2 {
+  color: #009cde;
+  margin-left: -5px;
+}
+
+.momo-logo {
+  font-weight: 800;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: white;
+}
+
+.mtn-logo {
+  background-color: #ffcc00;
+  color: #000;
+}
+
+.airtel-logo {
+  background-color: #ff0000;
+  text-transform: lowercase;
+}
+
+.method-details {
+  flex-grow: 1;
+}
+
+.method-number {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 4px;
+}
+
+.method-expiry-default {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-size: 12px;
+}
+
+.expiry {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.default-badge {
+  font-weight: 700;
+  color: #1a202c;
+  font-size: 12px;
+}
+
+.method-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.check-icon {
+  width: 20px;
+  height: 20px;
+  color: #d1d5db;
+}
+
+.method-check.selected-check .check-icon {
+  color: #6c5ce7;
+  fill: #6c5ce7;
+  stroke: white;
+}
+
+.add-method {
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.add-method-icon {
+  width: 40px;
+  height: 28px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+}
+
+.add-method-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.add-method-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a202c;
+}
+
+.submit-btn-redesign {
+  margin-top: 16px;
+  width: 100%;
+  padding: 16px;
+  background-color: #6c5ce7;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.submit-btn-redesign:hover {
+  background-color: #5b4bc4;
+}
+
+.add-form-container {
+  width: 100%;
+}
+
+.back-to-methods {
+  background: none;
+  border: none;
+  color: #1a202c;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 12px 20px;
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+}
+
+.back-to-methods:hover {
+  background-color: #f8fafc;
+}
+
+.spinner-purple {
+  width: 16px;
+  height: 16px;
+  border: 2px solid white;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+/* Step 2 Form adjustments */
+.step-2-container {
+  max-width: 1000px;
+  width: 100%;
+  padding: 0;
+  box-shadow: none;
+  background: transparent;
+  margin-top: 0;
+}
+
+.step-2-content {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+@media (max-width: 1024px) {
+  .step-2-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+.step-2-left-column {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.step-2-security {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  margin-top: 40px;
+}
+
+.step-2-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 24px 0 24px 0;
+}
+
+.back-btn-step-2 {
+  background: none;
+  border: 1px solid #d1d5db;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: fit-content;
+}
+
+.back-btn-step-2:hover {
+  background: #f8fafc;
+}
+
+.light-blue-summary {
+  background: #f0f7ff;
+  border: 1px solid #e0efff;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.summary-title-column {
+  display: flex;
+  flex-direction: column;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.summary-amount-column {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.total-label {
+  font-size: 12px;
+  color: #64748b;
+  text-align: right;
+  line-height: 1.2;
+}
+
+.ugx-amount {
+  font-size: 18px;
+  font-weight: 700;
+  color: #3b82f6;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.landscape-form h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 20px;
+}
+
+.submit-btn-landscape {
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  color: #3b82f6;
+  width: 100%;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  margin-top: 24px;
+  transition: all 0.2s;
+}
+
+.submit-btn-landscape:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.submit-btn-landscape span {
+  text-align: left;
+  line-height: 1.2;
+}
+
+.circle-outline-icon {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #3b82f6;
+  border-radius: 50%;
+}
+
+.spinner-blue {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #3b82f6;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Receipt Styles */
+.print-wrapper {
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+}
+
+.receipt-card {
+  background: white;
+  max-width: 500px;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Receipt top decorative border */
+.receipt-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: repeating-linear-gradient(
+    45deg,
+    #3b82f6,
+    #3b82f6 10px,
+    #10b981 10px,
+    #10b981 20px
+  );
+}
+
+.receipt-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.receipt-logo {
+  margin-bottom: 16px;
+}
+
+.receipt-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 8px;
+}
+
+.receipt-subtitle {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.receipt-divider {
+  height: 1px;
+  background-color: #e2e8f0;
+  margin: 24px 0;
+}
+
+.receipt-divider.dashed {
+  background-color: transparent;
+  border-top: 2px dashed #e2e8f0;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.receipt-label {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.receipt-value {
+  color: #1a202c;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: right;
+  max-width: 60%;
+}
+
+.receipt-value.monospace {
+  font-family: 'Courier New', Courier, monospace;
+  letter-spacing: 1px;
+}
+
+.receipt-value.capitalize {
+  text-transform: capitalize;
+}
+
+.receipt-total {
+  margin-top: 24px;
+}
+
+.receipt-total .receipt-label {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a202c;
+}
+
+.receipt-total .highlight {
+  font-size: 22px;
+  color: #3b82f6;
+  font-weight: 800;
+}
+
+.receipt-footer {
+  margin-top: 40px;
+  display: flex;
+  gap: 16px;
+}
+
+.receipt-footer button {
+  flex: 1;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .receipt-card, .receipt-card * {
+    visibility: visible;
+  }
+  
+  .receipt-card {
+    position: absolute;
+    left: 0;
+    top: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
 }

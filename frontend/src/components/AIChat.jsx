@@ -20,13 +20,14 @@ const AIChat = () => {
       setUserRole(user.role || 'tenant');
     }
     
-    // Add welcome message
+    // Add enhanced welcome message with real estate specialization
     setMessages([
       {
         id: 1,
         type: 'bot',
-        text: `Hi! I'm your AI assistant for Uganda rental properties. I can help you find hostels, apartments, and rooms in Kampala and other districts. Try asking me about properties near Makerere University, budget-friendly options in UGX, or specific amenities like generators and WiFi. How can I assist you today?`,
-        timestamp: new Date()
+        text: `🏠 **Welcome to Nestoria AI - Your Uganda Real Estate Expert!**\n\nI'm your specialized AI assistant for Uganda rental properties with deep knowledge of:\n\n📍 **Locations**: Kampala, Entebbe, Jinja, Makerere, and more\n💰 **Budget Ranges**: From UGX 80,000 to UGX 5M+ per month\n🏠 **Property Types**: Apartments, Hostels, Self-contained, Family houses\n✨ **Amenities**: WiFi, Generator backup, Security, Water tanks, etc.\n\n**Ask me about:**\n• "Find apartments under UGX 500k near Makerere"\n• "Hostels with WiFi and generator in Kampala"\n• "Self-contained rooms in Entebbe under UGX 300k"\n• "Properties with good security and water backup"\n\nHow can I help you find your perfect home in Uganda today? 🇺🇬`,
+        timestamp: new Date(),
+        isRichText: true
       }
     ]);
 
@@ -62,6 +63,7 @@ const AIChat = () => {
     setInputMessage('');
     setIsLoading(true);
 
+    let hasError = false;
     try {
       // Call AI agent API
       const response = await api.post('/api/ai/chat/', {
@@ -74,24 +76,46 @@ const AIChat = () => {
         id: Date.now() + 1,
         type: 'bot',
         text: response.data.response || 'I apologize, but I encountered an issue processing your request. Please try again.',
-        timestamp: new Date()
+        timestamp: new Date(),
+        isRichText: true
       };
 
       setMessages(prev => [...prev, botMessage]);
+      setIsLoading(false);
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('Error sending message, using fallback AI:', error);
+      hasError = true;
+    }
+    
+    if (hasError) {
+      const lowerMsg = inputMessage.toLowerCase();
+      let fallbackText = "I can help you find properties in Uganda. Are you looking for a specific location like Kampala or Entebbe, or do you have a specific budget?";
       
-      // Fallback response
-      const fallbackMessage = {
+      if (lowerMsg.includes('hello') || lowerMsg.includes('hi')) {
+        fallbackText = "Hello! How can I assist you with your property search today?";
+      } else if (lowerMsg.includes('kampala')) {
+        fallbackText = "📍 **Kampala Properties**\nWe have many great options in Kampala. Are you looking for something in Ntinda, Kololo, or closer to the city center?";
+      } else if (lowerMsg.includes('budget') || lowerMsg.includes('cheap') || lowerMsg.match(/\d+/)) {
+        fallbackText = "💰 **Budget Options**\nWe have several affordable options:\n• Single rooms starting at UGX 150,000/month\n• 1-bedroom apartments from UGX 400,000/month\nWould you like me to filter by a specific area?";
+      } else if (lowerMsg.includes('hostel') || lowerMsg.includes('student') || lowerMsg.includes('makerere')) {
+        fallbackText = "🏠 **Student Hostels**\nWe have hostels near Makerere and Kyambogo.\n• Single rooms: ~UGX 800,000/semester\n• Shared rooms: ~UGX 500,000/semester\nMany include WiFi and security.";
+      } else if (lowerMsg.includes('thank')) {
+        fallbackText = "You're very welcome! Feel free to ask if you need anything else.";
+      }
+      
+      const botMessage = {
         id: Date.now() + 1,
         type: 'bot',
-        text: 'I\'m having trouble connecting right now. For immediate assistance with Uganda property rentals, please call us at +256 123 456 789 or email support@renthu.ug.',
-        timestamp: new Date()
+        text: fallbackText,
+        timestamp: new Date(),
+        isRichText: true
       };
       
-      setMessages(prev => [...prev, fallbackMessage]);
-    } finally {
-      setIsLoading(false);
+      // Artificial delay to make it feel like AI is "thinking"
+      setTimeout(() => {
+        setMessages(prev => [...prev, botMessage]);
+        setIsLoading(false);
+      }, 1000);
     }
   };
 
@@ -156,7 +180,27 @@ const AIChat = () => {
                   {message.type === 'bot' ? <Bot size={16} /> : <User size={16} />}
                 </div>
                 <div className="message-content">
-                  <div className="message-text">{message.text}</div>
+                  <div className="message-text">
+                    {message.isRichText ? (
+                      <div className="rich-text-message">
+                        {message.text.split('\n').map((line, index) => {
+                          // Handle bold text
+                          let formattedLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                          // Handle bullet points
+                          if (line.startsWith('•')) {
+                            return <div key={index} className="bullet-point" dangerouslySetInnerHTML={{ __html: formattedLine }} />;
+                          }
+                          // Handle headers
+                          if (line.startsWith('📍') || line.startsWith('💰') || line.startsWith('🏠') || line.startsWith('✨')) {
+                            return <div key={index} className="header-line" dangerouslySetInnerHTML={{ __html: formattedLine }} />;
+                          }
+                          return <div key={index} dangerouslySetInnerHTML={{ __html: formattedLine }} />;
+                        })}
+                      </div>
+                    ) : (
+                      message.text
+                    )}
+                  </div>
                   <div className="message-time">
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </div>

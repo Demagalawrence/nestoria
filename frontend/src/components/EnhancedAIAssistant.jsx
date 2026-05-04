@@ -1,6 +1,6 @@
 /**
- * Enhanced AI Assistant with Hostel Booking Tools
- * Uganda-specific AI assistant to help students book hostels
+ * Enhanced AI Assistant with Hostel Reservation Tools
+ * Uganda-specific AI assistant to help students reserve hostels
  */
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -22,7 +22,7 @@ const EnhancedAIAssistant = () => {
       const initialMessage = {
         id: Date.now(),
         type: 'assistant',
-        content: "🇺🇬 Welcome to RentHu Uganda AI Assistant! I'm here to help you find and book the perfect hostel. I can help you with:\n\n🏠 Search for hostels by location, price, or university\n💰 Calculate booking costs and payment options\n📚 Get information about universities and areas\n🔍 Compare different hostels\n📋 Check booking status\n💡 Give you helpful tips for booking in Uganda\n\nHow can I help you today?",
+        content: "🇺🇬 Welcome to RentHu Uganda AI Assistant! I'm here to help you find and reserve the perfect hostel. I can help you with:\n\n🏠 Search for hostels by location, price, or university\n💰 Calculate reservation costs and payment options\n📚 Get information about universities and areas\n🔍 Compare different hostels\n📋 Check reservation status\n💡 Give you helpful tips for reserving in Uganda\n\nHow can I help you today?",
         timestamp: new Date()
       };
       setMessages([initialMessage]);
@@ -31,10 +31,10 @@ const EnhancedAIAssistant = () => {
         "Find hostels near Makerere University",
         "Show me hostels under UGX 150,000",
         "Compare hostels in Kikoni and Wandegeya",
-        "Help me book a room for next semester",
+        "Help me reserve a room for next semester",
         "What are the best areas for students?",
         "How do I pay with mobile money?",
-        "Check my booking status"
+        "Check my reservation status"
       ]);
     }
   }, [isOpen, messages.length]);
@@ -104,9 +104,9 @@ const EnhancedAIAssistant = () => {
       return await handleAreaRequest(input);
     }
     
-    // Check for booking
+    // Check for reservation
     if (lowerInput.includes('book') || lowerInput.includes('reserve') || lowerInput.includes('booking')) {
-      return await handleBookingRequest(input);
+      return await handleReservationRequest(input);
     }
     
     // Check for payment
@@ -121,7 +121,7 @@ const EnhancedAIAssistant = () => {
     
     // Default response
     return {
-      content: "I can help you with hostel booking in Uganda! Try asking me to:\n\n🏠 Search for hostels in a specific area\n📚 Get information about universities\n💰 Check prices and payment options\n📋 Help with booking a room\n🔍 Compare different hostels\n\nWhat would you like to know?",
+      content: "I can help you with hostel reservation in Uganda! Try asking me to:\n\n🏠 Search for hostels in a specific area\n📚 Get information about universities\n💰 Check prices and payment options\n📋 Help with reserving a room\n🔍 Compare different hostels\n\nWhat would you like to know?",
       suggestions: [
         "Find hostels near Makerere University",
         "Show me hostels under UGX 150,000",
@@ -150,11 +150,11 @@ const EnhancedAIAssistant = () => {
       ).join('\n\n');
       
       return {
-        content: `I found ${result.count} hostels matching your criteria:\n\n${hostelList}\n\nWould you like more details about any of these hostels, or would you like me to help you book one?`,
+        content: `I found ${result.count} hostels matching your criteria:\n\n${hostelList}\n\nWould you like more details about any of these hostels, or would you like me to help you reserve one?`,
         data: result.hostels,
         suggestions: [
           "Show me more details about the first hostel",
-          "Help me book the second hostel",
+          "Help me reserve the second hostel",
           "Compare these hostels",
           "Search with different criteria"
         ]
@@ -215,14 +215,14 @@ const EnhancedAIAssistant = () => {
     }
   };
 
-  const handleBookingRequest = async (input) => {
+  const handleReservationRequest = async (input) => {
     return {
-      content: "📋 I'd be happy to help you book a hostel! To get started, I'll need some information:\n\n🏠 Which hostel are you interested in?\n📅 When do you want to check in?\n📅 When do you want to check out?\n👥 How many guests?\n\nYou can tell me something like: \"I want to book [hostel name] from [date] to [date] for [number] guests\"\n\nOr if you haven't chosen a hostel yet, I can help you search first!",
+      content: "📋 I'd be happy to help you reserve a hostel! To get started, I'll need some information:\n\n🏠 Which hostel are you interested in?\n📅 When do you want to check in?\n📅 When do you want to check out?\n👥 How many guests?\n\nYou can tell me something like: \"I want to reserve [hostel name] from [date] to [date] for [number] guests\"\n\nOr if you haven't chosen a hostel yet, I can help you search first!",
       suggestions: [
         "Search for hostels first",
-        "I want to book from next month",
-        "Help me book for 2 guests",
-        "What information do you need for booking?"
+        "I want to reserve from next month",
+        "Help me reserve for 2 guests",
+        "What information do you need for reservation?"
       ]
     };
   };
@@ -259,13 +259,13 @@ const EnhancedAIAssistant = () => {
 
   const handleTipsRequest = async (input) => {
     const topic = extractTopic(input);
-    const tipsTool = aiTools.find(tool => tool.name === 'get_booking_tips');
+    const tipsTool = aiTools.find(tool => tool.name === 'get_reservation_tips');
     const result = await tipsTool.execute({ topic });
     
     if (result.success) {
       const tipsList = result.tips.map(tip => `💡 ${tip}`).join('\n');
       return {
-        content: `💡 **Helpful Tips for ${topic.charAt(0).toUpperCase() + topic.slice(1)}**\n\n${tipsList}\n\nThese tips will help you make better booking decisions in Uganda!`,
+        content: `💡 **Helpful Tips for ${topic.charAt(0).toUpperCase() + topic.slice(1)}**\n\n${tipsList}\n\nThese tips will help you make better reservation decisions in Uganda!`,
         suggestions: [
           "Give me budget tips",
           "Tell me about safety tips",
@@ -345,7 +345,7 @@ const EnhancedAIAssistant = () => {
               <Bot className="w-5 h-5" />
               <div>
                 <h3>RentHu Uganda AI</h3>
-                <p>Your hostel booking assistant</p>
+                <p>Your hostel reservation assistant</p>
               </div>
             </div>
             <button
@@ -442,7 +442,7 @@ const EnhancedAIAssistant = () => {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Ask me about hostels, universities, or booking..."
+                placeholder="Ask me about hostels, universities, or reservation..."
                 className="ai-input"
                 disabled={isLoading}
               />
@@ -473,10 +473,10 @@ const EnhancedAIAssistant = () => {
               </button>
               <button
                 className="quick-action"
-                onClick={() => handleSuggestionClick("Help me book a room")}
+                onClick={() => handleSuggestionClick("Help me reserve a room")}
               >
                 <Book className="w-4 h-4" />
-                <span>Book Now</span>
+                <span>Reserve Now</span>
               </button>
               <button
                 className="quick-action"

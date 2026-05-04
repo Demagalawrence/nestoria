@@ -13,6 +13,7 @@ from django.utils.decorators import method_decorator
 from .models import User, UserDocument
 from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserProfileSerializer, UserDocumentSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
+import requests
 
 @method_decorator(csrf_exempt, name='dispatch')
 class UserRegistrationView(generics.CreateAPIView):
@@ -21,6 +22,29 @@ class UserRegistrationView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     
     def create(self, request, *args, **kwargs):
+        # Verify reCAPTCHA token
+        recaptcha_token = request.data.get('recaptcha_token')
+        if not recaptcha_token:
+            return Response({
+                'error': 'reCAPTCHA token is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Verify reCAPTCHA with Google
+        recaptcha_secret = getattr(settings, 'RECAPTCHA_SECRET_KEY', '6LeIxAcTAAAAAGPvN7fJQ_0f4jBqKbWxR3e')
+        recaptcha_response = requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={
+                'secret': recaptcha_secret,
+                'response': recaptcha_token
+            }
+        )
+        
+        recaptcha_result = recaptcha_response.json()
+        if not recaptcha_result.get('success'):
+            return Response({
+                'error': 'reCAPTCHA verification failed. Please try again.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()

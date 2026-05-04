@@ -1,0 +1,147 @@
+/* Privacy Policy Page Styles */
+.privacy-page {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 80px 20px 40px 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.privacy-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.privacy-header {
+  background: linear-gradient(135deg, #1D4ED8 0%, #064E3B 100%);
+  color: white;
+  padding: 40px 30px;
+  text-align: center;
+  position: relative;
+}
+
+.privacy-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+  letter-spacing: -0.5px;
+}
+
+.privacy-subtitle {
+  font-size: 14px;
+  opacity: 0.9;
+  margin: 0 0 20px 0;
+}
+
+.back-to-register {
+  display: inline-block;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.back-to-register:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.privacy-content {
+  padding: 40px 30px;
+}
+
+.privacy-section {
+  margin-bottom: 40px;
+}
+
+.privacy-section h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 20px 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.privacy-section h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+  margin: 25px 0 15px 0;
+}
+
+.privacy-section p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #4b5563;
+  margin: 0 0 15px 0;
+}
+
+.privacy-section ul {
+  margin: 0 0 20px 0;
+  padding-left: 25px;
+}
+
+.privacy-section li {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #4b5563;
+  margin-bottom: 8px;
+}
+
+.contact-info {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.contact-info p {
+  margin-bottom: 8px;
+}
+
+.contact-info strong {
+  color: #10b981;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .privacy-page {
+    padding: 80px 15px 30px 15px;
+  }
+  
+  .privacy-container {
+    border-radius: 8px;
+  }
+  
+  .privacy-header {
+    padding: 30px 20px;
+  }
+  
+  .privacy-header h1 {
+    font-size: 24px;
+  }
+  
+  .privacy-content {
+    padding: 30px 20px;
+  }
+  
+  .privacy-section h2 {
+    font-size: 20px;
+  }
+  
+  .privacy-section h3 {
+    font-size: 16px;
+  }
+  
+  .privacy-section p,
+  .privacy-section li {
+    font-size: 15px;
+  }
+}

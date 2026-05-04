@@ -1,6 +1,6 @@
 .property-management-container {
   min-height: calc(100vh - 80px);
-  background: #f8fafc;
+  background: #F1F5F9;
   padding: 40px 20px 80px;
   margin-top: 80px;
 }
@@ -32,7 +32,7 @@
   gap: 8px;
   padding: 12px 20px;
   border: none;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1D4ED8 0%, #064E3B 100%);
   color: white;
   border-radius: 8px;
   cursor: pointer;
@@ -472,7 +472,7 @@
 .file-item {
   font-size: 12px;
   color: #64748b;
-  background: #f8fafc;
+  background: #F1F5F9;
   padding: 4px 8px;
   border-radius: 4px;
 }

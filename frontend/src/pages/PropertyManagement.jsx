@@ -204,7 +204,7 @@ const PropertyManagement = () => {
       <div className="management-header">
         <div className="header-content">
           <h1>Property Management</h1>
-          <p>Manage your property listings and bookings</p>
+          <p>Manage your property listings and reservations</p>
         </div>
         <button className="btn-primary" onClick={() => openModal()}>
           <Plus /> Add New Property
@@ -224,7 +224,7 @@ const PropertyManagement = () => {
           <div className="empty-state">
             <Home />
             <h3>No Properties Yet</h3>
-            <p>Start by adding your first property to begin receiving bookings.</p>
+            <p>Start by adding your first property to begin receiving reservations.</p>
             <button className="btn-primary" onClick={() => openModal()}>
               <Plus /> Add Your First Property
             </button>

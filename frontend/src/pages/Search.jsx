@@ -14,7 +14,8 @@ const SearchResults = () => {
   const [isUniversity, setIsUniversity] = useState(false);
   const [filters, setFilters] = useState({
     location: searchParams.get('location') || '',
-    property_type: searchParams.get('property_type') || ''
+    property_type: searchParams.get('property_type') || '',
+    max_price: searchParams.get('max_price') || ''
   });
 
   useEffect(() => {
@@ -32,6 +33,7 @@ const SearchResults = () => {
       // Basic filtering for this minimalist layout
       if (filters.location) params.append('location', filters.location);
       if (filters.property_type) params.append('property_type', filters.property_type);
+      if (filters.max_price) params.append('max_rent', filters.max_price);
       if (isUniversity) {
         params.append('audience_type', 'university');
       } else {
@@ -140,6 +142,17 @@ const SearchResults = () => {
                 <option value="self_contained">Self Contained</option>
               </select>
             </div>
+            
+            <div className="minimal-select-wrapper">
+              <input 
+                type="number"
+                name="max_price" 
+                className="minimal-input" 
+                placeholder="Max Price (UGX)"
+                value={filters.max_price}
+                onChange={handleFilterChange}
+              />
+            </div>
           </div>
           
           <div className="minimal-toggle-group">
@@ -161,7 +174,7 @@ const SearchResults = () => {
             <div className="minimal-no-results">
               <p>No properties found matching your criteria.</p>
               <button className="minimal-clear-btn" onClick={() => {
-                setFilters({ location: '', property_type: '' });
+                setFilters({ location: '', property_type: '', max_price: '' });
                 setIsUniversity(false);
               }}>Clear Filters</button>
             </div>

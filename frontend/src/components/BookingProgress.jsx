@@ -2,7 +2,7 @@ import React from 'react';
 import { Check } from 'lucide-react';
 import './BookingProgress.css';
 
-const BookingProgress = ({ currentStep }) => {
+const ReservationProgress = ({ currentStep }) => {
   const steps = [
     { id: 1, label: 'Property' },
     { id: 2, label: 'Your Info' },
@@ -50,4 +50,4 @@ const BookingProgress = ({ currentStep }) => {
   );
 };
 
-export default BookingProgress;
+export default ReservationProgress;

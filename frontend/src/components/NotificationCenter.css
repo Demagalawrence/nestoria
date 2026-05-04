@@ -1,6 +1,6 @@
 .notification-center {
   min-height: calc(100vh - 80px);
-  background: #f8fafc;
+  background: #F1F5F9;
   padding: 40px 20px 80px;
   margin-top: 80px;
 }
@@ -84,7 +84,7 @@
   padding: 20px;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  background: #f8fafc;
+  background: #F1F5F9;
 }
 
 .toggle-label {

@@ -15,12 +15,7 @@ const Reviews = () => {
   const [reviewForm, setReviewForm] = useState({
     rating: 5,
     title: '',
-    content: '',
-    cleanliness: 5,
-    communication: 5,
-    check_in: 5,
-    location: 5,
-    value: 5
+    content: ''
   });
 
   useEffect(() => {
@@ -54,7 +49,7 @@ const Reviews = () => {
           user: 'John Doe',
           rating: 5,
           title: 'Amazing Property!',
-          content: 'Absolutely loved our stay here. The property was clean, well-maintained, and exactly as described. Would definitely book again!',
+          content: 'Absolutely loved our stay here. The property was clean, well-maintained, and exactly as described. Would definitely reserve again!',
           cleanliness: 5,
           communication: 5,
           check_in: 5,
@@ -100,42 +95,24 @@ const Reviews = () => {
     e.preventDefault();
     try {
       const reviewData = {
-        ...reviewForm,
-        property: parseInt(propertyId)
+        rating: reviewForm.rating,
+        title: reviewForm.title,
+        review: reviewForm.content,
+        rental_property: parseInt(propertyId)
       };
       
-      const res = await api.post('/properties/reviews/create/', reviewData);
+      const res = await api.post(`/properties/${propertyId}/add-review/`, reviewData);
       if (res.data.id) {
         setReviews(prev => [res.data, ...prev]);
         setShowReviewForm(false);
         setReviewForm({
           rating: 5,
           title: '',
-          content: '',
-          cleanliness: 5,
-          communication: 5,
-          check_in: 5,
-          location: 5,
-          value: 5
+          content: ''
         });
       }
     } catch (error) {
       console.error('Error submitting review:', error);
-    }
-  };
-
-  const handleHelpful = async (reviewId) => {
-    try {
-      await api.post(`/reviews/${reviewId}/helpful/`);
-      setReviews(prev =>
-        prev.map(review =>
-          review.id === reviewId
-            ? { ...review, helpful_count: review.helpful_count + 1 }
-            : review
-        )
-      );
-    } catch (error) {
-      console.error('Error marking review as helpful:', error);
     }
   };
 
@@ -167,7 +144,6 @@ const Reviews = () => {
       if (sortBy === 'recent') return new Date(b.created_at) - new Date(a.created_at);
       if (sortBy === 'rating_high') return b.rating - a.rating;
       if (sortBy === 'rating_low') return a.rating - b.rating;
-      if (sortBy === 'helpful') return b.helpful_count - a.helpful_count;
       return 0;
     });
 
@@ -251,7 +227,6 @@ const Reviews = () => {
               <option value="recent">Most Recent</option>
               <option value="rating_high">Highest Rating</option>
               <option value="rating_low">Lowest Rating</option>
-              <option value="helpful">Most Helpful</option>
             </select>
           </div>
         </div>
@@ -270,13 +245,13 @@ const Reviews = () => {
               <div className="review-header">
                 <div className="reviewer-info">
                   <img
-                    src={review.user_avatar || `https://ui-avatars.com/api/?name=${review.user}&background=667eea&color=fff`}
-                    alt={review.user}
+                    src={review.user_avatar || `https://ui-avatars.com/api/?name=${review.user_name || review.user}&background=1D4ED8&color=fff`}
+                    alt={review.user_name || review.user}
                     className="reviewer-avatar"
                   />
                   <div className="reviewer-details">
-                    <h4>{review.user}</h4>
-                    <div className="review-date">{review.created_at}</div>
+                    <h4>{review.user_name || review.user}</h4>
+                    <div className="review-date">{new Date(review.created_at).toLocaleDateString()}</div>
                   </div>
                 </div>
                 <div className="review-rating">
@@ -286,41 +261,10 @@ const Reviews = () => {
 
               <div className="review-content">
                 <h5>{review.title}</h5>
-                <p>{review.content}</p>
+                <p>{review.review || review.content}</p>
               </div>
 
-              <div className="review-categories">
-                <div className="category">
-                  <span>Cleanliness</span>
-                  {renderStars(review.cleanliness)}
-                </div>
-                <div className="category">
-                  <span>Communication</span>
-                  {renderStars(review.communication)}
-                </div>
-                <div className="category">
-                  <span>Check-in</span>
-                  {renderStars(review.check_in)}
-                </div>
-                <div className="category">
-                  <span>Location</span>
-                  {renderStars(review.location)}
-                </div>
-                <div className="category">
-                  <span>Value</span>
-                  {renderStars(review.value)}
-                </div>
-              </div>
 
-              <div className="review-footer">
-                <button
-                  className="helpful-btn"
-                  onClick={() => handleHelpful(review.id)}
-                >
-                  <ThumbsUp size={14} />
-                  Helpful ({review.helpful_count})
-                </button>
-              </div>
             </div>
           ))
         )}
@@ -366,23 +310,7 @@ const Reviews = () => {
                 />
               </div>
 
-              <div className="rating-categories">
-                <h3>Detailed Ratings</h3>
-                {[
-                  { key: 'cleanliness', label: 'Cleanliness' },
-                  { key: 'communication', label: 'Communication' },
-                  { key: 'check_in', label: 'Check-in' },
-                  { key: 'location', label: 'Location' },
-                  { key: 'value', label: 'Value' }
-                ].map(({ key, label }) => (
-                  <div key={key} className="category-rating">
-                    <label>{label}</label>
-                    {renderStars(reviewForm[key], true, (rating) =>
-                      setReviewForm(prev => ({ ...prev, [key]: rating }))
-                    )}
-                  </div>
-                ))}
-              </div>
+
 
               <div className="form-actions">
                 <button type="button" className="btn-secondary" onClick={() => setShowReviewForm(false)}>

@@ -1,6 +1,6 @@
 .maintenance-dashboard {
   padding: 24px;
-  background: #f8fafc;
+  background: #F1F5F9;
   min-height: 100vh;
 }
 
@@ -206,7 +206,7 @@
   align-items: center;
   gap: 8px;
   padding: 20px;
-  background: #f8fafc;
+  background: #F1F5F9;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   color: #6b7280;
@@ -230,7 +230,7 @@
 }
 
 .request-card {
-  background: #f8fafc;
+  background: #F1F5F9;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   padding: 16px;

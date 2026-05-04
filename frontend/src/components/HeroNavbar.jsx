@@ -106,7 +106,7 @@ const HeroNavbar = () => {
                className="mobile-menu-toggle" 
                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-               {isMobileMenuOpen ? <X size={24} color="#0F766E" /> : <Menu size={24} color="#0F766E" />}
+               {isMobileMenuOpen ? <X size={24} color="#1D4ED8" /> : <Menu size={24} color="#1D4ED8" />}
             </button>
 
             <div className={`navbar-menu-overlay ${isMobileMenuOpen ? 'open' : ''}`}>

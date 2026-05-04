@@ -66,7 +66,7 @@ const MostViewed = () => {
       <div className="section-header text-center">
         <h2 className="section-title">Most Viewed</h2>
         <p className="section-subtitle">
-          Discover a range of vacation homes worldwide. Book securely and get<br/>
+          Discover a range of vacation homes worldwide. Reserve securely and get<br/>
           expert customer support for a stress-free stay.
         </p>
       </div>

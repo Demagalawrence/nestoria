@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MapPin } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
 import './PropertyCard.css';
 
 const PropertyCard = ({ property }) => {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
   
   // Use property data or fallback to mock data
   const title = property.name || property.title || 'Modern Title by Granps';
@@ -48,6 +50,15 @@ const PropertyCard = ({ property }) => {
   const handleReserveClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    if (!user) {
+      // User is not logged in, show login prompt
+      alert('Please login to reserve this room. You will be redirected to the login page.');
+      navigate('/login');
+      return;
+    }
+    
+    // User is logged in, proceed to reservation
     navigate(`/booking/${property.id}`);
   };
 
@@ -61,7 +72,7 @@ const PropertyCard = ({ property }) => {
         <h3 className="minimal-card-title">{title}</h3>
         
         <p className="minimal-card-details">
-          Type: {type} | Occupied: {occupiedRooms} | Available: {availableRooms}
+          Type: {type} | Available: {availableRooms} out of {totalRooms} rooms empty
         </p>
         
         <p className="minimal-card-price">

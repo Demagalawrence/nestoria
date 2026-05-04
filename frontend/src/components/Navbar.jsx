@@ -11,8 +11,8 @@ const Navbar = () => {
    const [notifications, setNotifications] = useState([
       {
          id: 1,
-         title: 'Booking Confirmed',
-         message: 'Your booking for Bugema Self-Contained Rooms has been confirmed.',
+         title: 'Reservation Confirmed',
+         message: 'Your reservation for Bugema Self-Contained Rooms has been confirmed.',
          time: '2 hours ago',
          read: false,
          type: 'success'
@@ -20,7 +20,7 @@ const Navbar = () => {
       {
          id: 2,
          title: 'Payment Reminder',
-         message: 'Complete your payment for booking #BK2026042411393609E439A8.',
+         message: 'Complete your payment for reservation #BK2026042411393609E439A8.',
          time: '5 hours ago',
          read: false,
          type: 'warning'
@@ -119,7 +119,7 @@ const Navbar = () => {
                className="mobile-menu-toggle" 
                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-               {isMobileMenuOpen ? <X size={24} color="#0F766E" /> : <Menu size={24} color="#0F766E" />}
+               {isMobileMenuOpen ? <X size={24} color="#1D4ED8" /> : <Menu size={24} color="#1D4ED8" />}
             </button>
 
             <div className={`navbar-menu-overlay ${isMobileMenuOpen ? 'open' : ''}`}>

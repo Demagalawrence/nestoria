@@ -90,7 +90,7 @@
 .stat-icon {
   width: 56px;
   height: 56px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1D4ED8 0%, #064E3B 100%);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -253,7 +253,7 @@
 .occupancy-stats .stat {
   text-align: center;
   padding: 16px;
-  background: #f8fafc;
+  background: #F1F5F9;
   border-radius: 8px;
 }
 
@@ -304,7 +304,7 @@
   align-items: center;
   gap: 16px;
   padding: 16px;
-  background: #f8fafc;
+  background: #F1F5F9;
   border-radius: 12px;
   transition: all 0.2s ease;
 }
@@ -372,7 +372,7 @@
   align-items: flex-start;
   gap: 12px;
   padding: 12px;
-  background: #f8fafc;
+  background: #F1F5F9;
   border-radius: 8px;
 }
 
@@ -430,7 +430,7 @@
   padding: 48px 24px;
   border: 2px dashed #e2e8f0;
   border-radius: 12px;
-  background: #f8fafc;
+  background: #F1F5F9;
   min-height: 300px;
 }
 

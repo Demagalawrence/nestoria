@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, Clock, Users, CreditCard, FileText, ArrowLeft } from 'lucide-react';
 import api from '../api/axios';
 import { AuthContext } from '../context/AuthContext';
-import BookingProgress from '../components/BookingProgress';
+import ReservationProgress from '../components/BookingProgress';
 import './Booking.css';
 
 const Booking = () => {
@@ -167,7 +167,7 @@ const Booking = () => {
         
         // Show success message
         const bookingRef = res.data.booking_reference || `#${res.data.id}`;
-        alert(`🎉 Room Reserved Successfully!\n\nBooking Reference: ${bookingRef}\nProperty: ${property?.name || 'Property'}\n\nYou will be redirected to complete your payment.`);
+        alert(`🎉 Room Reserved Successfully!\n\nBooking Reference: ${bookingRef}\nProperty: ${property?.name || property?.title || 'Property'}\n\nYou will be redirected to complete your payment.`);
         
         navigate(`/payment/${res.data.id}`);
       } else {
@@ -266,8 +266,8 @@ const Booking = () => {
           </button>
           
           <div className="modern-booking-title-section">
-            <h1 className="modern-booking-title">Complete Your Booking</h1>
-            <p className="modern-booking-subtitle">Secure your stay at {property?.title || 'Property'}</p>
+            <h1 className="modern-booking-title">Complete Your Reservation</h1>
+            <p className="modern-booking-subtitle">Secure your stay at {property?.name || property?.title || 'Property'}</p>
           </div>
         </div>
       </div>
@@ -293,11 +293,14 @@ const Booking = () => {
                 />
               </div>
               <div className="modern-property-info">
-                <h3 className="modern-property-title">{property?.title || 'Property'}</h3>
-                <p className="modern-property-location">{property?.location || 'Location'}</p>
+                <h3 className="modern-property-title">{property?.name || property?.title || 'Property'}</h3>
+                <p className="modern-property-location">{property?.district || property?.location || 'Location'}</p>
+                <p style={{ margin: '8px 0', fontSize: '14px', color: '#475569' }}>
+                  Available: {property?.available_rooms !== undefined ? property.available_rooms : 10} out of {property?.total_rooms || 10} rooms empty | Occupied: {(property?.total_rooms || 10) - (property?.available_rooms !== undefined ? property.available_rooms : 10)}
+                </p>
                 <div className="modern-property-features">
                   <span className="modern-feature-badge">
-                    <Users size={16} /> {property?.bedrooms || 1} Bedrooms
+                    <Users size={16} /> {property?.total_rooms || 1} Rooms
                   </span>
                   <span className="modern-feature-badge">
                     <Calendar size={16} /> {property?.property_type || 'Property'}
@@ -416,11 +419,11 @@ const Booking = () => {
                 <h4 className="summary-section-title">Property Details</h4>
                 <div className="summary-item">
                   <span className="summary-label">Property:</span>
-                  <span className="summary-value">{property?.title || 'Property'}</span>
+                  <span className="summary-value">{property?.name || property?.title || 'Property'}</span>
                 </div>
                 <div className="summary-item">
                   <span className="summary-label">Location:</span>
-                  <span className="summary-value">{property?.location || 'Location'}</span>
+                  <span className="summary-value">{property?.district || property?.location || 'Location'}</span>
                 </div>
               </div>
               

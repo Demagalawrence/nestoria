@@ -965,7 +965,7 @@ const AdminDashboard = () => {
               </div>
 
               <h4 style={{ marginBottom: '15px', color: '#1a656e' }}>Property Details</h4>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '25px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '25px' }}>
                 <div className="form-group">
                   <label>Property Name *</label>
                   <input
@@ -1076,7 +1076,7 @@ const AdminDashboard = () => {
               </div>
 
               <h4 style={{ marginBottom: '15px', color: '#1a656e' }}>Contact Information</h4>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '25px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '25px' }}>
                 <div className="form-group">
                   <label>Contact Person</label>
                   <input
@@ -1141,7 +1141,7 @@ const AdminDashboard = () => {
             
             <div className="modal-body">
               <h4 style={{ marginBottom: '15px', color: '#1a656e' }}>Basic Information</h4>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '25px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '25px' }}>
                 <div className="form-group">
                   <label>First Name</label>
                   <input
@@ -1213,7 +1213,7 @@ const AdminDashboard = () => {
               </div>
 
               <h4 style={{ marginBottom: '15px', color: '#1a656e' }}>Contact Information</h4>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '25px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '25px' }}>
                 <div className="form-group">
                   <label>Primary Phone</label>
                   <input
@@ -1256,7 +1256,7 @@ const AdminDashboard = () => {
               </div>
 
               <h4 style={{ marginBottom: '15px', color: '#1a656e' }}>Professional Information</h4>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '25px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '25px' }}>
                 <div className="form-group">
                   <label>Company Name</label>
                   <input
@@ -1303,7 +1303,7 @@ const AdminDashboard = () => {
               </div>
 
               <h4 style={{ marginBottom: '15px', color: '#1a656e' }}>Emergency Contact</h4>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '25px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '25px' }}>
                 <div className="form-group">
                   <label>Emergency Contact Name</label>
                   <input
@@ -1418,7 +1418,7 @@ const AdminDashboard = () => {
               </div>
 
               <h4 style={{ marginBottom: '15px', color: '#1a656e' }}>Basic Information</h4>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '25px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '25px' }}>
                 <div className="form-group">
                   <label>First Name</label>
                   <input
@@ -1476,7 +1476,7 @@ const AdminDashboard = () => {
               </div>
 
               <h4 style={{ marginBottom: '15px', color: '#1a656e' }}>Contact Information</h4>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '25px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '25px' }}>
                 <div className="form-group">
                   <label>Primary Phone</label>
                   <input
@@ -1519,7 +1519,7 @@ const AdminDashboard = () => {
               </div>
 
               <h4 style={{ marginBottom: '15px', color: '#1a656e' }}>Professional Information</h4>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '25px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '25px' }}>
                 <div className="form-group">
                   <label>Company Name</label>
                   <input
@@ -1566,7 +1566,7 @@ const AdminDashboard = () => {
               </div>
 
               <h4 style={{ marginBottom: '15px', color: '#1a656e' }}>Emergency Contact</h4>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '25px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '25px' }}>
                 <div className="form-group">
                   <label>Emergency Contact Name</label>
                   <input

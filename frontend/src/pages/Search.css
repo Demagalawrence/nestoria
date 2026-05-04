@@ -67,6 +67,25 @@
   font-weight: bold;
 }
 
+.minimal-input {
+  background-color: #ffffff;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #333333;
+  width: 130px;
+}
+
+.minimal-input:focus {
+  outline: none;
+  border-color: #999999;
+}
+
+.minimal-input::placeholder {
+  color: #999;
+}
+
 /* Toggle Switch */
 .minimal-toggle-group {
   display: flex;

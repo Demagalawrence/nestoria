@@ -1,8 +1,30 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { Eye, EyeOff } from 'lucide-react';
 import './Register.css';
+
+// Load reCAPTCHA script
+const loadReCaptcha = () => {
+  return new Promise((resolve) => {
+    if (window.grecaptcha) {
+      resolve(window.grecaptcha);
+      return;
+    }
+    
+    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6LeIxAcTAAAAAJcZVRqyHh71UMIEbUjQbQxO4';
+    const script = document.createElement('script');
+    script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
+    script.async = true;
+    script.defer = true;
+    
+    script.onload = () => {
+      resolve(window.grecaptcha);
+    };
+    
+    document.head.appendChild(script);
+  });
+};
 
 const GoogleIcon = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
@@ -40,13 +62,40 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState('');
+  const [isRecaptchaReady, setIsRecaptchaReady] = useState(false);
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  // Initialize reCAPTCHA
+  useEffect(() => {
+    loadReCaptcha().then(() => {
+      setIsRecaptchaReady(true);
+    });
+  }, []);
 
   const handleChange = (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     setFormData({ ...formData, [e.target.name]: value });
   };
+
+  const handleRecaptcha = () => {
+    if (!isRecaptchaReady) return;
+    
+    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6LeIxAcTAAAAAJcZVRqyHh71UMIEbUjQbQxO4';
+    
+    window.grecaptcha.ready(() => {
+      window.grecaptcha.execute(siteKey, { action: 'submit' })
+        .then(token => {
+          setRecaptchaToken(token);
+        });
+    });
+  };
+
+  // Execute reCAPTCHA on form submission
+  useEffect(() => {
+    handleRecaptcha();
+  }, [isRecaptchaReady]);
 
   const handleSuccessModalOk = () => {
     setShowSuccessModal(false);
@@ -63,7 +112,13 @@ const Register = () => {
     }
 
     if (!formData.termsAccepted) {
-      setError('✅ You must accept the terms & conditions to register.');
+      setError('✅ You must accept terms & conditions to register.');
+      return;
+    }
+
+    if (!recaptchaToken) {
+      setError('🤖 Please complete the reCAPTCHA verification.');
+      handleRecaptcha();
       return;
     }
 
@@ -102,6 +157,7 @@ const Register = () => {
       submitData.append('username', formData.email);
       submitData.append('password', formData.password);
       submitData.append('confirm_password', formData.confirm_password);
+      submitData.append('recaptcha_token', recaptchaToken);
       // submitData.append('user_type', 'user'); // Removed as API doesn't accept this field
       if (contactNumber) submitData.append('contact_number', contactNumber);
 
@@ -250,7 +306,7 @@ const Register = () => {
                   className="modern-checkbox"
                 />
                 <span className="modern-checkbox-text">
-                  I agree to the <a href="#" className="modern-terms-link">Terms of Service</a> and <a href="#" className="modern-terms-link">Privacy Policy</a>
+                  I agree to <a href="/terms" className="modern-terms-link">Terms of Service</a> and <a href="/privacy" className="modern-terms-link">Privacy Policy</a>
                 </span>
               </label>
             </div>
@@ -287,7 +343,7 @@ const Register = () => {
           {/* Footer */}
           <div className="modern-register-footer">
             <p className="modern-footer-text">
-              Protected by reCAPTCHA and subject to the Google <a href="#" className="modern-terms-link">Privacy Policy</a> and <a href="#" className="modern-terms-link">Terms of Service</a>.
+              Protected by reCAPTCHA and subject to Google <a href="/privacy" className="modern-terms-link">Privacy Policy</a> and <a href="/terms" className="modern-terms-link">Terms of Service</a>.
             </p>
           </div>
 

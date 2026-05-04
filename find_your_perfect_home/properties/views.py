@@ -24,6 +24,14 @@ class PropertyDetailView(generics.RetrieveAPIView):
     serializer_class = PropertyDetailSerializer
     permission_classes = [AllowAny]
 
+class PropertyReviewListView(generics.ListAPIView):
+    serializer_class = PropertyReviewSerializer
+    permission_classes = [AllowAny]
+    
+    def get_queryset(self):
+        property_id = self.kwargs['pk']
+        return PropertyReview.objects.filter(rental_property_id=property_id).order_by('-created_at')
+
 class PropertyCreateView(generics.CreateAPIView):
     queryset = Property.objects.all()
     serializer_class = PropertyCreateSerializer
