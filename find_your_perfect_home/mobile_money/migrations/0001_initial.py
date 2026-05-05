@@ -73,7 +73,7 @@ class Migration(migrations.Migration):
                 ('expires_at', models.DateTimeField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('verified_at', models.DateTimeField(blank=True, null=True)),
-                ('payment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='verifications', to='mobile_money.moneymoneypayment')),
+                ('payment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='verifications', to='mobile_money.MobileMoneyPayment')),
             ],
         ),
     ]
