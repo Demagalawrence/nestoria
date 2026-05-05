@@ -210,6 +210,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8001",
     "http://127.0.0.1:8001",
     "https://nestoria-8zlq8nvdg-demagalawrences-projects.vercel.app",
+    "https://nestoria-2x5z69tr7-demagalawrences-projects.vercel.app",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
