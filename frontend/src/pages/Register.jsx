@@ -67,8 +67,15 @@ const Register = () => {
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // Initialize reCAPTCHA
+  // Initialize reCAPTCHA (disabled for production)
   useEffect(() => {
+    // Check if we're in production and skip reCAPTCHA
+    if (import.meta.env.PROD) {
+      setIsRecaptchaReady(true);
+      setRecaptchaToken('production-disabled');
+      return;
+    }
+    
     loadReCaptcha().then(() => {
       setIsRecaptchaReady(true);
     });
@@ -81,6 +88,12 @@ const Register = () => {
 
   const handleRecaptcha = () => {
     if (!isRecaptchaReady) return;
+    
+    // Skip reCAPTCHA in production
+    if (import.meta.env.PROD) {
+      setRecaptchaToken('production-disabled');
+      return;
+    }
     
     const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6LeIxAcTAAAAAJcZVRqyHh71UMIEbUjQbQxO4';
     
