@@ -6,5 +6,23 @@
     }
   ],
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "routes": [
+    {
+      "src": "/booking/(.*)",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/property/(.*)",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/payment/(.*)",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/reviews/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
