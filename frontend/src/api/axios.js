@@ -16,8 +16,22 @@ function getCookie(name) {
   return cookieValue;
 }
 
+// Use production API URL for Vercel deployment
+const getApiBaseUrl = () => {
+  // Check if we're in production (Vercel)
+  if (import.meta.env.PROD) {
+    return 'https://nestoria-5j25.onrender.com/api';
+  }
+  // Use environment variable if available (for local development)
+  if (import.meta.env.NEXT_PUBLIC_API_URL) {
+    return import.meta.env.NEXT_PUBLIC_API_URL;
+  }
+  // Fallback to localhost
+  return 'http://localhost:8001/api';
+};
+
 const api = axios.create({
-  baseURL: import.meta.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001/api',
+  baseURL: getApiBaseUrl(),
   headers: {
     'Content-Type': 'application/json',
   },
