@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
                 ('receipt_link', models.URLField(blank=True)),
                 ('generated_date', models.DateTimeField(auto_now_add=True)),
                 ('is_sent', models.BooleanField(default=False)),
-                ('payment', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='receipt', to='payments.payment')),
+                ('payment', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='receipt', to='payments.Payment')),
             ],
         ),
         migrations.CreateModel(
@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
                 ('payout_reference', models.CharField(blank=True, max_length=100)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('payment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='commissions', to='payments.payment')),
+                ('payment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='commissions', to='payments.Payment')),
                 ('property_owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),

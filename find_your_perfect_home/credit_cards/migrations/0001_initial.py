@@ -133,7 +133,7 @@ class Migration(migrations.Migration):
                 ('refund_amount', models.DecimalField(decimal_places=2, default=0, max_digits=10)),
                 ('refund_reason', models.CharField(blank=True, max_length=500)),
                 ('refund_id', models.CharField(blank=True, max_length=100)),
-                ('payment', models.OneToOneField(on_delete=models.CASCADE, related_name='credit_card', to='payments.payment')),
+                ('payment', models.OneToOneField(on_delete=models.CASCADE, related_name='credit_card', to='payments.Payment')),
                 ('provider', models.ForeignKey(on_delete=models.PROTECT, to='credit_cards.CreditCardProvider')),
             ],
         ),

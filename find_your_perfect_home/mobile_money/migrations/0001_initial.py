@@ -130,7 +130,7 @@ class Migration(migrations.Migration):
                 ('retry_count', models.PositiveIntegerField(default=0)),
                 ('max_retries', models.PositiveIntegerField(default=3)),
                 ('next_retry_at', models.DateTimeField(blank=True, null=True)),
-                ('payment', models.OneToOneField(on_delete=models.CASCADE, related_name='mobile_money', to='payments.payment')),
+                ('payment', models.OneToOneField(on_delete=models.CASCADE, related_name='mobile_money', to='payments.Payment')),
                 ('provider', models.ForeignKey(on_delete=models.PROTECT, to='mobile_money.mobilemoneyprovider')),
             ],
         ),
