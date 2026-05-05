@@ -19,4 +19,5 @@ urlpatterns = [
     path('<int:pk>/upload-video/', views.upload_property_video, name='upload_video'),
     path('<int:pk>/add-review/', views.add_property_review, name='add_review'),
     path('<int:pk>/reviews/', views.PropertyReviewListView.as_view(), name='property_reviews'),
+    path('populate/', views.populate_sample_properties, name='populate_properties'),
 ]

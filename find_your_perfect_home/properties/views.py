@@ -172,3 +172,23 @@ def add_property_review(request, pk):
         serializer.save(user=request.user, rental_property=property_obj)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def populate_sample_properties(request):
+    """
+    One-time endpoint to populate sample properties.
+    This should be removed after initial deployment.
+    """
+    try:
+        from django.core.management import call_command
+        call_command('create_sample_properties')
+        return Response({
+            'message': 'Sample properties created successfully',
+            'status': 'success'
+        }, status=200)
+    except Exception as e:
+        return Response({
+            'message': f'Error creating sample properties: {str(e)}',
+            'status': 'error'
+        }, status=500)
