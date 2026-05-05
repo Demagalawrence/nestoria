@@ -4,27 +4,6 @@ import { AuthContext } from '../context/AuthContext';
 import { Eye, EyeOff } from 'lucide-react';
 import './Register.css';
 
-// Load reCAPTCHA script
-const loadReCaptcha = () => {
-  return new Promise((resolve) => {
-    if (window.grecaptcha) {
-      resolve(window.grecaptcha);
-      return;
-    }
-    
-    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6LeIxAcTAAAAAJcZVRqyHh71UMIEbUjQbQxO4';
-    const script = document.createElement('script');
-    script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
-    script.async = true;
-    script.defer = true;
-    
-    script.onload = () => {
-      resolve(window.grecaptcha);
-    };
-    
-    document.head.appendChild(script);
-  });
-};
 
 const GoogleIcon = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
@@ -62,54 +41,15 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [recaptchaToken, setRecaptchaToken] = useState('');
-  const [isRecaptchaReady, setIsRecaptchaReady] = useState(false);
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
-
-  // Initialize reCAPTCHA (disabled for production)
-  useEffect(() => {
-    // Check if we're in production and skip reCAPTCHA
-    if (import.meta.env.PROD) {
-      setIsRecaptchaReady(true);
-      setRecaptchaToken('production-disabled');
-      return;
-    }
-    
-    loadReCaptcha().then(() => {
-      setIsRecaptchaReady(true);
-    });
-  }, []);
 
   const handleChange = (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     setFormData({ ...formData, [e.target.name]: value });
   };
 
-  const handleRecaptcha = () => {
-    if (!isRecaptchaReady) return;
-    
-    // Skip reCAPTCHA in production
-    if (import.meta.env.PROD) {
-      setRecaptchaToken('production-disabled');
-      return;
-    }
-    
-    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6LeIxAcTAAAAAJcZVRqyHh71UMIEbUjQbQxO4';
-    
-    window.grecaptcha.ready(() => {
-      window.grecaptcha.execute(siteKey, { action: 'submit' })
-        .then(token => {
-          setRecaptchaToken(token);
-        });
-    });
-  };
-
-  // Execute reCAPTCHA on form submission
-  useEffect(() => {
-    handleRecaptcha();
-  }, [isRecaptchaReady]);
-
+  
   const handleSuccessModalOk = () => {
     setShowSuccessModal(false);
     navigate('/login');
@@ -126,12 +66,6 @@ const Register = () => {
 
     if (!formData.termsAccepted) {
       setError('✅ You must accept terms & conditions to register.');
-      return;
-    }
-
-    if (!recaptchaToken) {
-      setError('🤖 Please complete the reCAPTCHA verification.');
-      handleRecaptcha();
       return;
     }
 
@@ -170,7 +104,6 @@ const Register = () => {
       submitData.append('username', formData.email);
       submitData.append('password', formData.password);
       submitData.append('confirm_password', formData.confirm_password);
-      submitData.append('recaptcha_token', recaptchaToken);
       // submitData.append('user_type', 'user'); // Removed as API doesn't accept this field
       if (contactNumber) submitData.append('contact_number', contactNumber);
 

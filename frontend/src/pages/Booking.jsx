@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, Clock, Users, CreditCard, FileText, ArrowLeft } from 'lucide-react';
 import api from '../api/axios';
 import { AuthContext } from '../context/AuthContext';
-import ReservationProgress from '../components/BookingProgress';
+import BookingProgress from '../components/BookingProgress';
 import './Booking.css';
 
 const Booking = () => {
