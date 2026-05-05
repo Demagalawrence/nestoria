@@ -1,5 +1,5 @@
 Django==4.2.9
-djangorestframework==3.14.0
+djangorestframework==3.15.1
 django-cors-headers==4.3.1
 setuptools==69.0.0
 stripe==7.5.0
@@ -7,7 +7,7 @@ python-decouple==3.8
 psycopg2-binary==2.9.9
 celery==5.3.4
 redis==5.0.1
-django-filter==22.1
+django-filter==24.2
 django-extensions==3.2.3
 djangorestframework-simplejwt==5.3.0
 cryptography==41.0.7
