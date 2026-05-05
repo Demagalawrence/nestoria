@@ -109,6 +109,9 @@ else:
         }
     }
 
+# Ensure database connection is ready for migrations
+DATABASES['default']['CONN_MAX_AGE'] = 60
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
