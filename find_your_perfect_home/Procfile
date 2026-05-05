@@ -1,0 +1,1 @@
+web: python manage.py migrate && gunicorn find_your_perfect_home.wsgi:application
