@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,9 +26,6 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-ai39srk@67xb(c#%z8cxc
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
-
-import os
-from decouple import config
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
 
