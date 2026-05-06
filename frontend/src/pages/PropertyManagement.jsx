@@ -18,6 +18,7 @@ const PropertyManagement = () => {
     bedrooms: '',
     bathrooms: '',
     property_type: 'apartment',
+    target_audience: 'mixed',
     contact_number: '',
     whatsapp_number: '',
     contact_person: '',
@@ -27,7 +28,7 @@ const PropertyManagement = () => {
     country: '',
     postal_code: ''
   });
-  const [imageFiles, setImageFiles] = useState([]);
+  const [imageUrls, setImageUrls] = useState([]);
   const [videoFiles, setVideoFiles] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -74,6 +75,7 @@ const PropertyManagement = () => {
       bedrooms: '',
       bathrooms: '',
       property_type: 'apartment',
+      target_audience: 'mixed',
       contact_number: '',
       whatsapp_number: '',
       contact_person: '',
@@ -83,7 +85,7 @@ const PropertyManagement = () => {
       country: '',
       postal_code: ''
     });
-    setImageFiles([]);
+    setImageUrls([]);
     setVideoFiles([]);
     setEditingProperty(null);
   };
@@ -128,38 +130,17 @@ const PropertyManagement = () => {
     setSuccess(null);
 
     try {
-      const data = new FormData();
-      
-      // Add form fields
-      Object.keys(formData).forEach(key => {
-        if (formData[key]) {
-          data.append(key, formData[key]);
-        }
-      });
-
-      // Add images
-      imageFiles.forEach((file, index) => {
-        data.append(`image_${index}`, file);
-      });
-
-      // Add videos
-      videoFiles.forEach((file, index) => {
-        data.append(`video_${index}`, file);
-      });
+      // Create JSON payload
+      const data = {
+        ...formData,
+        image_urls: imageUrls.length > 0 ? imageUrls : []
+      };
 
       let res;
       if (editingProperty) {
-        res = await api.put(`/properties/${editingProperty.id}/update/`, data, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        });
+        res = await api.put(`/properties/${editingProperty.id}/update/`, data);
       } else {
-        res = await api.post('/properties/create/', data, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        });
+        res = await api.post('/properties/create/', data);
       }
 
       if (res.data.id) {
@@ -343,6 +324,29 @@ const PropertyManagement = () => {
                         <option value="office">Office Space</option>
                       </select>
                     </div>
+                    <div className="form-group">
+                      <label>Target Audience *</label>
+                      <select
+                        name="target_audience"
+                        value={formData.target_audience}
+                        onChange={handleInputChange}
+                        required
+                      >
+                        <option value="mixed">Mixed Audience</option>
+                        <option value="university_students">University Students</option>
+                        <option value="students">Students</option>
+                        <option value="professionals">Working Professionals</option>
+                        <option value="families">Families</option>
+                        <option value="business">Business Travelers</option>
+                        <option value="expats">Expatriates</option>
+                        <option value="senior_citizens">Senior Citizens</option>
+                        <option value="college_students">College Students</option>
+                        <option value="interns">Interns</option>
+                        <option value="nurses">Nurses & Medical Staff</option>
+                        <option value="teachers">Teachers</option>
+                        <option value="ngo_workers">NGO Workers</option>
+                      </select>
+                    </div>
                     <div className="form-group full-width">
                       <label>Description *</label>
                       <textarea
@@ -515,25 +519,45 @@ const PropertyManagement = () => {
                   <h3>Media</h3>
                   <div className="form-grid">
                     <div className="form-group">
-                      <label>Property Images</label>
-                      <div className="file-upload">
-                        <input
-                          type="file"
-                          multiple
-                          accept="image/*"
-                          onChange={handleImageUpload}
-                          id="images"
-                        />
-                        <label htmlFor="images" className="file-label">
-                          <Upload />
-                          <span>Choose Images</span>
-                        </label>
-                        {imageFiles.length > 0 && (
-                          <div className="file-list">
-                            {imageFiles.map((file, index) => (
-                              <span key={index} className="file-item">
-                                {file.name}
-                              </span>
+                      <label>Property Images (URLs)</label>
+                      <div className="url-upload">
+                        <div className="url-input-container">
+                          <input
+                            type="text"
+                            placeholder="Enter image URL (e.g., https://example.com/image.jpg)"
+                            onKeyPress={(e) => {
+                              if (e.key === 'Enter' && e.target.value.trim()) {
+                                e.preventDefault();
+                                setImageUrls([...imageUrls, e.target.value.trim()]);
+                                e.target.value = '';
+                              }
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const input = e.target.previousElementSibling;
+                              if (input.value.trim()) {
+                                setImageUrls([...imageUrls, input.value.trim()]);
+                                input.value = '';
+                              }
+                            }}
+                          >
+                            Add URL
+                          </button>
+                        </div>
+                        {imageUrls.length > 0 && (
+                          <div className="url-list">
+                            {imageUrls.map((url, index) => (
+                              <div key={index} className="url-item">
+                                <span>{url}</span>
+                                <button
+                                  type="button"
+                                  onClick={() => setImageUrls(imageUrls.filter((_, i) => i !== index))}
+                                >
+                                  <X />
+                                </button>
+                              </div>
                             ))}
                           </div>
                         )}

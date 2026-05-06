@@ -71,11 +71,12 @@ class PropertyDetailSerializer(PropertySerializer):
         return RoomSerializer(rooms, many=True).data
 
 class PropertyCreateSerializer(serializers.ModelSerializer):
-    images = serializers.ListField(
-        child=serializers.ImageField(),
+    image_urls = serializers.ListField(
+        child=serializers.URLField(),
         write_only=True,
         required=False,
-        allow_empty=True
+        allow_empty=True,
+        help_text="List of image URLs for the property"
     )
     
     class Meta:
@@ -94,19 +95,19 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
                  'restrictions', 'available_from', 'notice_period', 'minimum_stay_months',
                  'maximum_stay_months', 'contact_person', 'contact_number', 'whatsapp_number', 'email', 'website', 'facebook_link', 'instagram_link',
                  'youtube_link', 'pet_friendly', 'smoking_allowed', 'non_veg_allowed',
-                 'visitors_allowed', 'late_night_entry_allowed', 'images']
+                 'visitors_allowed', 'late_night_entry_allowed', 'image_urls']
     
     def create(self, validated_data):
-        images_data = validated_data.pop('images', [])
+        image_urls = validated_data.pop('image_urls', [])
         property_obj = Property.objects.create(**validated_data)
         
-        # Create property images if any
-        if images_data:
-            for index, image_file in enumerate(images_data):
+        # Create property images from URLs if any
+        if image_urls:
+            for index, image_url in enumerate(image_urls):
                 is_primary = index == 0  # First image is primary by default
                 PropertyImage.objects.create(
                     rental_property=property_obj,
-                    image=image_file,
+                    image=image_url,  # Store URL directly in image field
                     is_primary=is_primary,
                     image_type='exterior'
                 )
