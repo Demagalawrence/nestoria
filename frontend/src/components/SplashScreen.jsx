@@ -28,7 +28,7 @@ const SplashScreen = ({ finishLoading }) => {
         <div className="splash-logo-wrapper">
           <Home className="splash-logo-icon" size={64} />
         </div>
-        <h1 className="splash-title">RentHu Uganda</h1>
+        <h1 className="splash-title">Nestoria</h1>
         <p className="splash-subtitle">Find Your Perfect Home</p>
         
         <div className="splash-loader">

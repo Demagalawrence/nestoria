@@ -209,13 +209,6 @@ const HeroNavbar = () => {
                      <Link to="/register" className="req-quote-btn register-btn">Register</Link>
                   </div>
                )}
-               <div 
-                  className="user-profile-icon" 
-                  onClick={handleProfileClick} 
-                  title={user ? "Go to Dashboard" : "Login/Register"}
-               >
-                  <User size={18} color="#64748b" />
-               </div>
             </div>
             </div>
          </div>
