@@ -64,25 +64,25 @@ const HeroSection = () => {
                         </div>
                      </div>
 
-                     <div className="category-item">
+                     <Link to="/search?type=apartments" className="category-item">
                         <Building2 size={28} strokeWidth={1.5} className="cat-icon" />
                         <span>Apartments</span>
-                     </div>
+                     </Link>
 
-                     <div className="category-item">
+                     <Link to="/search?type=family_homes" className="category-item">
                         <Home size={28} strokeWidth={1.5} className="cat-icon" />
                         <span>Family Homes</span>
-                     </div>
+                     </Link>
 
-                     <div className="category-item">
+                     <Link to="/search?type=villas" className="category-item">
                         <Palmtree size={28} strokeWidth={1.5} className="cat-icon" />
                         <span>Villas</span>
-                     </div>
+                     </Link>
 
-                     <div className="category-item">
+                     <Link to="/search?type=unique_stays" className="category-item">
                         <Tent size={28} strokeWidth={1.5} className="cat-icon" />
                         <span>Unique Stays</span>
-                     </div>
+                     </Link>
                   </div>
                </div>
             </main>
