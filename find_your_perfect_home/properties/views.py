@@ -182,7 +182,7 @@ def populate_sample_properties(request):
     """
     try:
         from django.core.management import call_command
-        call_command('create_sample_properties')
+        call_command('seed_data')
         return Response({
             'message': 'Sample properties created successfully',
             'status': 'success'

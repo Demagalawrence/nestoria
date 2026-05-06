@@ -23,8 +23,8 @@ const getApiBaseUrl = () => {
     return 'https://nestoria-5j25.onrender.com/api';
   }
   // Use environment variable if available (for local development)
-  if (import.meta.env.NEXT_PUBLIC_API_URL) {
-    return import.meta.env.NEXT_PUBLIC_API_URL;
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
   }
   // Fallback to localhost
   return 'http://localhost:8001/api';

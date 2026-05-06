@@ -142,6 +142,11 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:5173',
     'http://localhost:8001',
     'http://127.0.0.1:8001',
+    'https://nestoria-8zlq8nvdg-demagalawrences-projects.vercel.app',
+    'https://nestoria-2x5z69tr7-demagalawrences-projects.vercel.app',
+    'https://nestoria-74lqo0kp5-demagalawrences-projects.vercel.app',
+    'https://nestoria-tan.vercel.app',
+    'https://nestoria-5j25.onrender.com',
 ]
 
 
@@ -170,7 +175,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,

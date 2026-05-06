@@ -26,22 +26,6 @@ npm install
 npm run dev
 ```
 
-### Access
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:8001/api/
-- Admin Panel: http://localhost:8001/admin/
-
-## 🌟 Key Features
-
-- **Property Management**: Listings, search, images, detailed info
-- **User System**: Multi-role (Tenant, Owner, Agent, Admin)
-- **Agent Network**: Verified agents with smart assignment
-- **Maintenance System**: Complete ticket management with notifications
-- **Booking System**: Seamless booking with availability tracking
-- **Payment Processing**: Mobile money & credit card integration
-- **Analytics Dashboard**: Comprehensive reporting for all users
-- **AI Assistant**: Intelligent chatbot for customer support
-
 ## 🛠️ Tech Stack
 
 - **Backend**: Django 4.2.7 + Django REST Framework

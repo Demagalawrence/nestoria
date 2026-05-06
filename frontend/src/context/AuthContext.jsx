@@ -14,19 +14,19 @@ export const AuthProvider = ({ children }) => {
         const res = await api.get('/accounts/profile/');
         if (res.data) {
           setUser(res.data);
-          // Update sessionStorage with fresh user data
-          sessionStorage.setItem('user', JSON.stringify(res.data));
+          // Update localStorage with fresh user data
+          localStorage.setItem('user', JSON.stringify(res.data));
         }
       } catch (error) {
         console.log('User not authenticated:', error.response?.status || error.message);
-        // Fallback to sessionStorage if API call fails
-        const storedUser = sessionStorage.getItem('user');
+        // Fallback to localStorage if API call fails
+        const storedUser = localStorage.getItem('user');
         if (storedUser) {
           try {
             const user = JSON.parse(storedUser);
             setUser(user);
           } catch (e) {
-            sessionStorage.removeItem('user');
+            localStorage.removeItem('user');
             setUser(null);
           }
         } else {
@@ -62,8 +62,8 @@ export const AuthProvider = ({ children }) => {
       
       if (res.data.user) {
         setUser(res.data.user);
-        // Store user data in sessionStorage as fallback
-        sessionStorage.setItem('user', JSON.stringify(res.data.user));
+        // Store user data in localStorage as fallback
+        localStorage.setItem('user', JSON.stringify(res.data.user));
         
         // Store authentication token in localStorage if available
         if (res.data.access) {
@@ -137,8 +137,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
-    // Clear sessionStorage
-    sessionStorage.removeItem('user');
+    // Clear localStorage user
+    localStorage.removeItem('user');
     // Clear localStorage tokens
     localStorage.removeItem('token');
     localStorage.removeItem('refresh_token');

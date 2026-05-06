@@ -67,7 +67,7 @@ const Payment = () => {
   const fetchBookingDetails = async () => {
     try {
       console.log('Fetching booking details for booking ID:', bookingId);
-      
+
       // Fetch booking details
       const bookingRes = await api.get(`/bookings/${bookingId}/`);
       console.log('Booking data received:', bookingRes.data);
@@ -78,7 +78,7 @@ const Payment = () => {
       const propertyName = bookingRes.data.property_name;
       console.log('Property ID from booking:', propertyId);
       console.log('Property name from booking:', propertyName);
-      
+
       if (propertyId) {
         // Use property ID if available
         const propertyRes = await api.get(`/properties/${propertyId}/`);
@@ -91,7 +91,7 @@ const Payment = () => {
           const searchRes = await api.get(`/properties/?search=${encodeURIComponent(propertyName)}`);
           const properties = searchRes.data?.results || searchRes.data || [];
           const foundProperty = properties.find(p => p.title === propertyName || p.name === propertyName);
-          
+
           if (foundProperty) {
             console.log('Property found by name:', foundProperty);
             setProperty(foundProperty);
@@ -186,7 +186,7 @@ const Payment = () => {
       // Refresh booking data to get current status
       const freshBookingRes = await api.get(`/bookings/${bookingId}/`);
       const freshBooking = freshBookingRes.data;
-      
+
       // First, confirm the booking if it's pending
       if (freshBooking.status === 'pending') {
         await api.post(`/bookings/${bookingId}/confirm/`);
@@ -199,7 +199,7 @@ const Payment = () => {
       };
 
       const paymentRes = await api.post('/payments/create/', paymentPayload);
-      
+
       if (paymentRes.data.id) {
         // Process payment (in real app, this would integrate with Stripe)
         const processRes = await api.post('/payments/process/', {
@@ -209,7 +209,7 @@ const Payment = () => {
         if (processRes.data.success) {
           // Show success notification briefly
           setShowNotification(true);
-          
+
           // Fetch receipt details
           try {
             const receiptRes = await api.get(`/payments/receipt/${paymentRes.data.id}/`);
@@ -226,7 +226,7 @@ const Payment = () => {
             });
           }
           setSuccess(true);
-          
+
           setTimeout(() => setShowNotification(false), 3000); // Just hide the toast, don't redirect
         }
       }
@@ -301,9 +301,9 @@ const Payment = () => {
               <span className="receipt-label">Guests</span>
               <span className="receipt-value">{booking?.number_of_occupants || booking?.number_of_guests || 1}</span>
             </div>
-            
+
             <div className="receipt-divider dashed"></div>
-            
+
             {receipt && (
               <>
                 <div className="receipt-row">
@@ -328,7 +328,7 @@ const Payment = () => {
             )}
 
             <div className="receipt-divider"></div>
-            
+
             <div className="receipt-row receipt-total">
               <span className="receipt-label">Amount Paid</span>
               <span className="receipt-value highlight">UGX {receipt?.amount || booking?.final_amount || booking?.total_amount}</span>
@@ -337,10 +337,10 @@ const Payment = () => {
 
           <div className="receipt-footer no-print">
             <button className="btn-outline-blue" onClick={() => window.print()}>
-               Print Receipt
+              Print Receipt
             </button>
             <button className="btn-primary" onClick={() => navigate('/dashboard')}>
-               Return to Dashboard
+              Return to Dashboard
             </button>
           </div>
         </div>
@@ -360,7 +360,7 @@ const Payment = () => {
               <p>Your payment has been processed successfully. Reservation confirmed!</p>
               <p>Receipt: {receipt?.receipt_number || 'Generating...'}</p>
             </div>
-            <button 
+            <button
               className="notification-close"
               onClick={() => setShowNotification(false)}
             >
@@ -382,25 +382,25 @@ const Payment = () => {
 
           <div className="payment-methods-list">
             {mockSavedMethods.map(method => (
-              <div 
-                key={method.id} 
+              <div
+                key={method.id}
                 className={`payment-method-card ${selectedMethod === method.id ? 'selected' : ''}`}
                 onClick={() => setSelectedMethod(method.id)}
               >
                 <div className="method-logo-container">
                   {method.type === 'mastercard' ? (
                     <div className="mc-logo">
-                       <div className="mc-red"></div>
-                       <div className="mc-orange"></div>
+                      <div className="mc-red"></div>
+                      <div className="mc-orange"></div>
                     </div>
                   ) : method.type === 'paypal' ? (
-                     <div className="pp-logo">
-                        <span className="p1">P</span><span className="p2">P</span>
-                     </div>
+                    <div className="pp-logo">
+                      <span className="p1">P</span><span className="p2">P</span>
+                    </div>
                   ) : method.type === 'mtn' ? (
-                     <div className="momo-logo mtn-logo">MTN</div>
+                    <div className="momo-logo mtn-logo">MTN</div>
                   ) : method.type === 'airtel' ? (
-                     <div className="momo-logo airtel-logo">airtel</div>
+                    <div className="momo-logo airtel-logo">airtel</div>
                   ) : (
                     <span className="visa-logo">VISA</span>
                   )}
@@ -417,8 +417,8 @@ const Payment = () => {
               </div>
             ))}
 
-            <button 
-              className="btn-primary submit-btn-redesign" 
+            <button
+              className="btn-primary submit-btn-redesign"
               onClick={() => setPaymentStep(2)}
             >
               Continue
@@ -448,158 +448,158 @@ const Payment = () => {
                     <span>Summary</span>
                   </div>
                   <div className="summary-amount-column">
-                    <span className="total-label">Total<br/>Amount<br/>to Pay:</span>
-                    <span className="ugx-amount">UGX<br/>{booking?.final_amount || booking?.total_amount || 0}</span>
+                    <span className="total-label">Total<br />Amount<br />to Pay:</span>
+                    <span className="ugx-amount">UGX<br />{booking?.final_amount || booking?.total_amount || 0}</span>
                   </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="payment-form landscape-form">
-                <h3>{mockSavedMethods.find(m => m.id === selectedMethod)?.category === 'momo' ? 'Mobile Money Details' : 'Card Details'}</h3>
-                
-                {mockSavedMethods.find(m => m.id === selectedMethod)?.category === 'momo' ? (
-                  <div className="form-group">
-                    <label>Mobile Money Number</label>
-                    <input
-                      type="tel"
-                      name="mobile_money_number"
-                      value={mobileMoneyNumber}
-                      onChange={(e) => setMobileMoneyNumber(e.target.value)}
-                      placeholder="e.g. 077X XXX XXX"
-                      required
-                    />
-                  </div>
-                ) : (
-                  <>
+                  <h3>{mockSavedMethods.find(m => m.id === selectedMethod)?.category === 'momo' ? 'Mobile Money Details' : 'Card Details'}</h3>
+
+                  {mockSavedMethods.find(m => m.id === selectedMethod)?.category === 'momo' ? (
                     <div className="form-group">
-                      <label>
-                        <CreditCard /> Card Number
-                      </label>
+                      <label>Mobile Money Number</label>
                       <input
-                        type="text"
-                        name="card_number"
-                        value={paymentData.card_number}
-                        onChange={handleCardNumberChange}
-                        placeholder="1234 5678 9012 3456"
-                        maxLength="19"
+                        type="tel"
+                        name="mobile_money_number"
+                        value={mobileMoneyNumber}
+                        onChange={(e) => setMobileMoneyNumber(e.target.value)}
+                        placeholder="e.g. 077X XXX XXX"
                         required
                       />
                     </div>
-
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Expiry Date</label>
-                        <input
-                          type="text"
-                          name="expiry_date"
-                          value={paymentData.expiry_date}
-                          onChange={handleExpiryDateChange}
-                          placeholder="MM/YY"
-                          maxLength="5"
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>CVV</label>
-                        <input
-                          type="text"
-                          name="cvv"
-                          value={paymentData.cvv}
-                          onChange={handleInputChange}
-                          placeholder="123"
-                          maxLength="4"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <div className="form-group">
-                      <label>Cardholder Name</label>
-                      <input
-                        type="text"
-                        name="cardholder_name"
-                        value={paymentData.cardholder_name}
-                        onChange={handleInputChange}
-                        placeholder="John Doe"
-                        required
-                      />
-                    </div>
-                  </>
-                )}
-
-                {error && (
-                  <div className="error-message">
-                    <AlertCircle />
-                    {error}
-                  </div>
-                )}
-
-                <button 
-                  type="submit" 
-                  className="btn-outline-blue submit-btn-landscape"
-                  disabled={processing}
-                >
-                  {processing ? (
-                    <>
-                      <div className="spinner-blue"></div>
-                      Processing...
-                    </>
                   ) : (
                     <>
-                      <div className="circle-outline-icon"></div>
-                      <span>Pay UGX<br/>{booking?.final_amount || booking?.total_amount || 0}</span>
+                      <div className="form-group">
+                        <label>
+                          <CreditCard /> Card Number
+                        </label>
+                        <input
+                          type="text"
+                          name="card_number"
+                          value={paymentData.card_number}
+                          onChange={handleCardNumberChange}
+                          placeholder="1234 5678 9012 3456"
+                          maxLength="19"
+                          required
+                        />
+                      </div>
+
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Expiry Date</label>
+                          <input
+                            type="text"
+                            name="expiry_date"
+                            value={paymentData.expiry_date}
+                            onChange={handleExpiryDateChange}
+                            placeholder="MM/YY"
+                            maxLength="5"
+                            required
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>CVV</label>
+                          <input
+                            type="text"
+                            name="cvv"
+                            value={paymentData.cvv}
+                            onChange={handleInputChange}
+                            placeholder="123"
+                            maxLength="4"
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div className="form-group">
+                        <label>Cardholder Name</label>
+                        <input
+                          type="text"
+                          name="cardholder_name"
+                          value={paymentData.cardholder_name}
+                          onChange={handleInputChange}
+                          placeholder="John Doe"
+                          required
+                        />
+                      </div>
                     </>
                   )}
-                </button>
-              </form>
-            </div>
-          </div>
 
-          <div className="payment-security step-2-security">
-          <h3>Security & Trust</h3>
-          <div className="security-features">
-            <div className="security-item">
-              <Shield />
-              <div>
-                <h4>Secure Payment</h4>
-                <p>Your payment information is encrypted and secure</p>
+                  {error && (
+                    <div className="error-message">
+                      <AlertCircle />
+                      {error}
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    className="btn-outline-blue submit-btn-landscape"
+                    disabled={processing}
+                  >
+                    {processing ? (
+                      <>
+                        <div className="spinner-blue"></div>
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <div className="circle-outline-icon"></div>
+                        <span>Pay UGX<br />{booking?.final_amount || booking?.total_amount || 0}</span>
+                      </>
+                    )}
+                  </button>
+                </form>
               </div>
             </div>
-            <div className="security-item">
-              <CheckCircle />
-              <div>
-                <h4>SSL Protected</h4>
-                <p>All transactions are protected by SSL encryption</p>
+
+            <div className="payment-security step-2-security">
+              <h3>Security & Trust</h3>
+              <div className="security-features">
+                <div className="security-item">
+                  <Shield />
+                  <div>
+                    <h4>Secure Payment</h4>
+                    <p>Your payment information is encrypted and secure</p>
+                  </div>
+                </div>
+                <div className="security-item">
+                  <CheckCircle />
+                  <div>
+                    <h4>SSL Protected</h4>
+                    <p>All transactions are protected by SSL encryption</p>
+                  </div>
+                </div>
+                <div className="security-item">
+                  <CreditCard />
+                  <div>
+                    <h4>Multiple Payment Methods</h4>
+                    <p>We accept all major credit and debit cards</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="payment-info">
+                <h4>Payment Information</h4>
+                <ul>
+                  <li>Your card will be charged immediately</li>
+                  <li>You'll receive a confirmation email</li>
+                  <li>Free cancellation up to 24 hours before check-in</li>
+                  <li>Refund processed according to cancellation policy</li>
+                </ul>
+              </div>
+
+              <div className="accepted-cards">
+                <h4>We Accept</h4>
+                <div className="card-logos">
+                  <div className="card-logo visa">VISA</div>
+                  <div className="card-logo mastercard">Mastercard</div>
+                  <div className="card-logo amex">AMEX</div>
+                  <div className="card-logo discover">Discover</div>
+                </div>
               </div>
             </div>
-            <div className="security-item">
-              <CreditCard />
-              <div>
-                <h4>Multiple Payment Methods</h4>
-                <p>We accept all major credit and debit cards</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="payment-info">
-            <h4>Payment Information</h4>
-            <ul>
-              <li>Your card will be charged immediately</li>
-              <li>You'll receive a confirmation email</li>
-              <li>Free cancellation up to 24 hours before check-in</li>
-              <li>Refund processed according to cancellation policy</li>
-            </ul>
-          </div>
-
-          <div className="accepted-cards">
-            <h4>We Accept</h4>
-            <div className="card-logos">
-              <div className="card-logo visa">VISA</div>
-              <div className="card-logo mastercard">Mastercard</div>
-              <div className="card-logo amex">AMEX</div>
-              <div className="card-logo discover">Discover</div>
-            </div>
-          </div>
-          </div>
           </div>
         </div>
       )}
