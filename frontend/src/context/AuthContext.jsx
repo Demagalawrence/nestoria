@@ -47,9 +47,9 @@ export const AuthProvider = ({ children }) => {
     return () => clearTimeout(timeout);
   }, []);
 
-  const login = async (email, password, secretKey) => {
-    console.log('Attempting login with:', { email, password, secretKey: !!secretKey });
-    console.log('Request payload:', { username: email, password, secret_key: secretKey });
+  const login = async (email, password) => {
+    console.log('Attempting login with:', { email, password });
+    console.log('Request payload:', { username: email, password });
     
     // Clear any existing tokens before attempting login
     localStorage.removeItem('token');
@@ -57,12 +57,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('refresh_token');
     
     try {
-      const loginData = { username: email, password };
-      if (secretKey) {
-        loginData.secret_key = secretKey;
-      }
-      
-      const res = await api.post('/accounts/login/', loginData);
+      const res = await api.post('/accounts/login/', { username: email, password });
       console.log('Login response:', res.data); // Debug log
       
       if (res.data.user) {

@@ -51,12 +51,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class UserLoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
-    secret_key = serializers.CharField(required=False, allow_blank=True)
     
     def validate(self, attrs):
         username = attrs.get('username')
         password = attrs.get('password')
-        secret_key = attrs.get('secret_key', '')
         
         if username and password:
             # Simple user lookup - try username first, then email
@@ -69,12 +67,6 @@ class UserLoginSerializer(serializers.Serializer):
             # If not found by username, try email
             if not user:
                 user = User.objects.filter(email=username).first()
-            
-            # Check if user is admin and secret key is required
-            if user and user.role == 'admin':
-                # For admin users, require secret key
-                if not secret_key or secret_key != user.secret_key:
-                    raise serializers.ValidationError('Invalid admin credentials')
             
             # Authenticate the user
             if user and user.check_password(password):
