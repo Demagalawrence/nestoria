@@ -3,7 +3,7 @@ services:
     name: web
     env: python
     buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
-    startCommand: python manage.py migrate && gunicorn find_your_perfect_home.wsgi:application
+    startCommand: python manage.py migrate && python manage.py seed_data && gunicorn find_your_perfect_home.wsgi:application
     envVars:
       - key: DATABASE_URL
         fromDatabase:
