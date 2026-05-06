@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { Eye, EyeOff, Building2, AlertCircle, Mail, User, Phone, Lock, Key } from 'lucide-react';
+import { Eye, EyeOff, Building2, AlertCircle, Mail, User, Phone, Lock, Key, ChevronDown } from 'lucide-react';
 import './Auth.css';
 
 const GoogleIcon = () => (
@@ -12,6 +12,63 @@ const GoogleIcon = () => (
     <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
   </svg>
 );
+
+const UgandaFlag = () => (
+  <svg viewBox="0 0 72 48" width="24" height="16" xmlns="http://www.w3.org/2000/svg">
+    <rect width="72" height="48" fill="#ffffff"/>
+    <g>
+      <rect y="0" width="72" height="6.857" fill="#000000"/>
+      <rect y="6.857" width="72" height="6.857" fill="#fcdc04"/>
+      <rect y="13.714" width="72" height="6.857" fill="#d90000"/>
+      <rect y="20.571" width="72" height="6.857" fill="#ffffff"/>
+      <rect y="27.429" width="72" height="6.857" fill="#fcdc04"/>
+      <rect y="34.286" width="72" height="6.857" fill="#d90000"/>
+      <rect y="41.143" width="72" height="6.857" fill="#000000"/>
+    </g>
+    <circle cx="36" cy="24" r="10" fill="#ffffff" stroke="#000000" strokeWidth="0.5"/>
+    <path d="M36 16 L37.5 22.5 L44 22.5 L38.75 26.5 L40.5 33 L36 29 L31.5 33 L33.25 26.5 L28 22.5 L34.5 22.5 Z" fill="#fcdc04"/>
+  </svg>
+);
+
+const USFlag = () => (
+  <svg viewBox="0 0 72 48" width="24" height="16" xmlns="http://www.w3.org/2000/svg">
+    <rect width="72" height="48" fill="#ffffff"/>
+    <g fill="#b22234">
+      <rect y="0" width="72" height="3.692"/>
+      <rect y="7.385" width="72" height="3.692"/>
+      <rect y="14.769" width="72" height="3.692"/>
+      <rect y="22.154" width="72" height="3.692"/>
+      <rect y="29.538" width="72" height="3.692"/>
+      <rect y="36.923" width="72" height="3.692"/>
+      <rect y="44.308" width="72" height="3.692"/>
+    </g>
+    <rect width="28.8" height="25.846" fill="#3c3b6e"/>
+    <g fill="#ffffff">
+      {Array.from({ length: 50 }).map((_, i) => {
+        const x = (i % 6) * 4.8 + 2.4;
+        const y = Math.floor(i / 6) * 3.462 + 1.731;
+        if (i >= 30 && (i % 6) >= 5) return null;
+        return <circle key={i} cx={x} cy={y} r="0.8"/>;
+      })}
+    </g>
+  </svg>
+);
+
+const UKFlag = () => (
+  <svg viewBox="0 0 72 48" width="24" height="16" xmlns="http://www.w3.org/2000/svg">
+    <rect width="72" height="48" fill="#012169"/>
+    <path d="M0 0 L72 48 M72 0 L0 48" stroke="#ffffff" strokeWidth="4.8"/>
+    <path d="M0 0 L72 48 M72 0 L0 48" stroke="#c8102e" strokeWidth="3.2"/>
+    <path d="M36 0 V48 M0 24 H72" stroke="#ffffff" strokeWidth="8"/>
+    <path d="M36 0 V48 M0 24 H72" stroke="#c8102e" strokeWidth="4.8"/>
+  </svg>
+);
+
+const countries = [
+  { code: 'UG', label: 'UG (+256)', flag: UgandaFlag },
+  { code: 'US', label: 'US (+1)', flag: USFlag },
+  { code: 'UK', label: 'UK (+44)', flag: UKFlag },
+];
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -56,6 +113,7 @@ const Register = () => {
   
   const [isAdmin, setIsAdmin] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [error, setError] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const { register } = useContext(AuthContext);
@@ -213,16 +271,42 @@ const Register = () => {
           <div className="premium-input-group">
             <label>Phone Number</label>
             <div className="premium-phone-group">
-              <select
-                name="country_code"
-                value={formData.country_code}
-                onChange={handleChange}
-                className="premium-country-select"
-              >
-                <option value="UG">🇺🇬 UG</option>
-                <option value="US">🇺🇸 US</option>
-                <option value="UK">🇬🇧 UK</option>
-              </select>
+              <div className="premium-country-dropdown">
+                <button
+                  type="button"
+                  className="premium-country-trigger"
+                  onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+                >
+                  {(() => {
+                    const selected = countries.find(c => c.code === formData.country_code);
+                    const Flag = selected ? selected.flag : UgandaFlag;
+                    return <Flag />;
+                  })()}
+                  <span>{formData.country_code}</span>
+                  <ChevronDown size={16} className={showCountryDropdown ? 'rotate' : ''} />
+                </button>
+                {showCountryDropdown && (
+                  <div className="premium-country-options">
+                    {countries.map((country) => {
+                      const Flag = country.flag;
+                      return (
+                        <button
+                          key={country.code}
+                          type="button"
+                          className={`premium-country-option ${formData.country_code === country.code ? 'active' : ''}`}
+                          onClick={() => {
+                            setFormData({ ...formData, country_code: country.code });
+                            setShowCountryDropdown(false);
+                          }}
+                        >
+                          <Flag />
+                          <span>{country.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
               <div className="premium-input-wrapper" style={{flex: 1}}>
                 <Phone className="premium-input-icon" size={20} />
                 <input
