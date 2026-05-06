@@ -97,7 +97,7 @@ const AdminDashboard = () => {
     setLoading(true);
     
     // Clear all storage
-    sessionStorage.removeItem('user');
+    localStorage.removeItem('user');
     localStorage.removeItem('token');
     localStorage.removeItem('refresh_token');
     
@@ -117,7 +117,7 @@ const AdminDashboard = () => {
       );
       
       // First check if we have stored authentication
-      const storedUser = sessionStorage.getItem('user');
+      const storedUser = localStorage.getItem('user') || sessionStorage.getItem('user');
       const token = localStorage.getItem('token');
       
       console.log('AdminDashboard Auth Check:');
@@ -138,6 +138,7 @@ const AdminDashboard = () => {
         parsedUser = JSON.parse(storedUser);
       } catch (e) {
         console.log('Invalid stored user data, clearing and redirecting...');
+        localStorage.removeItem('user');
         sessionStorage.removeItem('user');
         localStorage.removeItem('token');
         localStorage.removeItem('refresh_token');
@@ -194,7 +195,7 @@ const AdminDashboard = () => {
       if (error.message === 'Admin access check timeout') {
         console.log('Admin access check timed out, proceeding with stored data...');
         // Proceed with stored user data if API times out
-        const storedUser = sessionStorage.getItem('user');
+        const storedUser = localStorage.getItem('user') || sessionStorage.getItem('user');
         if (storedUser) {
           try {
             const parsedUser = JSON.parse(storedUser);
@@ -224,6 +225,7 @@ const AdminDashboard = () => {
       }
       
       // Clear invalid stored data and redirect
+      localStorage.removeItem('user');
       sessionStorage.removeItem('user');
       localStorage.removeItem('token');
       localStorage.removeItem('refresh_token');

@@ -13,33 +13,33 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    
+
     // Validate fields are not empty
     if (!identifier.trim() || !password.trim()) {
       setError('📝 Please enter both your email address and password.');
       return;
     }
-    
+
     // Check if identifier is email or username
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const isEmail = emailRegex.test(identifier);
-    
+
     // Validate email format if it looks like an email
     if (identifier.includes('@') && !isEmail) {
       setError('📧 Please enter a valid email address (e.g., admin@example.com).');
       return;
     }
-    
+
     // Validate password length
     if (password.length < 6) {
       setError('🔑 Password must be at least 6 characters long.');
       return;
     }
-    
+
     try {
       // Pass identifier (email or username) to login function
       const loginResult = await login(identifier, password);
-      
+
       // Redirect based on user role
       if (loginResult.user?.role === 'admin') {
         navigate('/admin');
@@ -49,7 +49,7 @@ const Login = () => {
     } catch (err) {
       console.error('Login error:', err);
       const errorData = err.response?.data;
-      
+
       if (errorData) {
         // Handle specific error messages with user-friendly text
         if (errorData.non_field_errors && errorData.non_field_errors.includes('Invalid credentials')) {
@@ -94,40 +94,40 @@ const Login = () => {
       <div className="auth-card glass-panel animate-fade-in">
         <h2 className="auth-title">Welcome Back</h2>
         <p className="auth-subtitle">Sign in to continue to Rent H&U</p>
-        
+
         {error && <div className="auth-error">{error}</div>}
-        
+
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label>Email Address</label>
-            <input 
-              type="text" 
-              value={identifier} 
-              onChange={(e) => setIdentifier(e.target.value)} 
+            <input
+              type="text"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
               placeholder="admin@example.com"
-              required 
+              required
             />
             <small className="form-hint">💡 Use your email address (e.g., admin@example.com)</small>
           </div>
           <div className="form-group">
             <label>Password</label>
-            <input 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              required 
+              required
             />
             <small className="form-hint">🔑 Must be at least 6 characters</small>
           </div>
-          
+
           <button type="submit" className="btn-primary auth-submit">Sign In</button>
         </form>
-        
+
         <div className="auth-footer">
           Don't have an account? <Link to="/register">Sign up</Link>
         </div>
-        
+
         <div className="demo-credentials">
           <h4>🔑 Demo Credentials</h4>
           <p><strong>Email:</strong> admin@example.com</p>
