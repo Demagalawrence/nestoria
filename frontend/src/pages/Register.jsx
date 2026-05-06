@@ -1,9 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { Eye, EyeOff } from 'lucide-react';
-import './Register.css';
-
+import { Eye, EyeOff, Building2, AlertCircle, Mail, User, Phone, Lock, Key } from 'lucide-react';
+import './Auth.css';
 
 const GoogleIcon = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
@@ -11,19 +10,6 @@ const GoogleIcon = () => (
     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
     <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
     <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-  </svg>
-);
-
-const XIcon = () => (
-  <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
-    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor" />
-  </svg>
-);
-
-const LogoIcon = () => (
-  <svg viewBox="0 0 40 40" width="48" height="48" xmlns="http://www.w3.org/2000/svg" className="auth-logo-icon">
-    <path d="M20 4L4 18h4v18h24V18h4L20 4z" fill="none" stroke="#2563eb" strokeWidth="4" strokeLinejoin="round" />
-    <path d="M16 36V22h8v14" fill="none" stroke="#2563eb" strokeWidth="4" strokeLinejoin="round" />
   </svg>
 );
 
@@ -40,9 +26,8 @@ const Register = () => {
     termsAccepted: false
   });
 
-  // Password strength validation
   const getPasswordStrength = (password) => {
-    if (!password) return { score: 0, color: '#ccc', text: 'Enter a password' };
+    if (!password) return { score: 0, color: '#94a3b8', text: 'Enter a password' };
     
     let score = 0;
     if (password.length >= 6) score += 1;
@@ -52,17 +37,17 @@ const Register = () => {
     if (/[0-9]/.test(password)) score += 1;
     if (/[^A-Za-z0-9]/.test(password)) score += 1;
     
-    let color = '#dc3545'; // red - weak
+    let color = '#ef4444'; 
     let text = 'Weak password';
     
     if (score >= 4) {
-      color = '#22c55e'; // green - strong
+      color = '#22c55e'; 
       text = 'Strong password';
     } else if (score >= 3) {
-      color = '#f59e0b'; // orange - medium
+      color = '#f59e0b'; 
       text = 'Medium password';
     } else if (score >= 2) {
-      color = '#eab308'; // yellow - fair
+      color = '#eab308'; 
       text = 'Fair password';
     }
     
@@ -70,7 +55,6 @@ const Register = () => {
   };
   
   const [isAdmin, setIsAdmin] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -81,7 +65,6 @@ const Register = () => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     setFormData({ ...formData, [e.target.name]: value });
     
-    // Handle admin checkbox change
     if (e.target.name === 'isAdmin') {
       setFormData(prev => ({ ...prev, isAdmin: e.target.checked }));
     }
@@ -97,28 +80,28 @@ const Register = () => {
     setError(null);
 
     if (!formData.name.trim() || !formData.email.trim() || !formData.password.trim()) {
-      setError('📝 Please fill in all required fields.');
+      setError('Please fill in all required fields.');
       return;
     }
 
     if (!formData.termsAccepted) {
-      setError('✅ You must accept terms & conditions to register.');
+      setError('You must accept terms & conditions to register.');
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      setError('📧 Please enter a valid email address.');
+      setError('Please enter a valid email address.');
       return;
     }
 
     if (formData.password !== formData.confirm_password) {
-      setError('🔐 Passwords do not match. Please check and try again.');
+      setError('Passwords do not match. Please check and try again.');
       return;
     }
 
     if (formData.password.length < 6) {
-      setError('🔑 Password must be at least 6 characters long.');
+      setError('Password must be at least 6 characters long.');
       return;
     }
 
@@ -142,7 +125,6 @@ const Register = () => {
       submitData.append('password', formData.password);
       submitData.append('confirm_password', formData.confirm_password);
       
-      // Add role and secret key for admin users
       if (isAdmin) {
         submitData.append('role', 'admin');
         if (formData.secret_key) {
@@ -169,265 +151,264 @@ const Register = () => {
             .join('; ');
           setError(errorMessages);
         } else {
-          setError(errorData.detail || errorData.error || '❌ Registration failed. Please try again.');
+          setError(errorData.detail || errorData.error || 'Registration failed. Please try again.');
         }
       } else {
-        setError('❌ Unable to connect to server. Please check your internet connection and try again.');
+        setError('Unable to connect to server. Please check your internet connection and try again.');
       }
     }
   };
 
   return (
-    <div className="modern-register-page">
-      <div className="modern-register-container">
-        <div className="modern-register-card">
-          
-          {/* Header */}
-          <div className="modern-register-header">
-            <div className="modern-logo">
-              <LogoIcon />
-            </div>
-            <h1 className="modern-register-title">Create an account</h1>
-            <p className="modern-register-subtitle">
-              Already have an account? <Link to="/login" className="modern-login-link">Sign in</Link>
-            </p>
+    <div className="premium-auth-container">
+      <div className="premium-auth-card premium-register-card animate-fade-in">
+        
+        <div className="premium-auth-header">
+          <div className="premium-logo">
+            <Building2 size={28} color="#ffffff" strokeWidth={2.5} />
           </div>
+          <h2>Create an account</h2>
+          <p>Join Nestoria today and unlock premium features</p>
+        </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="modern-error-message">
-              {error}
-            </div>
-          )}
+        {error && (
+          <div className="premium-error-message">
+            <AlertCircle size={20} />
+            <span>{error}</span>
+          </div>
+        )}
 
-          {/* Registration Form */}
-          <form onSubmit={handleSubmit} className="modern-register-form">
-            
-            {/* Name Field */}
-            <div className="modern-form-group">
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Enter your full name"
-                className="modern-form-input"
-                required
-              />
-            </div>
-
-            {/* Email Field */}
-            <div className="modern-form-group">
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Enter your email"
-                className="modern-form-input"
-                required
-              />
-            </div>
-
-            {/* Admin Checkbox */}
-            <div className="modern-form-group">
-              <label className="modern-checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={isAdmin}
-                  onChange={(e) => setIsAdmin(e.target.checked)}
-                  className="modern-checkbox"
-                />
-                <span className="modern-checkbox-text">
-                  I am registering as an administrator (requires secret key)
-                </span>
-              </label>
-            </div>
-
-            {/* Secret Key Field - Only for Admin */}
-            {isAdmin && (
-              <div className="modern-form-group">
+        <form onSubmit={handleSubmit} className="premium-auth-form">
+          
+          {/* Row 1: Name and Email */}
+          <div className="premium-form-row">
+            <div className="premium-input-group">
+              <label>Full Name</label>
+              <div className="premium-input-wrapper">
+                <User className="premium-input-icon" size={20} />
                 <input
                   type="text"
-                  name="secret_key"
-                  value={formData.secret_key || ''}
+                  name="name"
+                  value={formData.name}
                   onChange={handleChange}
-                  placeholder="Enter admin secret key"
-                  className="modern-form-input"
+                  placeholder="John Doe"
+                  required
                 />
               </div>
-            )}
+            </div>
 
-            {/* Phone Field */}
-            <div className="modern-form-group">
-              <div className="modern-phone-group">
+            <div className="premium-input-group">
+              <label>Email Address</label>
+              <div className="premium-input-wrapper">
+                <Mail className="premium-input-icon" size={20} />
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="name@example.com"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Row 2: Phone and Marital Status */}
+          <div className="premium-form-row">
+            <div className="premium-input-group">
+              <label>Phone Number</label>
+              <div className="premium-phone-group">
                 <select
                   name="country_code"
                   value={formData.country_code}
                   onChange={handleChange}
-                  className="modern-country-select"
+                  className="premium-country-select"
                 >
                   <option value="UG">🇺🇬 UG</option>
                   <option value="US">🇺🇸 US</option>
                   <option value="UK">🇬🇧 UK</option>
                 </select>
-                <input
-                  type="text"
-                  name="phone_number"
-                  value={formData.phone_number}
-                  onChange={handleChange}
-                  placeholder="700 000 000"
-                  className="modern-phone-input"
-                />
+                <div className="premium-input-wrapper" style={{flex: 1}}>
+                  <Phone className="premium-input-icon" size={20} />
+                  <input
+                    type="text"
+                    name="phone_number"
+                    value={formData.phone_number}
+                    onChange={handleChange}
+                    placeholder="700 000 000"
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Marital Status Field */}
-            <div className="modern-form-group">
-              <label className="modern-label">Marital Status</label>
-              <div className="radio-group">
-                <label className="radio-label">
+            <div className="premium-input-group">
+              <label>Marital Status</label>
+              <div className="premium-radio-group">
+                <label className="premium-radio-label">
                   <input
                     type="radio"
                     name="marital_status"
                     value="single"
                     checked={formData.marital_status === 'single'}
                     onChange={handleChange}
-                    className="radio-input"
                   />
-                  <span className="radio-custom"></span>
-                  <span className="radio-text">Single</span>
+                  <span>Single</span>
                 </label>
-                <label className="radio-label">
+                <label className="premium-radio-label">
                   <input
                     type="radio"
                     name="marital_status"
                     value="married"
                     checked={formData.marital_status === 'married'}
                     onChange={handleChange}
-                    className="radio-input"
                   />
-                  <span className="radio-custom"></span>
-                  <span className="radio-text">Married</span>
+                  <span>Married</span>
                 </label>
               </div>
             </div>
+          </div>
 
-            {/* Password Fields */}
-            <div className="modern-form-group">
-              <div className="modern-password-group">
+          {/* Row 3: Passwords */}
+          <div className="premium-form-row">
+            <div className="premium-input-group">
+              <label>Password</label>
+              <div className="premium-input-wrapper">
+                <Lock className="premium-input-icon" size={20} />
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  placeholder="Create a password"
-                  className={`modern-form-input ${getPasswordStrength(formData.password).color}`}
+                  placeholder="••••••••"
                   required
+                  style={{ paddingRight: '44px' }}
                 />
-                <div className="password-strength-indicator">
-                  <span style={{ color: getPasswordStrength(formData.password).color }}>
-                    {getPasswordStrength(formData.password).text}
-                  </span>
-                </div>
                 <button
                   type="button"
-                  className="modern-password-toggle"
+                  className="premium-password-toggle"
                   onClick={() => setShowPassword(!showPassword)}
                   tabIndex="-1"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
+              <span className="premium-password-strength" style={{ color: getPasswordStrength(formData.password).color }}>
+                {getPasswordStrength(formData.password).text}
+              </span>
             </div>
-            <div className="modern-form-group">
-              <input
-                type="password"
-                name="confirm_password"
-                value={formData.confirm_password}
-                onChange={handleChange}
-                placeholder="Confirm your password"
-                className={`modern-form-input ${getPasswordStrength(formData.confirm_password).color}`}
-                required
-              />
-              <div className="password-strength-indicator">
-                <span style={{ color: getPasswordStrength(formData.confirm_password).color }}>
-                    {getPasswordStrength(formData.confirm_password).text}
-                </span>
+
+            <div className="premium-input-group">
+              <label>Confirm Password</label>
+              <div className="premium-input-wrapper">
+                <Lock className="premium-input-icon" size={20} />
+                <input
+                  type="password"
+                  name="confirm_password"
+                  value={formData.confirm_password}
+                  onChange={handleChange}
+                  placeholder="••••••••"
+                  required
+                />
               </div>
             </div>
+          </div>
 
-            {/* Terms Checkbox */}
-            <div className="modern-terms-group">
-              <label className="modern-checkbox-label">
+          {/* Admin Section (Placed before terms) */}
+          <div className="premium-input-group" style={{ marginTop: '8px' }}>
+            <label className="premium-checkbox-label">
+              <input
+                type="checkbox"
+                name="isAdmin"
+                checked={isAdmin}
+                onChange={handleChange}
+              />
+              <span>I am registering as an administrator (requires secret key)</span>
+            </label>
+          </div>
+
+          {isAdmin && (
+            <div className="premium-input-group">
+              <label>Admin Secret Key</label>
+              <div className="premium-input-wrapper">
+                <Key className="premium-input-icon" size={20} />
                 <input
-                  type="checkbox"
-                  name="termsAccepted"
-                  checked={formData.termsAccepted}
+                  type="text"
+                  name="secret_key"
+                  value={formData.secret_key || ''}
                   onChange={handleChange}
-                  className="modern-checkbox"
+                  placeholder="Enter your administrator secret key"
                 />
-                <span className="modern-checkbox-text">
-                  I agree to <a href="/terms" className="modern-terms-link">Terms of Service</a> and <a href="/privacy" className="modern-terms-link">Privacy Policy</a>
-                </span>
-              </label>
+              </div>
             </div>
+          )}
 
-            {/* Submit Button */}
-            <button type="submit" className="modern-submit-btn">
-              Create Account
-            </button>
-          </form>
-
-          {/* Divider */}
-          <div className="modern-divider" style={{ marginTop: '20px' }}>
-            <div className="modern-divider-line"></div>
-            <span className="modern-divider-text">or sign up with</span>
-            <div className="modern-divider-line"></div>
+          {/* Terms Section (Placed after admin/secret key) */}
+          <div className="premium-input-group" style={{ marginTop: '8px' }}>
+            <label className="premium-checkbox-label">
+              <input
+                type="checkbox"
+                name="termsAccepted"
+                checked={formData.termsAccepted}
+                onChange={handleChange}
+              />
+              <span>I agree to the <Link to="/terms">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link></span>
+            </label>
           </div>
 
-          {/* Social Login */}
-          <div className="modern-social-section" style={{ marginTop: '20px', marginBottom: '20px' }}>
-            <div className="modern-social-buttons">
-              <button type="button" className="modern-social-btn google-btn">
-                <GoogleIcon />
-                <span>Google</span>
-              </button>
-              <button type="button" className="modern-social-btn apple-btn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                </svg>
-                <span>Apple</span>
-              </button>
-            </div>
-          </div>
+          <button type="submit" className="premium-submit-btn">
+            Create Account
+          </button>
+        </form>
 
-          {/* Footer */}
-          <div className="modern-register-footer">
-            <p className="modern-footer-text">
-              Protected by reCAPTCHA and subject to Google <a href="/privacy" className="modern-terms-link">Privacy Policy</a> and <a href="/terms" className="modern-terms-link">Terms of Service</a>.
-            </p>
-          </div>
-
+        <div className="premium-divider">
+          <span>or continue with</span>
         </div>
+
+        <div className="premium-social-group">
+          <button type="button" className="premium-social-btn">
+            <GoogleIcon />
+            <span>Google</span>
+          </button>
+          <button type="button" className="premium-social-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+            </svg>
+            <span>Apple</span>
+          </button>
+        </div>
+
+        <div className="premium-auth-footer">
+          <p>Already have an account? <Link to="/login">Sign in here</Link></p>
+        </div>
+
       </div>
 
-      {/* Success Modal */}
       {showSuccessModal && (
-        <div className="success-modal-overlay">
-          <div className="success-modal">
-            <div className="success-icon">
-              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" stroke="#10b981" strokeWidth="2"/>
-                <path d="M8 12l2 2 4-4" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <div className="success-modal-overlay" style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(15, 23, 42, 0.6)', backdropFilter: 'blur(4px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50
+        }}>
+          <div className="success-modal" style={{
+            background: 'white', padding: '40px', borderRadius: '16px',
+            textAlign: 'center', maxWidth: '400px', width: '90%',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
+          }}>
+            <div className="success-icon" style={{
+              width: '64px', height: '64px', background: '#dcfce7',
+              borderRadius: '50%', display: 'flex', alignItems: 'center',
+              justifyContent: 'center', margin: '0 auto 24px'
+            }}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17l-5-5" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <h2 className="success-title">Registration Successful!</h2>
-            <p className="success-message">
+            <h2 style={{fontSize: '1.5rem', fontWeight: '700', color: '#0f172a', marginBottom: '12px'}}>Registration Successful!</h2>
+            <p style={{color: '#64748b', marginBottom: '32px', lineHeight: '1.5'}}>
               Your account has been created successfully. You can now login with your credentials.
             </p>
-            <button onClick={handleSuccessModalOk} className="success-ok-btn">
-              OK
+            <button onClick={handleSuccessModalOk} className="premium-submit-btn">
+              Continue to Login
             </button>
           </div>
         </div>
