@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
-from properties.models import Property, PropertyImage
+from properties.models import Property, PropertyImage, Room
 from decimal import Decimal
 
 User = get_user_model()
@@ -136,8 +136,42 @@ class Command(BaseCommand):
                     is_primary=(i == 0)
                 )
             
+            # Create rooms for the property
+            room_configs = []
+            
+            if property.property_type == 'studio':
+                room_configs = [
+                    {'room_number': 'ST-001', 'room_type': 'studio', 'capacity': 1, 'price_per_month': property.rent_per_month, 'area_sqft': 300}
+                ]
+            elif property.property_type == 'hostel':
+                room_configs = [
+                    {'room_number': 'H-101', 'room_type': 'triple', 'capacity': 3, 'price_per_month': property.rent_per_month, 'area_sqft': 250},
+                    {'room_number': 'H-102', 'room_type': 'triple', 'capacity': 3, 'price_per_month': property.rent_per_month, 'area_sqft': 250},
+                    {'room_number': 'H-103', 'room_type': 'double', 'capacity': 2, 'price_per_month': property.rent_per_month, 'area_sqft': 200},
+                ]
+            elif property.property_type == 'self_contained':
+                room_configs = [
+                    {'room_number': 'SC-201', 'room_type': '1bhk', 'capacity': 2, 'price_per_month': property.rent_per_month, 'area_sqft': 500},
+                    {'room_number': 'SC-202', 'room_type': '1bhk', 'capacity': 2, 'price_per_month': property.rent_per_month, 'area_sqft': 500},
+                    {'room_number': 'SC-203', 'room_type': '2bhk', 'capacity': 4, 'price_per_month': property.rent_per_month, 'area_sqft': 700},
+                ]
+            elif property.property_type == 'single_room':
+                room_configs = [
+                    {'room_number': 'SR-301', 'room_type': 'single', 'capacity': 1, 'price_per_month': property.rent_per_month, 'area_sqft': 150}
+                ]
+            elif property.property_type == 'double_room':
+                room_configs = [
+                    {'room_number': 'DR-401', 'room_type': 'double', 'capacity': 2, 'price_per_month': property.rent_per_month, 'area_sqft': 200}
+                ]
+            
+            for room_config in room_configs:
+                Room.objects.create(
+                    rental_property=property,
+                    **room_config
+                )
+            
             created_count += 1
-            self.stdout.write(self.style.SUCCESS(f"Created property: {property.name}"))
+            self.stdout.write(self.style.SUCCESS(f"Created property: {property.name} with {len(room_configs)} rooms"))
 
         self.stdout.write(
             self.style.SUCCESS(f'Successfully created {created_count} sample properties')
