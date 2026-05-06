@@ -5,11 +5,12 @@ from .models import User, UserDocument
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
     confirm_password = serializers.CharField(write_only=True)
+    secret_key = serializers.CharField(required=False, allow_blank=True, write_only=True)
     
     class Meta:
         model = User
         fields = ['username', 'email', 'password', 'confirm_password', 'first_name', 'last_name', 
-                 'role', 'user_type', 'contact_number', 'date_of_birth', 'gender']
+                 'role', 'user_type', 'contact_number', 'date_of_birth', 'gender', 'secret_key']
     
     def validate(self, attrs):
         if attrs['password'] != attrs['confirm_password']:
@@ -28,6 +29,14 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         # Check if email already exists
         if User.objects.filter(email=email).exists():
             raise serializers.ValidationError("Email already registered")
+        
+        # Handle secret key for admin users
+        role = attrs.get('role')
+        secret_key = attrs.get('secret_key', '')
+        if role == 'admin':
+            if not secret_key:
+                raise serializers.ValidationError("Admin users must provide a secret key")
+            # You can add validation for the secret key here if needed
             
         return attrs
     
@@ -42,10 +51,12 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class UserLoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
+    secret_key = serializers.CharField(required=False, allow_blank=True)
     
     def validate(self, attrs):
         username = attrs.get('username')
         password = attrs.get('password')
+        secret_key = attrs.get('secret_key', '')
         
         if username and password:
             # Simple user lookup - try username first, then email
@@ -58,6 +69,12 @@ class UserLoginSerializer(serializers.Serializer):
             # If not found by username, try email
             if not user:
                 user = User.objects.filter(email=username).first()
+            
+            # Check if user is admin and secret key is required
+            if user and user.role == 'admin':
+                # For admin users, require secret key
+                if not secret_key or secret_key != user.secret_key:
+                    raise serializers.ValidationError('Invalid admin credentials')
             
             # Authenticate the user
             if user and user.check_password(password):

@@ -69,6 +69,7 @@ class User(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     last_login_ip = models.GenericIPAddressField(blank=True, null=True)
+    secret_key = models.CharField(max_length=100, blank=True, null=True, help_text="Admin secret key for secure login")
     
     def __str__(self):
         return f"{self.username} ({self.role})"
