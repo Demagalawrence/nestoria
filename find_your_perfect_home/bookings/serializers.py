@@ -75,16 +75,21 @@ class BookingCreateSerializer(serializers.ModelSerializer):
             if not rental_property:
                 raise serializers.ValidationError("Property is required")
             
+            # Property-level booking - check property availability
             if rental_property.available_rooms <= 0:
                 raise serializers.ValidationError("Property is fully booked")
             
-            # Try to auto-assign a vacant room if possible
-            vacant_room = Room.objects.filter(
-                rental_property=rental_property, 
-                status='vacant'
-            ).first()
-            if vacant_room:
-                attrs['room'] = vacant_room
+            # Check for overlapping property-level bookings
+            overlapping_bookings = Booking.objects.filter(
+                rental_property=rental_property,
+                room__isnull=True,  # Property-level bookings
+                status__in=['pending', 'confirmed'],
+                start_date__lte=end_date,
+                end_date__gte=start_date
+            )
+            
+            if overlapping_bookings.exists():
+                raise serializers.ValidationError("Property is already booked for these dates")
             
         return attrs
 
