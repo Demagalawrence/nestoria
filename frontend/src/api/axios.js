@@ -26,8 +26,8 @@ const getApiBaseUrl = () => {
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL;
   }
-  // Fallback to localhost
-  return 'http://localhost:8001/api';
+  // Fallback to localhost or local network IP
+  return `http://${window.location.hostname}:8001/api`;
 };
 
 const api = axios.create({

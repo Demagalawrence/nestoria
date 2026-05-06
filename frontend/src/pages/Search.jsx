@@ -34,7 +34,8 @@ const SearchResults = () => {
       if (filters.location) params.append('location', filters.location);
       if (filters.property_type) params.append('property_type', filters.property_type);
       if (filters.max_price) params.append('max_rent', filters.max_price);
-      // Removed audience_type filtering to show all properties including hostels
+      // Add audience filtering based on toggle
+      params.append('audience_type', isUniversity ? 'university' : 'public');
       
       const res = await api.get(`/properties/search/?${params.toString()}`);
       setProperties(res.data.results || res.data);
