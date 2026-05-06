@@ -114,16 +114,17 @@ class BookingConfirmView(generics.GenericAPIView):
             booking.confirmed_at = timezone.now()
             booking.save()
             
-            # Update room availability
+            # Update room availability when this is a room-level booking.
             room = booking.room
-            room.current_occupancy += booking.number_of_occupants
-            if room.current_occupancy >= room.capacity:
-                room.status = 'occupied'
-            room.save()
+            if room:
+                room.current_occupancy += booking.number_of_occupants
+                if room.current_occupancy >= room.capacity:
+                    room.status = 'occupied'
+                room.save()
             
             # Update property availability
             property_obj = booking.rental_property
-            property_obj.available_rooms -= 1
+            property_obj.available_rooms = max(0, property_obj.available_rooms - 1)
             property_obj.save()
             
             # Create booking history
@@ -189,14 +190,15 @@ class CheckOutView(generics.GenericAPIView):
             booking.status = 'completed'
             booking.save()
             
-            # Update room availability
+            # Update room availability when this is a room-level booking.
             room = booking.room
-            room.current_occupancy -= booking.number_of_occupants
-            if room.current_occupancy == 0:
-                room.status = 'vacant'
-            else:
-                room.status = 'occupied'
-            room.save()
+            if room:
+                room.current_occupancy = max(0, room.current_occupancy - booking.number_of_occupants)
+                if room.current_occupancy == 0:
+                    room.status = 'vacant'
+                else:
+                    room.status = 'occupied'
+                room.save()
             
             # Update property availability
             property_obj = booking.rental_property

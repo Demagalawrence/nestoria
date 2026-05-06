@@ -35,6 +35,7 @@ class Property(models.Model):
         ('nurses', 'Nurses & Medical Staff'),
         ('teachers', 'Teachers'),
         ('ngo_workers', 'NGO Workers'),
+        ('public', 'Public'),
     ]
     
     GENDER_PREFERENCE = [
@@ -106,6 +107,7 @@ class Property(models.Model):
     gender_preference = models.CharField(max_length=20, choices=GENDER_PREFERENCE, default='any')
     description = models.TextField()
     detailed_description = models.TextField(blank=True)
+    image_url = models.URLField(max_length=500, blank=True)
     
     # Location Details
     address_line_1 = models.CharField(max_length=255)
@@ -197,7 +199,8 @@ class Property(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return f"{self.name} - {self.locality}, {self.city}"
+        location = self.district or self.county or self.country
+        return f"{self.name} - {location}"
     
     @property
     def occupancy_rate(self):

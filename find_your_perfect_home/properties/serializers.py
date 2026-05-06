@@ -34,7 +34,7 @@ class PropertySerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'property_type', 'target_audience', 'gender_preference',
                  'description', 'address_line_1', 'address_line_2', 'district', 'county', 
                  'sub_county', 'parish', 'village', 'postal_code', 'country',
-                 'rent_per_month', 'security_deposit', 'furnishing', 'amenities',
+                 'image_url', 'rent_per_month', 'security_deposit', 'furnishing', 'amenities',
                  'total_rooms', 'available_rooms', 'min_occupancy', 'max_occupancy',
                  'is_featured', 'owner_name', 'primary_image', 'average_rating',
                  'total_reviews', 'created_at']
@@ -93,7 +93,7 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
         fields = ['name', 'property_type', 'target_audience', 'gender_preference',
                  'description', 'address_line_1', 'address_line_2', 'district', 'county',
                  'sub_county', 'parish', 'village', 'postal_code', 'country',
-                 'total_rooms', 'available_rooms', 'min_occupancy', 'max_occupancy',
+                 'image_url', 'total_rooms', 'available_rooms', 'min_occupancy', 'max_occupancy',
                  'rent_per_month', 'security_deposit', 'built_up_area', 'carpet_area',
                  'contact_person', 'contact_number', 'whatsapp_number', 'furnishing', 
                  'amenities', 'is_active', 'is_featured', 'nearby_landmarks', 

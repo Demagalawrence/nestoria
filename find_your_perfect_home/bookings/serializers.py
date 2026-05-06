@@ -29,6 +29,7 @@ class BookingSerializer(serializers.ModelSerializer):
 
 class BookingCreateSerializer(serializers.ModelSerializer):
     room = serializers.PrimaryKeyRelatedField(queryset=Room.objects.all(), required=False, allow_null=True)
+    ACTIVE_BOOKING_STATUSES = ('pending', 'confirmed')
     
     class Meta:
         model = Booking
@@ -39,11 +40,20 @@ class BookingCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'booking_reference']
     
     def validate(self, attrs):
-        room = attrs.get('room')
-        start_date = attrs['start_date']
-        end_date = attrs['end_date']
-        number_of_occupants = attrs.get('number_of_occupants', 1)
-        rental_property = attrs.get('rental_property')
+        room = attrs.get('room', self.instance.room if self.instance else None)
+        start_date = attrs.get('start_date', self.instance.start_date if self.instance else None)
+        end_date = attrs.get('end_date', self.instance.end_date if self.instance else None)
+        number_of_occupants = attrs.get(
+            'number_of_occupants',
+            self.instance.number_of_occupants if self.instance else 1
+        )
+        rental_property = attrs.get(
+            'rental_property',
+            self.instance.rental_property if self.instance else None
+        )
+
+        if not start_date or not end_date:
+            return attrs
         
         # Check date validity
         if start_date >= end_date:
@@ -53,6 +63,9 @@ class BookingCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Start date cannot be in the past")
 
         if room:
+            if rental_property and room.rental_property_id != rental_property.id:
+                raise serializers.ValidationError("Room does not belong to the selected property")
+            
             # Check if room is available
             if not room.is_available:
                 raise serializers.ValidationError("Room is not available")
@@ -64,32 +77,46 @@ class BookingCreateSerializer(serializers.ModelSerializer):
             # Check for overlapping bookings
             overlapping_bookings = Booking.objects.filter(
                 room=room,
-                status__in=['pending', 'confirmed'],
-                start_date__lte=end_date,
-                end_date__gte=start_date
+                status__in=self.ACTIVE_BOOKING_STATUSES,
+                start_date__lt=end_date,
+                end_date__gt=start_date
             )
+            if self.instance:
+                overlapping_bookings = overlapping_bookings.exclude(pk=self.instance.pk)
             
             if overlapping_bookings.exists():
                 raise serializers.ValidationError("Room is already booked for these dates")
         else:
             if not rental_property:
                 raise serializers.ValidationError("Property is required")
+
+            if number_of_occupants < rental_property.min_occupancy:
+                raise serializers.ValidationError(
+                    f"Property requires at least {rental_property.min_occupancy} occupants"
+                )
+
+            if number_of_occupants > rental_property.max_occupancy:
+                raise serializers.ValidationError(
+                    f"Property allows at most {rental_property.max_occupancy} occupants"
+                )
             
             # Property-level booking - check property availability
             if rental_property.available_rooms <= 0:
                 raise serializers.ValidationError("Property is fully booked")
             
-            # Check for overlapping property-level bookings
+            # Check property-level capacity for overlapping dates. A property can
+            # accept overlapping bookings until all rooms are reserved.
             overlapping_bookings = Booking.objects.filter(
                 rental_property=rental_property,
-                room__isnull=True,  # Property-level bookings
-                status__in=['pending', 'confirmed'],
-                start_date__lte=end_date,
-                end_date__gte=start_date
+                status__in=self.ACTIVE_BOOKING_STATUSES,
+                start_date__lt=end_date,
+                end_date__gt=start_date
             )
+            if self.instance:
+                overlapping_bookings = overlapping_bookings.exclude(pk=self.instance.pk)
             
-            if overlapping_bookings.exists():
-                raise serializers.ValidationError("Property is already booked for these dates")
+            if overlapping_bookings.count() >= rental_property.total_rooms:
+                raise serializers.ValidationError("Property is fully booked for these dates")
             
         return attrs
 
