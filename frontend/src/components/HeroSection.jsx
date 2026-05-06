@@ -85,57 +85,6 @@ const HeroSection = () => {
                      </div>
                   </div>
                </div>
-
-               {/* Floating Property Cards placed at bottom center/right */}
-               <div className="floating-properties-row">
-                  {/* Bugema Self-Contained Rooms */}
-                  <Link to="/property/bugema-self-contained" className="floating-card">
-                     <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=400&q=80" alt="Bugema Self-Contained Rooms" className="prop-img" />
-                     <div className="prop-details">
-                        <div className="prop-header">
-                           <span className="prop-price">ugx</span>
-                           <span className="prop-badge">🏢</span>
-                        </div>
-                        <span className="prop-desc">Bugema Self-Contained Rooms, Private Bath, Kitchen Access</span>
-                     </div>
-                  </Link>
-
-                  {/* Jinja Executive Hostels */}
-                  <Link to="/property/jinja-executive-hostels" className="floating-card">
-                     <img src="https://images.unsplash.com/photo-1566073791251-02c2a1b9a198?auto=format&fit=crop&w=400&q=80" alt="Jinja Executive Hostels" className="prop-img" />
-                     <div className="prop-details">
-                        <div className="prop-header">
-                           <span className="prop-price">ugx</span>
-                           <span className="prop-badge">🏠</span>
-                        </div>
-                        <span className="prop-desc">Jinja Executive Hostels, Modern Facilities, Study Areas</span>
-                     </div>
-                  </Link>
-
-                  {/* Entebbe Airport Guest House */}
-                  <Link to="/property/entebbe-airport-guest-house" className="floating-card">
-                     <img src="https://images.unsplash.com/photo-1570124479644-e84f8208c7fa?auto=format&fit=crop&w=400&q=80" alt="Entebbe Airport Guest House" className="prop-img" />
-                     <div className="prop-details">
-                        <div className="prop-header">
-                           <span className="prop-price">ugx</span>
-                           <span className="prop-badge">�</span>
-                        </div>
-                        <span className="prop-desc">Entebbe Airport Guest House, 24/7 Shuttle, Airport Transfer</span>
-                     </div>
-                  </Link>
-
-                  {/* Wakiso Student Hostels */}
-                  <Link to="/property/wakiso-student-hostels" className="floating-card">
-                     <img src="https://images.unsplash.com/photo-1551882547-3c0de63dc8ea?auto=format&fit=crop&w=400&q=80" alt="Wakiso Student Hostels" className="prop-img" />
-                     <div className="prop-details">
-                        <div className="prop-header">
-                           <span className="prop-price">ugx</span>
-                           <span className="prop-badge">🎓</span>
-                        </div>
-                        <span className="prop-desc">Wakiso Student Hostels, Budget Friendly, Near University</span>
-                     </div>
-                  </Link>
-               </div>
             </main>
 
             {/* Person Image from Assets - Right Side */}
