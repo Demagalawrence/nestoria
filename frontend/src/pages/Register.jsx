@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { Eye, EyeOff, Building2, AlertCircle, Mail, User, Phone, Lock, Key, ChevronDown } from 'lucide-react';
+import { Eye, EyeOff, Building2, AlertCircle, Mail, User, Phone, Lock, Key, ChevronDown, Check } from 'lucide-react';
 import './Auth.css';
 
 const GoogleIcon = () => (
@@ -116,14 +116,42 @@ const Register = () => {
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [error, setError] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [touched, setTouched] = useState({});
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const validators = {
+    name: (v) => v.trim().length >= 2 && /^[a-zA-Z\s]+$/.test(v.trim()),
+    email: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
+    phone_number: (v) => v.trim().length >= 9 && /^[\d\s]+$/.test(v.trim()),
+    password: (v) => getPasswordStrength(v).score >= 2,
+    confirm_password: (v) => v === formData.password && v.length > 0,
+    termsAccepted: (v) => v === true,
+  };
+
+  const isFieldValid = (name) => {
+    if (!touched[name]) return null;
+    const val = formData[name];
+    const validator = validators[name];
+    if (!validator) return null;
+    return validator(val);
+  };
+
+  const getFieldClass = (name) => {
+    const valid = isFieldValid(name);
+    if (valid === null) return '';
+    return valid ? ' valid' : ' invalid';
+  };
+
+  const showCheck = (name) => isFieldValid(name) === true;
+
   const handleChange = (e) => {
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    setFormData({ ...formData, [e.target.name]: value });
+    const { name, type } = e.target;
+    const value = type === 'checkbox' ? e.target.checked : e.target.value;
+    setFormData({ ...formData, [name]: value });
+    setTouched(prev => ({ ...prev, [name]: true }));
     
-    if (e.target.name === 'isAdmin') {
+    if (name === 'isAdmin') {
       setFormData(prev => ({ ...prev, isAdmin: e.target.checked }));
     }
   };
@@ -240,7 +268,7 @@ const Register = () => {
           
           <div className="premium-input-group">
             <label>Full Name</label>
-            <div className="premium-input-wrapper">
+            <div className={`premium-input-wrapper${getFieldClass('name')}`}>
               <User className="premium-input-icon" size={20} />
               <input
                 type="text"
@@ -250,12 +278,15 @@ const Register = () => {
                 placeholder="John Doe"
                 required
               />
+              {showCheck('name') && (
+                <Check className="premium-check-icon" size={20} />
+              )}
             </div>
           </div>
 
           <div className="premium-input-group">
             <label>Email Address</label>
-            <div className="premium-input-wrapper">
+            <div className={`premium-input-wrapper${getFieldClass('email')}`}>
               <Mail className="premium-input-icon" size={20} />
               <input
                 type="email"
@@ -265,6 +296,9 @@ const Register = () => {
                 placeholder="name@example.com"
                 required
               />
+              {showCheck('email') && (
+                <Check className="premium-check-icon" size={20} />
+              )}
             </div>
           </div>
 
@@ -307,7 +341,7 @@ const Register = () => {
                   </div>
                 )}
               </div>
-              <div className="premium-input-wrapper" style={{flex: 1}}>
+              <div className={`premium-input-wrapper${getFieldClass('phone_number')}`} style={{flex: 1}}>
                 <Phone className="premium-input-icon" size={20} />
                 <input
                   type="text"
@@ -316,6 +350,9 @@ const Register = () => {
                   onChange={handleChange}
                   placeholder="700 000 000"
                 />
+                {showCheck('phone_number') && (
+                  <Check className="premium-check-icon" size={20} />
+                )}
               </div>
             </div>
           </div>
@@ -348,7 +385,7 @@ const Register = () => {
 
           <div className="premium-input-group">
             <label>Password</label>
-            <div className="premium-input-wrapper">
+            <div className={`premium-input-wrapper${getFieldClass('password')}`}>
               <Lock className="premium-input-icon" size={20} />
               <input
                 type={showPassword ? "text" : "password"}
@@ -357,8 +394,11 @@ const Register = () => {
                 onChange={handleChange}
                 placeholder="••••••••"
                 required
-                style={{ paddingRight: '44px' }}
+                style={{ paddingRight: showCheck('password') ? '72px' : '44px' }}
               />
+              {showCheck('password') && (
+                <Check className="premium-check-icon" size={20} />
+              )}
               <button
                 type="button"
                 className="premium-password-toggle"
@@ -375,7 +415,7 @@ const Register = () => {
 
           <div className="premium-input-group">
             <label>Confirm Password</label>
-            <div className="premium-input-wrapper">
+            <div className={`premium-input-wrapper${getFieldClass('confirm_password')}`}>
               <Lock className="premium-input-icon" size={20} />
               <input
                 type="password"
@@ -385,6 +425,9 @@ const Register = () => {
                 placeholder="••••••••"
                 required
               />
+              {showCheck('confirm_password') && (
+                <Check className="premium-check-icon" size={20} />
+              )}
             </div>
           </div>
 
@@ -419,7 +462,7 @@ const Register = () => {
 
           {/* Terms Section (Placed after admin/secret key) */}
           <div className="premium-input-group" style={{ marginTop: '8px' }}>
-            <label className="premium-checkbox-label">
+            <label className={`premium-checkbox-label${getFieldClass('termsAccepted')}`}>
               <input
                 type="checkbox"
                 name="termsAccepted"
@@ -427,6 +470,9 @@ const Register = () => {
                 onChange={handleChange}
               />
               <span>I agree to the <Link to="/terms">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link></span>
+              {showCheck('termsAccepted') && (
+                <Check className="premium-check-inline" size={16} />
+              )}
             </label>
           </div>
 
