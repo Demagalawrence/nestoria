@@ -101,8 +101,8 @@ const AdminDashboard = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('refresh_token');
     
-    // Force redirect to home page
-    window.location.href = '/'; // Force full page reload and redirect
+    // Force redirect to login page
+    window.location.href = '/login'; // Force full page reload and redirect
   };
 
   useEffect(() => {
