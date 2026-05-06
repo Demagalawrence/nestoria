@@ -212,6 +212,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://nestoria-8zlq8nvdg-demagalawrences-projects.vercel.app",
     "https://nestoria-2x5z69tr7-demagalawrences-projects.vercel.app",
     "https://nestoria-74lqo0kp5-demagalawrences-projects.vercel.app",
+    "https://nestoria-tan.vercel.app",
 ]
 
 CORS_ALLOW_CREDENTIALS = True

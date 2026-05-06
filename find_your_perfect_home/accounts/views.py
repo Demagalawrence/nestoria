@@ -24,16 +24,29 @@ class UserRegistrationView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         # reCAPTCHA has been completely removed from the system
         
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        refresh = RefreshToken.for_user(user)
-        return Response({
-            'user': UserProfileSerializer(user).data,
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-            'message': 'User registered successfully'
-        }, status=status.HTTP_201_CREATED)
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            user = serializer.save()
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'user': UserProfileSerializer(user).data,
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+                'message': 'User registered successfully'
+            }, status=status.HTTP_201_CREATED)
+        except serializers.ValidationError as e:
+            return Response({
+                'error': 'Validation failed',
+                'details': e.detail,
+                'message': str(e)
+            }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({
+                'error': 'Registration failed',
+                'message': str(e),
+                'details': 'An unexpected error occurred'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @method_decorator(csrf_exempt, name='dispatch')
 class UserLoginView(generics.GenericAPIView):
