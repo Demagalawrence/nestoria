@@ -180,136 +180,127 @@ const Register = () => {
 
         <form onSubmit={handleSubmit} className="premium-auth-form">
           
-          {/* Row 1: Name and Email */}
-          <div className="premium-form-row">
-            <div className="premium-input-group">
-              <label>Full Name</label>
-              <div className="premium-input-wrapper">
-                <User className="premium-input-icon" size={20} />
+          <div className="premium-input-group">
+            <label>Full Name</label>
+            <div className="premium-input-wrapper">
+              <User className="premium-input-icon" size={20} />
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="John Doe"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="premium-input-group">
+            <label>Email Address</label>
+            <div className="premium-input-wrapper">
+              <Mail className="premium-input-icon" size={20} />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="name@example.com"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="premium-input-group">
+            <label>Phone Number</label>
+            <div className="premium-phone-group">
+              <select
+                name="country_code"
+                value={formData.country_code}
+                onChange={handleChange}
+                className="premium-country-select"
+              >
+                <option value="UG">🇺🇬 UG</option>
+                <option value="US">🇺🇸 US</option>
+                <option value="UK">🇬🇧 UK</option>
+              </select>
+              <div className="premium-input-wrapper" style={{flex: 1}}>
+                <Phone className="premium-input-icon" size={20} />
                 <input
                   type="text"
-                  name="name"
-                  value={formData.name}
+                  name="phone_number"
+                  value={formData.phone_number}
                   onChange={handleChange}
-                  placeholder="John Doe"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="premium-input-group">
-              <label>Email Address</label>
-              <div className="premium-input-wrapper">
-                <Mail className="premium-input-icon" size={20} />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="name@example.com"
-                  required
+                  placeholder="700 000 000"
                 />
               </div>
             </div>
           </div>
 
-          {/* Row 2: Phone and Marital Status */}
-          <div className="premium-form-row">
-            <div className="premium-input-group">
-              <label>Phone Number</label>
-              <div className="premium-phone-group">
-                <select
-                  name="country_code"
-                  value={formData.country_code}
+          <div className="premium-input-group">
+            <label>Marital Status</label>
+            <div className="premium-radio-group">
+              <label className="premium-radio-label">
+                <input
+                  type="radio"
+                  name="marital_status"
+                  value="single"
+                  checked={formData.marital_status === 'single'}
                   onChange={handleChange}
-                  className="premium-country-select"
-                >
-                  <option value="UG">🇺🇬 UG</option>
-                  <option value="US">🇺🇸 US</option>
-                  <option value="UK">🇬🇧 UK</option>
-                </select>
-                <div className="premium-input-wrapper" style={{flex: 1}}>
-                  <Phone className="premium-input-icon" size={20} />
-                  <input
-                    type="text"
-                    name="phone_number"
-                    value={formData.phone_number}
-                    onChange={handleChange}
-                    placeholder="700 000 000"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="premium-input-group">
-              <label>Marital Status</label>
-              <div className="premium-radio-group">
-                <label className="premium-radio-label">
-                  <input
-                    type="radio"
-                    name="marital_status"
-                    value="single"
-                    checked={formData.marital_status === 'single'}
-                    onChange={handleChange}
-                  />
-                  <span>Single</span>
-                </label>
-                <label className="premium-radio-label">
-                  <input
-                    type="radio"
-                    name="marital_status"
-                    value="married"
-                    checked={formData.marital_status === 'married'}
-                    onChange={handleChange}
-                  />
-                  <span>Married</span>
-                </label>
-              </div>
+                />
+                <span>Single</span>
+              </label>
+              <label className="premium-radio-label">
+                <input
+                  type="radio"
+                  name="marital_status"
+                  value="married"
+                  checked={formData.marital_status === 'married'}
+                  onChange={handleChange}
+                />
+                <span>Married</span>
+              </label>
             </div>
           </div>
 
-          {/* Row 3: Passwords */}
-          <div className="premium-form-row">
-            <div className="premium-input-group">
-              <label>Password</label>
-              <div className="premium-input-wrapper">
-                <Lock className="premium-input-icon" size={20} />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  required
-                  style={{ paddingRight: '44px' }}
-                />
-                <button
-                  type="button"
-                  className="premium-password-toggle"
-                  onClick={() => setShowPassword(!showPassword)}
-                  tabIndex="-1"
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
-              <span className="premium-password-strength" style={{ color: getPasswordStrength(formData.password).color }}>
-                {getPasswordStrength(formData.password).text}
-              </span>
+          <div className="premium-input-group">
+            <label>Password</label>
+            <div className="premium-input-wrapper">
+              <Lock className="premium-input-icon" size={20} />
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="••••••••"
+                required
+                style={{ paddingRight: '44px' }}
+              />
+              <button
+                type="button"
+                className="premium-password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                tabIndex="-1"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
+            <span className="premium-password-strength" style={{ color: getPasswordStrength(formData.password).color }}>
+              {getPasswordStrength(formData.password).text}
+            </span>
+          </div>
 
-            <div className="premium-input-group">
-              <label>Confirm Password</label>
-              <div className="premium-input-wrapper">
-                <Lock className="premium-input-icon" size={20} />
-                <input
-                  type="password"
-                  name="confirm_password"
-                  value={formData.confirm_password}
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
+          <div className="premium-input-group">
+            <label>Confirm Password</label>
+            <div className="premium-input-wrapper">
+              <Lock className="premium-input-icon" size={20} />
+              <input
+                type="password"
+                name="confirm_password"
+                value={formData.confirm_password}
+                onChange={handleChange}
+                placeholder="••••••••"
+                required
+              />
             </div>
           </div>
 
