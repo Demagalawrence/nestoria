@@ -3,10 +3,19 @@ from django.db.models import Avg
 from .models import Property, PropertyImage, PropertyVideo, Room, PropertyReview
 
 class PropertyImageSerializer(serializers.ModelSerializer):
+    image_display = serializers.SerializerMethodField()
+    
     class Meta:
         model = PropertyImage
-        fields = ['id', 'image', 'caption', 'is_primary', 'image_type', 'created_at']
+        fields = ['id', 'image', 'image_url', 'image_display', 'caption', 'is_primary', 'image_type', 'created_at']
         read_only_fields = ['id', 'created_at']
+    
+    def get_image_display(self, obj):
+        if obj.image_url:
+            return obj.image_url
+        elif obj.image:
+            return obj.image.url
+        return None
 
 class PropertyVideoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -85,15 +94,14 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
                  'description', 'address_line_1', 'address_line_2', 'district', 'county',
                  'sub_county', 'parish', 'village', 'postal_code', 'country',
                  'total_rooms', 'available_rooms', 'min_occupancy', 'max_occupancy',
-                 'rent_per_month', 'security_deposit', 'built_up_area', 'contact_person',
-                 'contact_number', 'furnishing', 'amenities', 'is_active', 'is_featured',
-                 'nearby_landmarks', 'nearby_transportation', 'total_floors', 'property_on_floor',
-                 'year_built', 'year_renovated', 'built_up_area', 'carpet_area', 'total_rooms',
-                 'available_rooms', 'min_occupancy', 'max_occupancy', 'rent_per_month',
-                 'security_deposit', 'maintenance_charge', 'electricity_charge', 'water_charge',
-                 'other_charges', 'furnishing', 'amenities', 'safety_features', 'rules',
+                 'rent_per_month', 'security_deposit', 'built_up_area', 'carpet_area',
+                 'contact_person', 'contact_number', 'whatsapp_number', 'furnishing', 
+                 'amenities', 'is_active', 'is_featured', 'nearby_landmarks', 
+                 'nearby_transportation', 'total_floors', 'property_on_floor',
+                 'year_built', 'year_renovated', 'maintenance_charge', 'electricity_charge', 
+                 'water_charge', 'other_charges', 'safety_features', 'rules',
                  'restrictions', 'available_from', 'notice_period', 'minimum_stay_months',
-                 'maximum_stay_months', 'contact_person', 'contact_number', 'whatsapp_number', 'email', 'website', 'facebook_link', 'instagram_link',
+                 'maximum_stay_months', 'email', 'website', 'facebook_link', 'instagram_link',
                  'youtube_link', 'pet_friendly', 'smoking_allowed', 'non_veg_allowed',
                  'visitors_allowed', 'late_night_entry_allowed', 'image_urls']
     
@@ -107,7 +115,7 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
                 is_primary = index == 0  # First image is primary by default
                 PropertyImage.objects.create(
                     rental_property=property_obj,
-                    image=image_url,  # Store URL directly in image field
+                    image_url=image_url,  # Store URL in image_url field
                     is_primary=is_primary,
                     image_type='exterior'
                 )
