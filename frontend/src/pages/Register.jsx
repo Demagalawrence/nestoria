@@ -161,6 +161,48 @@ const Register = () => {
     navigate('/login');
   };
 
+  const handleGoogleSignIn = () => {
+    if (!window.google) {
+      setError('Google Sign-In is not available. Please try again later.');
+      return;
+    }
+
+    window.google.accounts.oauth2.initTokenClient({
+      client_id: 'YOUR_GOOGLE_CLIENT_ID', // Replace with your actual Google Client ID
+      scope: 'openid email profile',
+      callback: async (response) => {
+        if (response.access_token) {
+          try {
+            // Send token to backend for verification
+            const res = await fetch('/api/auth/google', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ token: response.access_token }),
+            });
+
+            const data = await res.json();
+            
+            if (res.ok) {
+              // Store user data and redirect
+              localStorage.setItem('token', data.token);
+              localStorage.setItem('user', JSON.stringify(data.user));
+              navigate('/properties');
+            } else {
+              setError(data.message || 'Google Sign-In failed');
+            }
+          } catch (err) {
+            setError('Failed to authenticate with Google');
+          }
+        }
+      },
+      error_callback: () => {
+        setError('Google Sign-In was cancelled or failed');
+      }
+    }).requestAccessToken();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -486,7 +528,7 @@ const Register = () => {
         </div>
 
         <div className="premium-social-group">
-          <button type="button" className="premium-social-btn">
+          <button type="button" className="premium-social-btn" onClick={handleGoogleSignIn}>
             <GoogleIcon />
             <span>Google</span>
           </button>
