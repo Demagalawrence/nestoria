@@ -4,6 +4,7 @@
  */
 
 import { z } from 'zod';
+import api from '../api/axios';
 
 // Tool schemas for AI assistant
 export const aiTools = [
@@ -23,20 +24,8 @@ export const aiTools = [
     }),
     execute: async (params) => {
       try {
-        const response = await fetch('/api/hostels/search/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify(params)
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to search hostels');
-        }
-        
-        const data = await response.json();
+        const response = await api.post('/hostels/search/', params);
+        const data = response.data;
         return {
           success: true,
           hostels: data.results || data,
@@ -61,18 +50,8 @@ export const aiTools = [
     }),
     execute: async (params) => {
       try {
-        const response = await fetch(`/api/hostels/${params.hostel_id}/`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to get hostel details');
-        }
-        
-        const hostel = await response.json();
+        const response = await api.get(`/hostels/${params.hostel_id}/`);
+        const hostel = response.data;
         return {
           success: true,
           hostel,
@@ -100,20 +79,8 @@ export const aiTools = [
     }),
     execute: async (params) => {
       try {
-        const response = await fetch(`/api/hostels/${params.hostel_id}/availability/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify(params)
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to check availability');
-        }
-        
-        const data = await response.json();
+        const response = await api.post(`/hostels/${params.hostel_id}/availability/`, params);
+        const data = response.data;
         return {
           success: true,
           available: data.available,
@@ -146,20 +113,8 @@ export const aiTools = [
     }),
     execute: async (params) => {
       try {
-        const response = await fetch('/api/bookings/calculate-cost/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify(params)
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to calculate cost');
-        }
-        
-        const data = await response.json();
+        const response = await api.post('/bookings/calculate-cost/', params);
+        const data = response.data;
         return {
           success: true,
           cost_breakdown: {
@@ -203,20 +158,8 @@ export const aiTools = [
     }),
     execute: async (params) => {
       try {
-        const response = await fetch('/api/bookings/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify(params)
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to create booking');
-        }
-        
-        const booking = await response.json();
+        const response = await api.post('/bookings/', params);
+        const booking = response.data;
         return {
           success: true,
           booking,
@@ -394,20 +337,8 @@ export const aiTools = [
     }),
     execute: async (params) => {
       try {
-        const response = await fetch('/api/hostels/compare/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify(params)
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to compare hostels');
-        }
-        
-        const comparison = await response.json();
+        const response = await api.post('/hostels/compare/', params);
+        const comparison = response.data;
         return {
           success: true,
           comparison,
@@ -432,18 +363,8 @@ export const aiTools = [
     }),
     execute: async (params) => {
       try {
-        const response = await fetch(`/api/bookings/${params.booking_id}/status/`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to get booking status');
-        }
-        
-        const booking = await response.json();
+        const response = await api.get(`/bookings/${params.booking_id}/status/`);
+        const booking = response.data;
         return {
           success: true,
           booking,
