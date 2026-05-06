@@ -35,9 +35,39 @@ const Register = () => {
     phone_number: '',
     password: '',
     confirm_password: '',
+    marital_status: 'single',
     secret_key: '',
     termsAccepted: false
   });
+
+  // Password strength validation
+  const getPasswordStrength = (password) => {
+    if (!password) return { score: 0, color: '#ccc', text: 'Enter a password' };
+    
+    let score = 0;
+    if (password.length >= 6) score += 1;
+    if (password.length >= 8) score += 1;
+    if (/[A-Z]/.test(password)) score += 1;
+    if (/[a-z]/.test(password)) score += 1;
+    if (/[0-9]/.test(password)) score += 1;
+    if (/[^A-Za-z0-9]/.test(password)) score += 1;
+    
+    let color = '#dc3545'; // red - weak
+    let text = 'Weak password';
+    
+    if (score >= 4) {
+      color = '#22c55e'; // green - strong
+      text = 'Strong password';
+    } else if (score >= 3) {
+      color = '#f59e0b'; // orange - medium
+      text = 'Medium password';
+    } else if (score >= 2) {
+      color = '#eab308'; // yellow - fair
+      text = 'Fair password';
+    }
+    
+    return { score, color, text };
+  };
   
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -252,6 +282,22 @@ const Register = () => {
               </div>
             </div>
 
+            {/* Marital Status Field */}
+            <div className="modern-form-group">
+              <select
+                name="marital_status"
+                value={formData.marital_status}
+                onChange={handleChange}
+                className="modern-form-input"
+                required
+              >
+                <option value="single">Single</option>
+                <option value="married">Married</option>
+                <option value="divorced">Divorced</option>
+                <option value="widowed">Widowed</option>
+              </select>
+            </div>
+
             {/* Password Fields */}
             <div className="modern-form-group">
               <div className="modern-password-group">
@@ -261,9 +307,14 @@ const Register = () => {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Create a password"
-                  className="modern-form-input"
+                  className={`modern-form-input ${getPasswordStrength(formData.password).color}`}
                   required
                 />
+                <div className="password-strength-indicator">
+                  <span style={{ color: getPasswordStrength(formData.password).color }}>
+                    {getPasswordStrength(formData.password).text}
+                  </span>
+                </div>
                 <button
                   type="button"
                   className="modern-password-toggle"
@@ -274,7 +325,6 @@ const Register = () => {
                 </button>
               </div>
             </div>
-
             <div className="modern-form-group">
               <input
                 type="password"
@@ -282,9 +332,14 @@ const Register = () => {
                 value={formData.confirm_password}
                 onChange={handleChange}
                 placeholder="Confirm your password"
-                className="modern-form-input"
+                className={`modern-form-input ${getPasswordStrength(formData.confirm_password).color}`}
                 required
               />
+              <div className="password-strength-indicator">
+                <span style={{ color: getPasswordStrength(formData.confirm_password).color }}>
+                    {getPasswordStrength(formData.confirm_password).text}
+                </span>
+              </div>
             </div>
 
             {/* Terms Checkbox */}

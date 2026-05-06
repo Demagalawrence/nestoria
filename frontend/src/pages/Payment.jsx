@@ -453,6 +453,42 @@ const Payment = () => {
                   </div>
                 </div>
 
+                {/* Cost Breakdown Section */}
+                <div className="cost-breakdown-section">
+                  <h4>Cost Breakdown</h4>
+                  <div className="cost-item">
+                    <span className="cost-label">Base Rent</span>
+                    <span className="cost-value">UGX {booking?.base_rent || booking?.rent_per_month || 0}</span>
+                  </div>
+                  <div className="cost-item">
+                    <span className="cost-label">Water Charges</span>
+                    <span className="cost-value">UGX {booking?.water_charges || 15000}</span>
+                  </div>
+                  <div className="cost-item">
+                    <span className="cost-label">Electricity Charges</span>
+                    <span className="cost-value">UGX {booking?.electricity_charges || 25000}</span>
+                  </div>
+                  <div className="cost-item">
+                    <span className="cost-label">Maintenance Fee</span>
+                    <span className="cost-value">UGX {booking?.maintenance_charge || 10000}</span>
+                  </div>
+                  <div className="cost-item">
+                    <span className="cost-label">Security Deposit</span>
+                    <span className="cost-value">UGX {booking?.security_deposit || 50000}</span>
+                  </div>
+                  {booking?.discount_amount && (
+                    <div className="cost-item discount">
+                      <span className="cost-label">Discount</span>
+                      <span className="cost-value">-UGX {booking.discount_amount}</span>
+                    </div>
+                  )}
+                  <div className="cost-divider"></div>
+                  <div className="cost-item total">
+                    <span className="cost-label">Total</span>
+                    <span className="cost-value">UGX {booking?.final_amount || booking?.total_amount || 0}</span>
+                  </div>
+                </div>
+
                 <form onSubmit={handleSubmit} className="payment-form landscape-form">
                   <h3>{mockSavedMethods.find(m => m.id === selectedMethod)?.category === 'momo' ? 'Mobile Money Details' : 'Card Details'}</h3>
 
