@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { 
   Home, Users, Building, Calendar, CreditCard, Bell, Settings, 
   Plus, Edit, Trash2, Search, Filter, LogOut, Shield, CheckCircle, X,
@@ -16,7 +15,7 @@ const AdminDashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [authChecking, setAuthChecking] = useState(true);
-  const [user, setUser] = useState(null);
+  const [, setUser] = useState(null);
   const [showAddPropertyModal, setShowAddPropertyModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
   const [showOwnerModal, setShowOwnerModal] = useState(false);
@@ -84,8 +83,6 @@ const AdminDashboard = () => {
     emergency_contact_relation: ''
   });
   
-  const navigate = useNavigate();
-
   const handleLogout = () => {
     // Clear all admin-related data
     setUser(null);
@@ -136,7 +133,7 @@ const AdminDashboard = () => {
       let parsedUser;
       try {
         parsedUser = JSON.parse(storedUser);
-      } catch (e) {
+      } catch {
         console.log('Invalid stored user data, clearing and redirecting...');
         localStorage.removeItem('user');
         sessionStorage.removeItem('user');
@@ -294,7 +291,7 @@ const AdminDashboard = () => {
       });
       
       // Add property images
-      propertyImages.forEach((image, index) => {
+      propertyImages.forEach((image) => {
         submitData.append(`property_images`, image);
       });
 

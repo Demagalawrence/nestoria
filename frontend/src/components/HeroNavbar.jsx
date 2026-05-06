@@ -39,7 +39,6 @@ const HeroNavbar = () => {
 
    const isHome = location.pathname === '/';
    const isSearch = location.pathname === '/search';
-   const isDashboard = location.pathname === '/dashboard';
    const isAnalytics = location.pathname === '/analytics';
    const isSupport = location.pathname === '/support';
    const isAbout = location.pathname === '/about';

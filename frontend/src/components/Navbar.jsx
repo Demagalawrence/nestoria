@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Home as HomeIcon, User, PhoneCall, Menu, X, Bell } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import './Navbar.css';
@@ -34,13 +34,11 @@ const Navbar = () => {
          type: 'info'
       }
    ]);
-   const navigate = useNavigate();
    const location = useLocation();
    const { user, logout } = useContext(AuthContext);
 
    const isHome = location.pathname === '/';
    const isSearch = location.pathname === '/search';
-   const isDashboard = location.pathname === '/dashboard';
    const isAnalytics = location.pathname === '/analytics';
    const isSupport = location.pathname === '/support';
    const isReservations = location.pathname === '/reservations';
@@ -52,18 +50,6 @@ const Navbar = () => {
       window.addEventListener('scroll', handleScroll);
       return () => window.removeEventListener('scroll', handleScroll);
    }, []);
-
-   useEffect(() => {
-      setIsMobileMenuOpen(false);
-   }, [location.pathname]);
-
-   const handleProfileClick = () => {
-      if (user) {
-         navigate('/dashboard');
-      } else {
-         navigate('/login');
-      }
-   };
 
    const handleNotificationClick = () => {
       setIsNotificationOpen(!isNotificationOpen);
@@ -123,7 +109,7 @@ const Navbar = () => {
             </button>
 
             <div className={`navbar-menu-overlay ${isMobileMenuOpen ? 'open' : ''}`}>
-               <nav className="navbar-nav-links">
+               <nav className="navbar-nav-links" onClick={() => setIsMobileMenuOpen(false)}>
                <Link to="/" className={isHome ? 'active' : ''}>Home</Link>
                <Link to="/search" className={isSearch ? 'active' : ''}>Properties</Link>
                {user && (
@@ -218,13 +204,6 @@ const Navbar = () => {
                      <Link to="/register" className="req-quote-btn register-btn">Register</Link>
                   </div>
                )}
-               <div
-                  className="user-profile-icon"
-                  onClick={handleProfileClick}
-                  title={user ? "Go to Dashboard" : "Login/Register"}
-               >
-                  <User size={18} color="#64748b" />
-               </div>
             </div>
             </div>
          </div>

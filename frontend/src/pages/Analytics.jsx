@@ -96,7 +96,7 @@ const Analytics = () => {
     );
   }
 
-  const { overview, revenueData, bookingData, propertyPerformance, topProperties, recentActivity } = analyticsData;
+  const { overview, topProperties, recentActivity } = analyticsData;
 
   return (
     <div className="analytics-container">

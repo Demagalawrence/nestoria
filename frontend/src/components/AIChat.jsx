@@ -12,6 +12,10 @@ const AIChat = () => {
   const [userRole, setUserRole] = useState('tenant');
   const messagesEndRef = useRef(null);
 
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   useEffect(() => {
     // Get user role from context or localStorage
     const storedUser = localStorage.getItem('user');
@@ -43,10 +47,6 @@ const AIChat = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   const handleSendMessage = async (e) => {
     e.preventDefault();

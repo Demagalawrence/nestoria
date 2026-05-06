@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import api from '../api/axios';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -25,7 +26,7 @@ export const AuthProvider = ({ children }) => {
           try {
             const user = JSON.parse(storedUser);
             setUser(user);
-          } catch (e) {
+          } catch {
             localStorage.removeItem('user');
             setUser(null);
           }

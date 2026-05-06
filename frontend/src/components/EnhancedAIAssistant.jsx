@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Bot, User, MapPin, DollarSign, Calendar, Home, Phone, CreditCard, Book, Search, Info, CheckCircle, AlertCircle } from 'lucide-react';
+import { Send, Bot, User, MapPin, DollarSign, CreditCard, Book } from 'lucide-react';
 import aiTools from '../utils/aiTools';
 
 const EnhancedAIAssistant = () => {
@@ -73,7 +73,7 @@ const EnhancedAIAssistant = () => {
       if (response.suggestions) {
         setSuggestions(response.suggestions);
       }
-    } catch (error) {
+    } catch {
       const errorMessage = {
         id: Date.now() + 1,
         type: 'assistant',
@@ -215,7 +215,7 @@ const EnhancedAIAssistant = () => {
     }
   };
 
-  const handleReservationRequest = async (input) => {
+  const handleReservationRequest = async () => {
     return {
       content: "📋 I'd be happy to help you reserve a hostel! To get started, I'll need some information:\n\n🏠 Which hostel are you interested in?\n📅 When do you want to check in?\n📅 When do you want to check out?\n👥 How many guests?\n\nYou can tell me something like: \"I want to reserve [hostel name] from [date] to [date] for [number] guests\"\n\nOr if you haven't chosen a hostel yet, I can help you search first!",
       suggestions: [
@@ -227,7 +227,7 @@ const EnhancedAIAssistant = () => {
     };
   };
 
-  const handlePaymentRequest = async (input) => {
+  const handlePaymentRequest = async () => {
     const paymentTool = aiTools.find(tool => tool.name === 'get_payment_methods');
     const result = await paymentTool.execute({});
     

@@ -1,10 +1,8 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { MessageCircle, Mail, Phone, HelpCircle, Send, X, Minimize2, Maximize2 } from 'lucide-react';
-import { AuthContext } from '../context/AuthContext';
 import './Support.css';
 
 const Support = () => {
-  const { user } = useContext(AuthContext);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [message, setMessage] = useState('');
@@ -19,6 +17,10 @@ const Support = () => {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -26,15 +28,6 @@ const Support = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleStartChat = () => {
-    setIsChatOpen(true);
-    setIsMinimized(false);
-  };
 
   const handleCloseChat = () => {
     setIsChatOpen(false);

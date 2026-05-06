@@ -16,7 +16,6 @@ const ReservationProgress = ({ currentStep }) => {
         {steps.map((step, index) => {
           const isCompleted = step.id < currentStep;
           const isActive = step.id === currentStep;
-          const isPending = step.id > currentStep;
 
           return (
             <React.Fragment key={step.id}>

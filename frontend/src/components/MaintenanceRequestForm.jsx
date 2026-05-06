@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  X, Camera, Paperclip, AlertCircle, Clock, MapPin, 
-  DollarSign, User, Calendar, CheckSquare
+  X, Camera, AlertCircle, DollarSign
 } from 'lucide-react';
 import maintenanceService from '../services/maintenanceService';
 import './MaintenanceRequestForm.css';
@@ -117,16 +116,6 @@ const MaintenanceRequestForm = ({
     } finally {
       setLoading(false);
     }
-  };
-
-  const getPriorityIcon = (priority) => {
-    const icons = {
-      urgent: <AlertCircle size={16} />,
-      high: <AlertCircle size={16} />,
-      medium: <Clock size={16} />,
-      low: <Clock size={16} />
-    };
-    return icons[priority] || <Clock size={16} />;
   };
 
   return (

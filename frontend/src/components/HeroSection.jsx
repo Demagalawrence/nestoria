@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
    Brain,
@@ -11,14 +11,12 @@ import {
    Palmtree,
    Tent
 } from 'lucide-react';
-import { AuthContext } from '../context/AuthContext';
 import HeroNavbar from './HeroNavbar';
 import personImage from '../assets/person.png';
 import './HeroSection.css';
 
 const HeroSection = () => {
    const navigate = useNavigate();
-   const { user } = useContext(AuthContext);
 
    const handleSearch = (e) => {
       e.preventDefault();

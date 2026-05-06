@@ -1,317 +1,859 @@
-/* Home.css - NESTTORI Landing Page Refining */
+/* Home.css - Redesign for Nestoria Theme */
 
-.nesttori-landing-container {
+/* General Container Reset */
+.nestoria-home-container {
   font-family: 'Inter', sans-serif;
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-  max-width: 100%;
-  overflow: hidden;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  color: #fff;
+  background-color: #fff;
+  color: #333;
+  width: 100%;
+  overflow-x: hidden;
 }
 
-.nesttori-bg-overlay {
+/* NAVBAR */
+.nestoria-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 4rem;
+  background: transparent;
+  width: 100%;
   position: absolute;
   top: 0;
-  left: 0;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(to right,
-      rgba(14, 25, 34, 0.85) 0%,
-      rgba(14, 25, 34, 0.7) 40%,
-      rgba(14, 25, 34, 0) 100%);
-  z-index: 1;
+  z-index: 100;
 }
 
-.nesttori-content-wrapper {
-  position: relative;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-/* Header */
-.nesttori-header {
+.nestoria-logo {
   display: flex;
   align-items: center;
-  padding: 2.5rem 5rem;
-  width: 100%;
+  gap: 10px;
 }
 
-.nesttori-logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-right: 5rem;
-}
-
-.nesttori-logo-icon-wrapper {
-  position: relative;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.nestoria-logo-icon img {
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.8);
-  background: transparent;
+  border: 4px solid #333;
+  object-fit: cover;
 }
 
-.nesttori-logo-waves {
-  position: absolute;
-  bottom: 8px;
-  width: 20px;
-  height: 2px;
-  border-bottom: 2px solid white;
-  border-top: 2px solid white;
+.nestoria-logo-text {
+  display: flex;
+  flex-direction: column;
 }
 
-.nesttori-logo-icon {
-  margin-bottom: 6px;
-  color: white;
-}
-
-.nesttori-brand-text {
-  font-size: 1.3rem;
+.nestoria-logo-text h2 {
+  font-size: 1.2rem;
   font-weight: 800;
+  color: #1a2a40;
+  margin: 0;
+  line-height: 1;
   letter-spacing: 1px;
 }
 
-.text-nest {
-  color: #ffffff;
-}
-
-.text-tori {
-  color: #10B981;
-  /* Dull reddish orange from the image */
-}
-
-.nesttori-nav-links {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  font-size: 0.9rem;
-  font-weight: 400;
-}
-
-.nesttori-nav-links a {
-  color: #fff;
-  text-decoration: none;
-  transition: opacity 0.3s;
-}
-
-.nesttori-nav-links a:hover {
-  opacity: 0.7;
-}
-
-.nav-dot {
-  font-size: 0.5rem;
-  opacity: 0.5;
-}
-
-/* Main Content */
-.nesttori-main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 5rem;
-  padding-bottom: 2rem;
-}
-
-.nesttori-hero-left {
-  max-width: 600px;
-}
-
-.nesttori-brain-icon-wrapper {
-  background: #0b1120;
-  width: 85px;
-  height: 85px;
-  border-radius: 18px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 2.5rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-.brain-container {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.nesttori-brain-icon {
-  color: #fff;
-}
-
-.brain-inner-home {
-  position: absolute;
-  color: #0b1120;
-  /* Same as bg to create negative space effect */
-  background: #fff;
-  /* Fill color to make it look like part of brain */
-  border-radius: 50%;
-  padding: 1px;
-}
-
-.nesttori-hero-title {
-  font-size: 4.8rem;
-  font-weight: 700;
-  line-height: 1.05;
-  margin-bottom: 1.5rem;
-  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  letter-spacing: -1px;
-}
-
-.nesttori-hero-subtitle {
-  font-size: 1.15rem;
-  font-weight: 400;
-  margin-bottom: 3rem;
-  opacity: 0.9;
-}
-
-.nesttori-hero-buttons {
-  display: flex;
-  gap: 1.25rem;
-}
-
-.nesttori-btn-solid {
-  background-color: #fff;
-  color: #000;
-  border: none;
-  border-radius: 10px;
-  padding: 15px 35px;
-  font-size: 1rem;
+.nestoria-logo-text span {
+  font-size: 0.6rem;
   font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.nesttori-btn-solid:hover {
-  background-color: #f0f0f0;
-}
-
-.nesttori-btn-outline {
-  background-color: transparent;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 10px;
-  padding: 15px 35px;
-  font-size: 1rem;
-  font-weight: 400;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.nesttori-btn-outline:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Social Footer */
-.nesttori-social-footer {
-  display: flex;
-  gap: 3rem;
-  padding: 2rem 5rem 3rem 5rem;
-  align-items: flex-start;
-}
-
-.social-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  opacity: 0.7;
-  transition: opacity 0.3s ease;
-}
-
-.social-item:hover {
-  opacity: 1;
-}
-
-.social-icon {
-  color: #fff;
-}
-
-.social-icon-x {
-  color: #fff;
-  font-size: 22px;
-  line-height: 20px;
-  font-weight: 300;
-}
-
-.social-icon-svg {
-  width: 20px;
-  height: 20px;
-  color: #fff;
-}
-
-.social-handle {
-  font-size: 0.7rem;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.8);
+  color: #666;
   letter-spacing: 0.5px;
 }
 
-@media (max-width: 1024px) {
+.nestoria-nav-links {
+  display: flex;
+  gap: 2rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
 
-  .nesttori-header,
-  .nesttori-main-content,
-  .nesttori-social-footer {
-    padding-left: 2rem;
-    padding-right: 2rem;
+.nestoria-nav-links .nav-link {
+  color: #1a2a40;
+  cursor: pointer;
+  position: relative;
+}
+
+.nestoria-nav-links .nav-link.active {
+  color: #ff7a00;
+}
+
+.nestoria-nav-actions {
+  display: flex;
+}
+
+.nestoria-btn-orange {
+  background-color: #ff7a00;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nestoria-btn-orange:hover {
+  background-color: #e66d00;
+}
+
+.info-i {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+/* Top Announcement Banner */
+.top-announcement-banner {
+  background: var(--primary-teal);
+  color: white;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  width: 100%;
+  z-index: 50;
+  position: relative;
+  margin-top: 80px;
+  /* Space for fixed global navbar */
+  border-radius: 12px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 4px 15px rgba(26, 101, 112, 0.2);
+}
+
+.banner-badge {
+  background: var(--accent-orange);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;                                                                                                                                                                           
+}
+
+.banner-link {
+  color: #aedadd;
+  text-decoration: underline;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.banner-link:hover {
+  color: white;
+}
+
+/* LOGISCO HERO SECTION */
+.logisco-hero-section {
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--primary-teal);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.logisco-hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.bg-ship-override {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.15;
+  /* Faint luxury house in background */
+  mix-blend-mode: luminosity;
+}
+
+.orange-angle-bottom {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 12vw;
+  background-color: var(--accent-orange);
+  clip-path: polygon(0 100%, 100% 0, 100% 100%);
+  z-index: 2;
+}
+
+.logisco-hero-content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* Space between left circle and right text */
+  padding-top: 40px;
+  min-height: 70vh;
+}
+
+/* Artistic Graphic Composition */
+.hero-art-composition {
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 750px;
+  height: 800px;
+  z-index: 5;
+}
+
+.art-circle {
+  position: absolute;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.art-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.hero-art-composition:hover .art-circle img {
+  transform: scale(1.05);
+}
+
+/* Large Main Circle (Exterior) */
+.art-circle-1 {
+  width: 480px;
+  height: 480px;
+  top: 10px;
+  left: -20px;
+  border: 15px solid var(--accent-orange);
+  z-index: 4; /* Above the agent */
+}
+
+/* Smaller Circle (Interior) */
+.art-circle-2 {
+  width: 280px;
+  height: 280px;
+  bottom: 30px;
+  left: 60px;
+  border: 10px solid white;
+  z-index: 5;
+}
+
+/* New Third Circle (Full House) */
+.art-circle-3 {
+  width: 250px;
+  height: 250px;
+  top: 80px;
+  left: 450px;
+  border: 10px solid var(--accent-orange);
+  z-index: 1; /* Deep behind */
+}
+
+/* African Agent Image */
+.art-agent-img {
+  position: absolute;
+  top: 80px; 
+  left: 300px;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  border: 12px solid white;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+  z-index: 2; /* Behind the big exterior circle */
+  pointer-events: none;
+}
+
+/* Some artistic decorative dots */
+.art-dots {
+  position: absolute;
+  top: -10px;
+  left: 550px;
+  width: 120px;
+  height: 120px;
+  background-image: radial-gradient(var(--accent-orange) 20%, transparent 20%);
+  background-size: 20px 20px;
+  z-index: 1;
+  opacity: 0.8;
+}
+
+.hero-center-text {
+  text-align: right;
+  /* Align text to the right */
+  max-width: 55%;
+  /* Limit width */
+  color: white;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  /* Align items to the right */
+  margin-left: auto;
+  /* Push to the right */
+  margin-right: 2%;
+  /* Some space from right edge */
+  margin-top: -5vh;
+}
+
+.pill-badge {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 20px;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(5px);
+}
+
+.logisco-title {
+  font-size: 4.8rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.logisco-subtitle {
+  font-size: 1.25rem;
+  color: #d1e8eb;
+  line-height: 1.6;
+  max-width: 650px;
+  margin-bottom: 2.5rem;
+}
+
+.logisco-btn-orange {
+  background: var(--accent-orange);
+  color: white;
+  padding: 14px 10px 14px 30px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: all 0.3s;
+  box-shadow: 0 10px 30px rgba(255, 122, 0, 0.3);
+  border: none;
+  cursor: pointer;
+}
+
+.logisco-btn-orange:hover {
+  background: #e66d00;
+  transform: translateY(-2px);
+}
+
+.check-icon {
+  background: white;
+  color: var(--accent-orange);
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Enhanced Contact Section */
+.hero-contact-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: flex-end;
+}
+
+.contact-buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.contact-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 14px 24px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.logisco-btn-outline {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  backdrop-filter: blur(5px);
+}
+
+.logisco-btn-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.social-media-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.social-text {
+  color: #d1e8eb;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.social-icons {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.social-icon:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.social-icon.facebook {
+  background: rgba(66, 103, 178, 0.8);
+}
+
+.social-icon.facebook:hover {
+  background: rgba(66, 103, 178, 1);
+}
+
+.social-icon.instagram {
+  background: linear-gradient(45deg, rgba(225, 48, 108, 0.8), rgba(193, 53, 132, 0.8));
+}
+
+.social-icon.instagram:hover {
+  background: linear-gradient(45deg, rgba(225, 48, 108, 1), rgba(193, 53, 132, 1));
+}
+
+.social-icon.twitter {
+  background: rgba(29, 161, 242, 0.8);
+}
+
+.social-icon.twitter:hover {
+  background: rgba(29, 161, 242, 1);
+}
+
+.social-icon.youtube {
+  background: rgba(255, 0, 0, 0.8);
+}
+
+.social-icon.youtube:hover {
+  background: rgba(255, 0, 0, 1);
+}
+
+.social-icon.whatsapp {
+  background: rgba(37, 211, 102, 0.8);
+}
+
+.social-icon.whatsapp:hover {
+  background: rgba(37, 211, 102, 1);
+}
+
+.overlapping-truck-house {
+  position: absolute;
+  bottom: -30px;
+  left: 15%;
+  z-index: 20;
+  display: flex;
+  align-items: flex-end;
+}
+
+.floating-house-img {
+  width: 500px;
+  border-radius: 20px;
+  filter: drop-shadow(20px 20px 30px rgba(0, 0, 0, 0.4));
+}
+
+.floating-boxes {
+  margin-left: -50px;
+  margin-bottom: 20px;
+  z-index: 21;
+}
+
+.boxes-img {
+  width: 250px;
+  border-radius: 20px;
+  filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.3));
+}
+
+@media (max-width: 1024px) {
+  .hero-art-composition {
+    display: none;
+  }
+  .hero-agent-img { display: none; }
+  .logisco-title {
+    font-size: 2.8rem;
   }
 
-  .nesttori-hero-title {
-    font-size: 3.8rem;
+  .overlapping-truck-house {
+    left: 5%;
+    transform: scale(0.8);
+    transform-origin: bottom left;
   }
 }
 
 @media (max-width: 768px) {
-  .nesttori-landing-container {
-    overflow-y: auto;
-    height: auto;
-    min-height: 100vh;
+  .logisco-title {
+    font-size: 2.2rem;
   }
 
-  .nesttori-header {
-    padding: 1.5rem 1rem;
+  .overlapping-truck-house {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    transform: scale(1);
+    margin-top: 3rem;
+    justify-content: center;
+    padding: 0 20px;
   }
 
-  .nesttori-main-content {
-    padding: 1rem;
-    margin-top: 2rem;
+  .floating-house-img {
+    width: 100%;
+    max-width: 400px;
   }
 
-  .nesttori-hero-title {
-    font-size: 2.8rem;
-    margin-bottom: 1rem;
-  }
-
-  .nesttori-nav-links {
+  .floating-boxes {
     display: none;
   }
 
-  .nesttori-hero-buttons {
+  .logisco-hero-content {
+    min-height: auto;
+    padding-bottom: 3rem;
+    margin-top: 0;
+  }
+
+  .logisco-hero-section {
+    flex-direction: column;
+    height: auto;
+  }
+}
+
+/* FEATURED LISTINGS SECTION */
+.nestoria-featured-section {
+  background: linear-gradient(to bottom, #f2e6cb 0%, #e8d0a5 100%);
+  padding: 6rem 4rem;
+  position: relative;
+  min-height: 100vh;
+}
+
+.curtain {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 150px;
+  background-image: linear-gradient(to right,
+      #124d56 0%,
+      #1a6570 20%,
+      #124d56 40%,
+      #217b88 60%,
+      #0d3c43 80%,
+      #217b88 100%);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3), 5px 0 15px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.curtain::after {
+  content: '';
+  position: absolute;
+  bottom: -40px;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: repeating-linear-gradient(90deg, #124d56, #124d56 2px, transparent 2px, transparent 6px);
+}
+
+.curtain-left {
+  left: 0;
+  border-right: 5px solid #0d3c43;
+}
+
+.curtain-right {
+  right: 0;
+  border-left: 5px solid #0d3c43;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3), -5px 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.featured-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 5;
+}
+
+.featured-title-teal {
+  text-align: center;
+  font-size: 3rem;
+  background: linear-gradient(to right, #124d56, #217b88, #124d56);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 3rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.listings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.nestoria-listing-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.card-img-wrapper {
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+  height: 200px;
+  margin-bottom: 1.5rem;
+}
+
+.card-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-img-wrapper img.special-img {
+  transform: scale(1.1) rotateX(10deg);
+  perspective: 1000px;
+  filter: drop-shadow(0 20px 20px rgba(0, 0, 0, 0.2));
+  background: transparent;
+  object-fit: contain;
+}
+
+.heart-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.7);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.card-header h4 {
+  font-size: 1.1rem;
+  color: #1a2a40;
+  font-weight: 700;
+}
+
+.price {
+  font-weight: 700;
+  color: #1a2a40;
+}
+
+.card-desc {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.card-meta {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  align-items: center;
+}
+
+.map-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #3b82f6;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.map-link:hover {
+  background: #eff6ff;
+  color: #2563eb;
+  transform: translateY(-1px);
+}
+
+.card-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-view,
+.btn-book {
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.btn-view {
+  background: transparent;
+  border: 1px solid #287754;
+  color: #287754;
+}
+
+.btn-book {
+  background: #287754;
+  color: white;
+  border: none;
+}
+
+/* Featured Bottom */
+.featured-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  background: rgba(255, 255, 255, 0.4);
+  padding: 2rem;
+  border-radius: 20px;
+  backdrop-filter: blur(5px);
+}
+
+.hostel-stays {
+  display: flex;
+  background: linear-gradient(135deg, #e3ebef 0%, #ffffff 100%);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.hs-text {
+  padding: 2rem;
+  flex: 1;
+}
+
+.hs-text h3 {
+  font-size: 1.5rem;
+  color: #1a2a40;
+  margin-bottom: 1rem;
+}
+
+.hs-text p {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.hs-img {
+  width: 200px;
+  object-fit: cover;
+}
+
+.nestoria-advantage h3 {
+  font-size: 1.5rem;
+  color: #1a2a40;
+  margin-bottom: 1rem;
+}
+
+.nestoria-advantage p {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .nestoria-hero {
     flex-direction: column;
   }
 
-  .nesttori-btn-solid,
-  .nesttori-btn-outline {
-    width: 100%;
+  .nestoria-hero-left,
+  .nestoria-hero-right {
+    flex: 1;
   }
 
-  .nesttori-social-footer {
-    padding: 2rem 1rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1.5rem;
+  .nestoria-navbar {
+    padding: 1rem 2rem;
+  }
+
+  .listings-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-complex-graphics {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .listings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-bottom {
+    grid-template-columns: 1fr;
+  }
+
+  .curtain {
+    width: 50px;
   }
 }

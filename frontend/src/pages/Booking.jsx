@@ -21,11 +21,7 @@ const Booking = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
-  const [bookingId, setBookingId] = useState(null);
-  const [redirectCountdown, setRedirectCountdown] = useState(2);
-  const [availableRooms, setAvailableRooms] = useState([]);
-  const [totalRooms, setTotalRooms] = useState(0);
+  const [availableRooms] = useState([]);
 
   useEffect(() => {
     // Check if user is authenticated

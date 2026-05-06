@@ -15,7 +15,6 @@ const PropertyCard = ({ property }) => {
   const type = property.property_type || 'Studio Room';
   const totalRooms = property.total_rooms || 10;
   const availableRooms = property.available_rooms !== undefined ? property.available_rooms : totalRooms;
-  const occupiedRooms = totalRooms - availableRooms;
   
   // Image handling
   const fallbackImages = [

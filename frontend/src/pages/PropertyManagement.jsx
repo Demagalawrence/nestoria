@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Edit, Trash2, Eye, Home, MapPin, Bed, Bath, DollarSign, Calendar, Image, Video, X, Upload, Check } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, Home, MapPin, Bed, Bath, DollarSign, Video, X, Check } from 'lucide-react';
 import api from '../api/axios';
 import './PropertyManagement.css';
 
@@ -24,11 +24,17 @@ const PropertyManagement = () => {
     contact_person: '',
     amenities: '',
     address: '',
+    district: '',
+    county: '',
+    sub_county: '',
+    parish: '',
+    village: '',
     city: '',
-    country: '',
+    country: 'Uganda',
     postal_code: ''
   });
   const [imageUrls, setImageUrls] = useState([]);
+  const [imageUrlInput, setImageUrlInput] = useState('');
   const [videoFiles, setVideoFiles] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -58,12 +64,54 @@ const PropertyManagement = () => {
     }));
   };
 
-  const handleImageUpload = (e) => {
-    setImageFiles(Array.from(e.target.files));
-  };
-
   const handleVideoUpload = (e) => {
     setVideoFiles(Array.from(e.target.files));
+  };
+
+  const addImageUrl = () => {
+    const trimmedUrl = imageUrlInput.trim();
+    if (!trimmedUrl) return;
+
+    setImageUrls(prev => [...prev, trimmedUrl]);
+    setImageUrlInput('');
+  };
+
+  const parseListField = (value) => {
+    if (Array.isArray(value)) return value;
+    return String(value || '')
+      .split(',')
+      .map(item => item.trim())
+      .filter(Boolean);
+  };
+
+  const buildPropertyPayload = () => {
+    const roomCount = Math.max(parseInt(formData.bedrooms || 1, 10), 1);
+
+    return {
+      name: formData.title,
+      description: formData.description,
+      property_type: formData.property_type,
+      target_audience: formData.target_audience,
+      address_line_1: formData.address,
+      district: formData.district || formData.city || 'Kampala',
+      county: formData.county,
+      sub_county: formData.sub_county,
+      parish: formData.parish,
+      village: formData.village || formData.location,
+      postal_code: formData.postal_code,
+      country: formData.country || 'Uganda',
+      total_rooms: roomCount,
+      available_rooms: roomCount,
+      min_occupancy: 1,
+      max_occupancy: Math.max(parseInt(formData.bedrooms || 1, 10), 1),
+      rent_per_month: formData.price,
+      contact_person: formData.contact_person,
+      contact_number: formData.contact_number,
+      whatsapp_number: formData.whatsapp_number,
+      amenities: parseListField(formData.amenities),
+      image_url: imageUrls[0] || '',
+      image_urls: imageUrls
+    };
   };
 
   const resetForm = () => {
@@ -81,11 +129,17 @@ const PropertyManagement = () => {
       contact_person: '',
       amenities: '',
       address: '',
+      district: '',
+      county: '',
+      sub_county: '',
+      parish: '',
+      village: '',
       city: '',
-      country: '',
+      country: 'Uganda',
       postal_code: ''
     });
     setImageUrls([]);
+    setImageUrlInput('');
     setVideoFiles([]);
     setEditingProperty(null);
   };
@@ -94,22 +148,29 @@ const PropertyManagement = () => {
     if (property) {
       setEditingProperty(property);
       setFormData({
-        title: property.title || '',
+        title: property.name || property.title || '',
         description: property.description || '',
-        location: property.location || '',
-        price: property.price || '',
-        bedrooms: property.bedrooms || '',
+        location: property.village || property.location || '',
+        price: property.rent_per_month || property.price || '',
+        bedrooms: property.total_rooms || property.bedrooms || '',
         bathrooms: property.bathrooms || '',
         property_type: property.property_type || 'apartment',
+        target_audience: property.target_audience || 'mixed',
         contact_number: property.contact_number || '',
         whatsapp_number: property.whatsapp_number || '',
         contact_person: property.contact_person || '',
-        amenities: property.amenities || '',
-        address: property.address || '',
+        amenities: Array.isArray(property.amenities) ? property.amenities.join(', ') : property.amenities || '',
+        address: property.address_line_1 || property.address || '',
+        district: property.district || '',
+        county: property.county || '',
+        sub_county: property.sub_county || '',
+        parish: property.parish || '',
+        village: property.village || '',
         city: property.city || '',
-        country: property.country || '',
+        country: property.country || 'Uganda',
         postal_code: property.postal_code || ''
       });
+      setImageUrls(property.image_url ? [property.image_url] : []);
     } else {
       resetForm();
     }
@@ -130,11 +191,7 @@ const PropertyManagement = () => {
     setSuccess(null);
 
     try {
-      // Create JSON payload
-      const data = {
-        ...formData,
-        image_urls: imageUrls.length > 0 ? imageUrls : []
-      };
+      const data = buildPropertyPayload();
 
       let res;
       if (editingProperty) {
@@ -525,23 +582,18 @@ const PropertyManagement = () => {
                           <input
                             type="text"
                             placeholder="Enter image URL (e.g., https://example.com/image.jpg)"
-                            onKeyPress={(e) => {
-                              if (e.key === 'Enter' && e.target.value.trim()) {
-                                e.preventDefault();
-                                setImageUrls([...imageUrls, e.target.value.trim()]);
-                                e.target.value = '';
+                            value={imageUrlInput}
+                            onChange={(event) => setImageUrlInput(event.target.value)}
+                            onKeyDown={(event) => {
+                              if (event.key === 'Enter') {
+                                event.preventDefault();
+                                addImageUrl();
                               }
                             }}
                           />
                           <button
                             type="button"
-                            onClick={() => {
-                              const input = e.target.previousElementSibling;
-                              if (input.value.trim()) {
-                                setImageUrls([...imageUrls, input.value.trim()]);
-                                input.value = '';
-                              }
-                            }}
+                            onClick={addImageUrl}
                           >
                             Add URL
                           </button>

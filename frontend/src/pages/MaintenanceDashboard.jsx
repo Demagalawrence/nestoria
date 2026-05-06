@@ -11,14 +11,13 @@ const MaintenanceDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [requests, setRequests] = useState([]);
   const [stats, setStats] = useState(null);
-  const [categories, setCategories] = useState([]);
+  const [, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [filterPriority, setFilterPriority] = useState('');
   const [selectedRequest, setSelectedRequest] = useState(null);
-  const [showRequestModal, setShowRequestModal] = useState(false);
-  const [notifications, setNotifications] = useState([]);
+  const [notifications] = useState([]);
 
   useEffect(() => {
     fetchDashboardData();
@@ -164,7 +163,7 @@ const MaintenanceDashboard = () => {
           <p>Manage and track all maintenance requests</p>
         </div>
         <div className="header-actions">
-          <button className="btn-primary" onClick={() => setShowRequestModal(true)}>
+          <button className="btn-primary" onClick={() => setActiveTab('requests')}>
             <Plus size={16} />
             New Request
           </button>
