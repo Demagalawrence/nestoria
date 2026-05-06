@@ -47,9 +47,9 @@ export const AuthProvider = ({ children }) => {
     return () => clearTimeout(timeout);
   }, []);
 
-  const login = async (email, password) => {
-    console.log('Attempting login with:', { email, password });
-    console.log('Request payload:', { username: email, password });
+  const login = async (email, password, secretKey) => {
+    console.log('Attempting login with:', { email, password, secretKey: !!secretKey });
+    console.log('Request payload:', { username: email, password, secret_key: secretKey });
     
     // Clear any existing tokens before attempting login
     localStorage.removeItem('token');
@@ -57,7 +57,12 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('refresh_token');
     
     try {
-      const res = await api.post('/accounts/login/', { username: email, password });
+      const loginData = { username: email, password };
+      if (secretKey) {
+        loginData.secret_key = secretKey;
+      }
+      
+      const res = await api.post('/accounts/login/', loginData);
       console.log('Login response:', res.data); // Debug log
       
       if (res.data.user) {
@@ -65,17 +70,15 @@ export const AuthProvider = ({ children }) => {
         // Store user data in localStorage as fallback
         localStorage.setItem('user', JSON.stringify(res.data.user));
         
-        // Store authentication token in localStorage if available
-        if (res.data.access) {
+        // Store authentication tokens in localStorage
+        if (res.data.access && res.data.refresh) {
           localStorage.setItem('token', res.data.access);
+          localStorage.setItem('access_token', res.data.access);
           localStorage.setItem('refresh_token', res.data.refresh);
-          console.log('Token stored (access):', res.data.access);
-        } else if (res.data.token) {
-          localStorage.setItem('token', res.data.token);
-          console.log('Token stored (token):', res.data.token);
+          console.log('Access token stored:', res.data.access);
+          console.log('Refresh token stored:', res.data.refresh);
         } else {
-          console.log('No token found in response, checking other fields...');
-          // Check if token is in a different field
+          console.log('No tokens found in response');
           Object.keys(res.data).forEach(key => {
             console.log(`${key}:`, res.data[key]);
           });
@@ -141,6 +144,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
     // Clear localStorage tokens
     localStorage.removeItem('token');
+    localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
   };
 

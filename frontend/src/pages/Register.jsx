@@ -35,8 +35,11 @@ const Register = () => {
     phone_number: '',
     password: '',
     confirm_password: '',
+    secret_key: '',
     termsAccepted: false
   });
+  
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
@@ -47,9 +50,13 @@ const Register = () => {
   const handleChange = (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     setFormData({ ...formData, [e.target.name]: value });
+    
+    // Handle admin checkbox change
+    if (e.target.name === 'isAdmin') {
+      setFormData(prev => ({ ...prev, isAdmin: e.target.checked }));
+    }
   };
 
-  
   const handleSuccessModalOk = () => {
     setShowSuccessModal(false);
     navigate('/login');
@@ -104,7 +111,17 @@ const Register = () => {
       submitData.append('username', formData.email);
       submitData.append('password', formData.password);
       submitData.append('confirm_password', formData.confirm_password);
-      // submitData.append('user_type', 'user'); // Removed as API doesn't accept this field
+      
+      // Add role and secret key for admin users
+      if (isAdmin) {
+        submitData.append('role', 'admin');
+        if (formData.secret_key) {
+          submitData.append('secret_key', formData.secret_key);
+        }
+      } else {
+        submitData.append('role', 'tenant');
+      }
+      
       if (contactNumber) submitData.append('contact_number', contactNumber);
 
       await register(submitData);
@@ -181,6 +198,35 @@ const Register = () => {
                 required
               />
             </div>
+
+            {/* Admin Checkbox */}
+            <div className="modern-form-group">
+              <label className="modern-checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={isAdmin}
+                  onChange={(e) => setIsAdmin(e.target.checked)}
+                  className="modern-checkbox"
+                />
+                <span className="modern-checkbox-text">
+                  I am registering as an administrator (requires secret key)
+                </span>
+              </label>
+            </div>
+
+            {/* Secret Key Field - Only for Admin */}
+            {isAdmin && (
+              <div className="modern-form-group">
+                <input
+                  type="text"
+                  name="secret_key"
+                  value={formData.secret_key || ''}
+                  onChange={handleChange}
+                  placeholder="Enter admin secret key"
+                  className="modern-form-input"
+                />
+              </div>
+            )}
 
             {/* Phone Field */}
             <div className="modern-form-group">

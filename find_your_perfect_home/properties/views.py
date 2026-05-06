@@ -128,11 +128,8 @@ class PropertySearchView(generics.ListAPIView):
         if location:
             queryset = queryset.filter(Q(district__icontains=location) | Q(village__icontains=location) | Q(county__icontains=location) | Q(address_line_1__icontains=location))
                 
-        audience_type = self.request.query_params.get('audience_type')
-        if audience_type == 'university':
-            queryset = queryset.filter(Q(target_audience='university_students') | Q(target_audience='students') | Q(name__icontains='university') | Q(name__icontains='campus') | Q(name__icontains='hostel'))
-        elif audience_type == 'public':
-            queryset = queryset.exclude(Q(target_audience='university_students') | Q(target_audience='students') | Q(name__icontains='university') | Q(name__icontains='campus') | Q(name__icontains='hostel'))
+        # Removed audience_type filtering to show all properties including hostels
+        # This ensures both local and hosted environments show the same data
         
         return queryset
 
