@@ -48,9 +48,81 @@
 
 .payment-form-section {
   background: white;
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Cost Breakdown Section */
+.cost-breakdown-section {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  border: 1px solid #e2e8f0;
+}
+
+.cost-breakdown-section h4 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  border-bottom: 2px solid #3b82f6;
+  padding-bottom: 8px;
+}
+
+.cost-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.cost-item:last-of-type:not(.total) {
+  border-bottom: none;
+}
+
+.cost-label {
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cost-value {
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cost-item.discount .cost-label {
+  color: #22c55e;
+}
+
+.cost-item.discount .cost-value {
+  color: #22c55e;
+}
+
+.cost-divider {
+  height: 2px;
+  background: #e2e8f0;
+  margin: 8px 0;
+}
+
+.cost-item.total {
+  border-top: 2px solid #3b82f6;
+  border-bottom: none;
+  padding-top: 16px;
+  margin-top: 8px;
+}
+
+.cost-item.total .cost-label {
+  color: #1e293b;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.cost-item.total .cost-value {
+  color: #3b82f6;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .reservation-summary {

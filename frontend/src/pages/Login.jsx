@@ -90,48 +90,64 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card glass-panel animate-fade-in">
-        <h2 className="auth-title">Welcome Back</h2>
-        <p className="auth-subtitle">Sign in to continue to Rent H&U</p>
-
-        {error && <div className="auth-error">{error}</div>}
-
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-group">
-            <label>Email Address</label>
-            <input
-              type="text"
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
-              placeholder="admin@example.com"
-              required
-            />
-            <small className="form-hint">💡 Use your email address (e.g., admin@example.com)</small>
+    <div className="auth-container glassmorphism-bg">
+      <div className="glassmorphism-card animate-fade-in">
+        <div className="glass-header">
+          <div className="logo-section">
+            <div className="glass-logo">
+              <svg viewBox="0 0 40 40" width="48" height="48" xmlns="http://www.w3.org/2000/svg" className="auth-logo-icon">
+                <path d="M20 4L4 18h4v18h24V4z" fill="none" stroke="#3b82f6" strokeWidth="4" strokeLinejoin="round" />
+                <path d="M16 36V22h-8v14h8z" fill="none" stroke="#3b82f6" strokeWidth="4" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <h2 className="glass-title">Welcome Back</h2>
           </div>
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              required
-            />
-            <small className="form-hint">🔑 Must be at least 6 characters</small>
-          </div>
-
-          <button type="submit" className="btn-primary auth-submit">Sign In</button>
-        </form>
-
-        <div className="auth-footer">
-          Don't have an account? <Link to="/register">Sign up</Link>
         </div>
 
-        <div className="demo-credentials">
-          <h4>🔑 Demo Credentials</h4>
-          <p><strong>Email:</strong> admin@example.com</p>
-          <p><strong>Password:</strong> admin123</p>
+        <p className="glass-subtitle">Sign in to continue to Nestoria</p>
+
+        {error && <div className="glass-error">{error}</div>}
+
+        <form onSubmit={handleSubmit} className="glass-form">
+          <div className="glass-form-group">
+            <label className="glass-label">Email Address</label>
+            <div className="glass-input-wrapper">
+              <input
+                type="text"
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
+                placeholder="Enter your email"
+                className="glass-input"
+                required
+              />
+              <div className="glass-input-icon">�</div>
+            </div>
+          </div>
+
+          <div className="glass-form-group">
+            <label className="glass-label">Password</label>
+            <div className="glass-input-wrapper">
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                className="glass-input"
+                required
+              />
+              <div className="glass-input-icon">🔑</div>
+            </div>
+          </div>
+
+          <button type="submit" className="glass-submit-btn">
+            <span className="glass-btn-text">Sign In</span>
+            <div className="glass-btn-shine"></div>
+          </button>
+        </form>
+
+        <div className="glass-footer">
+          <span className="glass-footer-text">Don't have an account?</span>
+          <Link to="/register" className="glass-link">Sign up</Link>
         </div>
       </div>
     </div>

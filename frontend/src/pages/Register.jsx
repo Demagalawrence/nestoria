@@ -284,18 +284,33 @@ const Register = () => {
 
             {/* Marital Status Field */}
             <div className="modern-form-group">
-              <select
-                name="marital_status"
-                value={formData.marital_status}
-                onChange={handleChange}
-                className="modern-form-input"
-                required
-              >
-                <option value="single">Single</option>
-                <option value="married">Married</option>
-                <option value="divorced">Divorced</option>
-                <option value="widowed">Widowed</option>
-              </select>
+              <label className="modern-label">Marital Status</label>
+              <div className="radio-group">
+                <label className="radio-label">
+                  <input
+                    type="radio"
+                    name="marital_status"
+                    value="single"
+                    checked={formData.marital_status === 'single'}
+                    onChange={handleChange}
+                    className="radio-input"
+                  />
+                  <span className="radio-custom"></span>
+                  <span className="radio-text">Single</span>
+                </label>
+                <label className="radio-label">
+                  <input
+                    type="radio"
+                    name="marital_status"
+                    value="married"
+                    checked={formData.marital_status === 'married'}
+                    onChange={handleChange}
+                    className="radio-input"
+                  />
+                  <span className="radio-custom"></span>
+                  <span className="radio-text">Married</span>
+                </label>
+              </div>
             </div>
 
             {/* Password Fields */}
