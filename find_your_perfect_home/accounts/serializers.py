@@ -48,43 +48,21 @@ class UserLoginSerializer(serializers.Serializer):
         password = attrs.get('password')
         
         if username and password:
-            # Try to find user by username or email
+            # Simple user lookup - try username first, then email
             from django.contrib.auth import get_user_model
             User = get_user_model()
             
-            # Check if the input is an email
-            if '@' in username:
-                try:
-                    users = User.objects.filter(email=username.lower())
-                    if users.count() == 1:
-                        username = users.first().username
-                    elif users.count() > 1:
-                        # If multiple users have the same email, try to find the one with matching username
-                        # First try exact username match
-                        matching_user = users.filter(username=username).first()
-                        if matching_user:
-                            username = matching_user.username
-                        else:
-                            # Otherwise prefer the first active user
-                            active_users = users.filter(is_active=True)
-                            if active_users.exists():
-                                username = active_users.first().username
-                            else:
-                                username = users.first().username
-                    # If no users found with that email, continue with original username
-                except:
-                    pass
-            else:
-                # If not email, try to find by username
-                try:
-                    user = User.objects.get(username=username)
-                    username = user.username
-                except User.DoesNotExist:
-                    pass
+            # Try to find user by username
+            user = User.objects.filter(username=username).first()
             
-            user = authenticate(username=username, password=password)
-            
+            # If not found by username, try email
             if not user:
+                user = User.objects.filter(email=username).first()
+            
+            # Authenticate the user
+            if user and user.check_password(password):
+                return {'user': user}
+            else:
                 raise serializers.ValidationError('Invalid credentials')
             if not user.is_active:
                 raise serializers.ValidationError('User account is disabled')
