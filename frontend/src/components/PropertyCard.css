@@ -137,6 +137,20 @@
   font-weight: 500;
 }
 
+.minimal-card-rating {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.minimal-card-rating:hover {
+  background: #f9fafb;
+}
+
 .minimal-card-rating:hover .rating-text {
   color: #374151;
+}
+
+.minimal-card-rating:hover .star-filled {
+  color: #f59e0b;
 }

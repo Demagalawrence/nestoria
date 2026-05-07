@@ -61,6 +61,12 @@ const PropertyCard = ({ property }) => {
     navigate(`/booking/${property.id}`);
   };
 
+  const handleRatingClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/reviews/${property.id}`);
+  };
+
   // Rating display logic
   const averageRating = property.average_rating || 0;
   const totalReviews = property.total_reviews || 0;
@@ -99,7 +105,7 @@ const PropertyCard = ({ property }) => {
         </p>
         
         {/* Rating Display */}
-        <div className="minimal-card-rating">
+        <div className="minimal-card-rating" onClick={handleRatingClick}>
           {renderStars(averageRating)}
           <span className="rating-text">
             {averageRating > 0 ? `${averageRating.toFixed(1)} (${totalReviews} reviews)` : 'No reviews yet'}
