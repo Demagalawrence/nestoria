@@ -87,6 +87,11 @@
   background: #f5f5f5;
 }
 
+.minimal-btn.reserve-btn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
 .map-btn {
   padding: 0 12px;
   gap: 6px;
@@ -99,4 +104,39 @@
 .reserve-btn {
   flex: 1;
   padding: 0 16px;
+}
+
+/* Rating Styles */
+.minimal-card-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  padding: 4px 0;
+  border-top: 1px solid #f3f4f6;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.rating-stars {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.star-filled {
+  color: #fbbf24;
+}
+
+.star-empty {
+  color: #e2e8f0;
+}
+
+.rating-text {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.minimal-card-rating:hover .rating-text {
+  color: #374151;
 }

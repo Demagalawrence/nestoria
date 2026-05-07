@@ -254,7 +254,7 @@ const AdminDashboard = () => {
         api.get('/properties/'),
         api.get('/accounts/users/'),
         api.get('/bookings/'),
-        api.get('/properties/reviews/')
+        api.get('/properties/reviews')
       ]);
       
       console.log('API Responses:', {

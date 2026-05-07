@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MapPin } from 'lucide-react';
+import { MapPin, Star } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import './PropertyCard.css';
 
@@ -61,6 +61,26 @@ const PropertyCard = ({ property }) => {
     navigate(`/booking/${property.id}`);
   };
 
+  // Rating display logic
+  const averageRating = property.average_rating || 0;
+  const totalReviews = property.total_reviews || 0;
+  
+  const renderStars = (rating) => {
+    return (
+      <div className="rating-stars">
+        {[1, 2, 3, 4, 5].map(star => (
+          <Star
+            key={star}
+            size={14}
+            className={star <= rating ? 'star-filled' : 'star-empty'}
+            fill={star <= rating ? '#fbbf24' : 'none'}
+            color={star <= rating ? '#fbbf24' : '#e2e8f0'}
+          />
+        ))}
+      </div>
+    );
+  };
+
   return (
     <Link to={`/property/${property.id}`} className="minimal-property-card">
       <div className="minimal-card-image-wrapper">
@@ -77,6 +97,14 @@ const PropertyCard = ({ property }) => {
         <p className="minimal-card-price">
           Price: <strong>{priceDisplay}</strong>
         </p>
+        
+        {/* Rating Display */}
+        <div className="minimal-card-rating">
+          {renderStars(averageRating)}
+          <span className="rating-text">
+            {averageRating > 0 ? `${averageRating.toFixed(1)} (${totalReviews} reviews)` : 'No reviews yet'}
+          </span>
+        </div>
         
         <div className="minimal-card-actions">
           <button className="minimal-btn map-btn" onClick={handleMapClick}>
