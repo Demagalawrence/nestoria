@@ -772,6 +772,7 @@ const AdminDashboard = () => {
         <table>
           <thead>
             <tr>
+              <th>Reference</th>
               <th>Property</th>
               <th>User</th>
               <th>Check-in</th>
@@ -782,18 +783,23 @@ const AdminDashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {reservations.map(reservation => (
+            {reservations.filter(reservation => 
+              reservation.property_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              reservation.user_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              reservation.booking_reference?.toLowerCase().includes(searchTerm.toLowerCase())
+            ).map(reservation => (
               <tr key={reservation.id}>
-                <td>{reservation.property_title || 'N/A'}</td>
-                <td>{reservation.user?.username || 'N/A'}</td>
-                <td>{reservation.check_in_date || 'N/A'}</td>
-                <td>{reservation.check_out_date || 'N/A'}</td>
+                <td>{reservation.booking_reference || 'N/A'}</td>
+                <td>{reservation.property_name || 'N/A'}</td>
+                <td>{reservation.user_name || 'N/A'}</td>
+                <td>{reservation.start_date || 'N/A'}</td>
+                <td>{reservation.end_date || 'N/A'}</td>
                 <td>
                   <span className={`status-badge ${reservation.status}`}>
                     {reservation.status}
                   </span>
                 </td>
-                <td>UGX {reservation.total_amount || '0'}</td>
+                <td>UGX {reservation.final_amount || '0'}</td>
                 <td>
                   <div className="action-buttons">
                     <button className="btn-view"><Eye size={14} /></button>
