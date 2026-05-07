@@ -342,9 +342,12 @@ const Payment = () => {
             {(property?.id || booking?.rental_property) && (
               <button
                 className="btn-outline-blue"
-                onClick={() => navigate(`/reviews/${property?.id || booking?.rental_property}?rate=1`)}
+                onClick={() => {
+                  // Auto-open review form when clicking from payment receipt
+                  navigate(`/reviews/${property?.id || booking?.rental_property}?rate=1`);
+                }}
               >
-                Rate Services
+                Rate Your Stay
               </button>
             )}
             <button className="btn-primary" onClick={() => navigate('/dashboard')}>
