@@ -323,6 +323,98 @@ const AdminDashboard = () => {
     }
   };
 
+  // View functionality handlers
+  const handleViewProperty = (property) => {
+    const propertyDetails = `
+PROPERTY DETAILS
+================
+Name: ${property.name}
+Type: ${property.property_type}
+Audience: ${property.target_audience}
+Owner: ${property.owner?.username || property.owner_username || property.owner_name}
+Price: UGX ${property.rent_per_month}
+Location: ${property.address_line_1}, ${property.district}
+Status: ${property.is_approved ? 'Approved' : 'Pending'}
+Total Rooms: ${property.total_rooms}
+Available Rooms: ${property.available_rooms}
+Description: ${property.description || 'No description available'}
+    `;
+    alert(propertyDetails);
+  };
+
+  const handleViewUser = (user) => {
+    const userDetails = `
+USER DETAILS
+================
+Name: ${user.first_name} ${user.last_name}
+Username: ${user.username}
+Email: ${user.email}
+Role: ${user.role}
+Phone: ${user.contact_number || 'N/A'}
+Status: ${user.is_verified ? 'Verified' : 'Not Verified'}
+Verification Status: ${user.verification_status || 'Pending'}
+Created: ${new Date(user.created_at).toLocaleDateString()}
+Occupation: ${user.occupation || 'N/A'}
+Company: ${user.company_name || 'N/A'}
+    `;
+    alert(userDetails);
+  };
+
+  const handleViewReservation = (reservation) => {
+    const reservationDetails = `
+RESERVATION DETAILS
+==================
+Booking Reference: ${reservation.booking_reference || 'N/A'}
+Property: ${reservation.property_name || 'N/A'}
+Guest: ${reservation.user_name || 'N/A'}
+Start Date: ${reservation.start_date || 'N/A'}
+End Date: ${reservation.end_date || 'N/A'}
+Status: ${reservation.status}
+Total Amount: UGX ${reservation.final_amount || '0'}
+Created: ${new Date(reservation.created_at).toLocaleDateString()}
+    `;
+    alert(reservationDetails);
+  };
+
+  // Edit functionality handlers
+  const handleEditProperty = (property) => {
+    const newPrice = prompt(`Edit property price for "${property.name}":`, property.rent_per_month);
+    if (newPrice && !isNaN(newPrice)) {
+      handleUpdateProperty(property.id, { rent_per_month: parseFloat(newPrice) });
+    }
+  };
+
+  const handleEditReservation = (reservation) => {
+    const newStatus = prompt(`Edit reservation status for "${reservation.booking_reference || reservation.id}":\nCurrent status: ${reservation.status}\n\nEnter new status (confirmed, pending, cancelled, completed):`, reservation.status);
+    if (newStatus && ['confirmed', 'pending', 'cancelled', 'completed'].includes(newStatus.toLowerCase())) {
+      handleUpdateReservation(reservation.id, { status: newStatus.toLowerCase() });
+    } else if (newStatus) {
+      alert('Invalid status. Please use: confirmed, pending, cancelled, or completed');
+    }
+  };
+
+  const handleUpdateProperty = async (id, updates) => {
+    try {
+      await api.patch(`/properties/${id}/update/`, updates);
+      setProperties(properties.map(p => p.id === id ? { ...p, ...updates } : p));
+      alert('Property updated successfully!');
+    } catch (error) {
+      console.error('Error updating property:', error);
+      alert('Error updating property. Please check the console for details.');
+    }
+  };
+
+  const handleUpdateReservation = async (id, updates) => {
+    try {
+      await api.patch(`/bookings/${id}/update/`, updates);
+      setReservations(reservations.map(r => r.id === id ? { ...r, ...updates } : r));
+      alert('Reservation updated successfully!');
+    } catch (error) {
+      console.error('Error updating reservation:', error);
+      alert('Error updating reservation. Please check the console for details.');
+    }
+  };
+
   const handleApproveProperty = async (id) => {
     try {
       const property = properties.find(p => p.id === id);
@@ -732,8 +824,8 @@ const AdminDashboard = () => {
                 </td>
                 <td>
                   <div className="action-buttons">
-                    <button className="btn-view">View</button>
-                    <button className="btn-edit">Edit</button>
+                    <button className="btn-view" onClick={() => handleViewProperty(property)}>View</button>
+                    <button className="btn-edit" onClick={() => handleEditProperty(property)}>Edit</button>
                     {property.is_approved ? (
                       <button className="btn-warning" onClick={() => handleApproveProperty(property.id)}>
                         Reject
@@ -814,7 +906,7 @@ const AdminDashboard = () => {
                 </td>
                 <td>
                   <div className="action-buttons">
-                    <button className="btn-view">View</button>
+                    <button className="btn-view" onClick={() => handleViewUser(user)}>View</button>
                     <button className="btn-edit" onClick={() => handleEditUser(user)}>Edit</button>
                     {!user.is_verified && (
                       <button className="btn-success" onClick={() => handleConfirmUser(user.id)}>
@@ -885,8 +977,8 @@ const AdminDashboard = () => {
                 <td>UGX {reservation.final_amount || '0'}</td>
                 <td>
                   <div className="action-buttons">
-                    <button className="btn-view">View</button>
-                    <button className="btn-edit">Edit</button>
+                    <button className="btn-view" onClick={() => handleViewReservation(reservation)}>View</button>
+                    <button className="btn-edit" onClick={() => handleEditReservation(reservation)}>Edit</button>
                   </div>
                 </td>
               </tr>
