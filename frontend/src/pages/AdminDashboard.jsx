@@ -295,16 +295,27 @@ const AdminDashboard = () => {
 
   const handleAddProperty = async () => {
     try {
-      if (!propertyFormData.name || !propertyFormData.address_line_1 || !propertyFormData.rent_per_month || !propertyFormData.total_rooms) {
-        alert('Please fill in the property name, address, rent, and number of rooms.');
+      if (!propertyFormData.name || !propertyFormData.description || !propertyFormData.address_line_1 || !propertyFormData.rent_per_month || !propertyFormData.total_rooms) {
+        alert('Please fill in all required fields: property name, description, address, rent, and number of rooms.');
         return;
       }
 
       const totalRooms = parseInt(propertyFormData.total_rooms, 10);
-      const availableRooms = parseInt(propertyFormData.available_rooms || propertyFormData.total_rooms, 10);
+      const availableRooms = propertyFormData.available_rooms ? parseInt(propertyFormData.available_rooms, 10) : totalRooms;
 
       if (Number.isNaN(totalRooms) || totalRooms < 1 || Number.isNaN(availableRooms) || availableRooms < 0) {
         alert('Please enter a valid room count.');
+        return;
+      }
+
+      if (availableRooms > totalRooms) {
+        alert('Available rooms cannot be more than total rooms.');
+        return;
+      }
+
+      const rentPerMonth = parseFloat(propertyFormData.rent_per_month);
+      if (Number.isNaN(rentPerMonth) || rentPerMonth <= 0) {
+        alert('Please enter a valid rent amount.');
         return;
       }
 
@@ -314,6 +325,7 @@ const AdminDashboard = () => {
         ...propertyFormData,
         total_rooms: totalRooms,
         available_rooms: Math.min(availableRooms, totalRooms),
+        rent_per_month: rentPerMonth,
         country: 'Uganda',
         gender_preference: 'any',
         is_active: true
@@ -346,7 +358,25 @@ const AdminDashboard = () => {
       alert('Property created successfully!');
     } catch (error) {
       console.error('Error creating property:', error);
-      alert('Error creating property. Please check the console for details.');
+      console.error('Error response data:', error.response?.data);
+      console.error('Error status:', error.response?.status);
+      
+      if (error.response?.data) {
+        const errorData = error.response.data;
+        if (typeof errorData === 'object') {
+          const errorMessages = Object.entries(errorData)
+            .map(([field, messages]) => {
+              const friendlyField = field.charAt(0).toUpperCase() + field.slice(1);
+              return `${friendlyField}: ${Array.isArray(messages) ? messages.join(', ') : messages}`;
+            })
+            .join('; ');
+          alert(`Property creation failed: ${errorMessages}`);
+        } else {
+          alert(`Property creation failed: ${errorData.detail || errorData.error || 'Unknown error'}`);
+        }
+      } else {
+        alert('Error creating property. Please check the console for details.');
+      }
     }
   };
 
