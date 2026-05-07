@@ -84,7 +84,7 @@ const Booking = () => {
     const rawPrice = property.rent_per_month || property.price_per_night || property.price || 0;
     const priceStr = String(rawPrice).replace(/,/g, '');
     const pricePerMonth = parseFloat(priceStr) || 0;
-    console.log(`Using property price: $${pricePerMonth}/month for ${nights} nights`);
+    console.log(`Using property price: UGX ${pricePerMonth}/month for ${nights} nights`);
     
     // Ensure price is reasonable and within database limits
     const safePrice = Math.min(pricePerMonth, 99999999); // Max 8 digits for UGX
@@ -102,7 +102,7 @@ const Booking = () => {
     
     // Ensure total price is within 10-digit limit
     const finalPrice = Math.min(Math.round(totalPrice), 999999999);
-    console.log(`Final calculated price: $${finalPrice}`);
+    console.log(`Final calculated price: UGX ${finalPrice}`);
     return finalPrice;
   };
 

@@ -144,7 +144,7 @@ const Analytics = () => {
             <DollarSign />
           </div>
           <div className="stat-content">
-            <h3>${overview.total_revenue.toLocaleString()}</h3>
+            <h3>UGX {overview.total_revenue.toLocaleString()}</h3>
             <p>Total Revenue</p>
             <span className="stat-change positive">+23% vs last period</span>
           </div>
@@ -324,7 +324,7 @@ const Analytics = () => {
                 <div className="activity-content">
                   <p>
                     <strong>{activity.guest}</strong>
-                    {activity.type === 'booking' && ` booked ${activity.property} for $${activity.amount}`}
+                    {activity.type === 'booking' && ` booked ${activity.property} for UGX ${activity.amount}`}
                     {activity.type === 'review' && ` left a ${activity.rating}-star review for ${activity.property}`}
                     {activity.type === 'view' && ` viewed ${activity.property}`}
                   </p>

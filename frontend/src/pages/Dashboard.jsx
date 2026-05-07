@@ -360,7 +360,7 @@ const Dashboard = () => {
                 </div>
                 <div className="receipt-row">
                   <span>Amount Paid:</span>
-                  <span>${selectedReceipt.amount}</span>
+                  <span>UGX {selectedReceipt.amount}</span>
                 </div>
                 <div className="receipt-row">
                   <span>Payment Method:</span>

@@ -277,6 +277,29 @@
   color: #1a202c;
 }
 
+.account-info {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.account-info p {
+  margin: 6px 0;
+  font-size: 13px;
+  color: #374151;
+}
+
+.account-info strong {
+  color: #166534;
+}
+
+.account-info em {
+  color: #6b7280;
+  font-size: 12px;
+}
+
 .payment-submit {
   padding: 16px 24px;
   border: none;

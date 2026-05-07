@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { CreditCard, Shield, ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react';
+import { CreditCard, Calendar, Clock, CheckCircle, AlertCircle, ArrowLeft, Shield, Smartphone, Wifi, Car, Users } from 'lucide-react';
 import api from '../api/axios';
+import { formatUGX } from '../utils/currency';
 import ReservationProgress from '../components/BookingProgress';
 import './Payment.css';
 
@@ -325,12 +326,42 @@ const Payment = () => {
                   </span>
                 </div>
                 {mockSavedMethods.find(m => m.id === selectedMethod)?.category === 'momo' && (
-                  <div className="receipt-row">
-                    <span className="receipt-label">Paid To</span>
-                    <span className="receipt-value">
-                      {mockSavedMethods.find(m => m.id === selectedMethod)?.number}
-                    </span>
-                  </div>
+                  <>
+                    <div className="receipt-row">
+                      <span className="receipt-label">Paid To</span>
+                      <span className="receipt-value">
+                        {mockSavedMethods.find(m => m.id === selectedMethod)?.number}
+                      </span>
+                    </div>
+                    <div className="receipt-row">
+                      <span className="receipt-label">Account Name</span>
+                      <span className="receipt-value">Nestoria Properties Ltd</span>
+                    </div>
+                    <div className="receipt-row">
+                      <span className="receipt-label">Account Number</span>
+                      <span className="receipt-value">1234567890</span>
+                    </div>
+                    <div className="receipt-row">
+                      <span className="receipt-label">Bank</span>
+                      <span className="receipt-value">Stanbic Bank Uganda</span>
+                    </div>
+                  </>
+                )}
+                {mockSavedMethods.find(m => m.id === selectedMethod)?.category === 'card' && (
+                  <>
+                    <div className="receipt-row">
+                      <span className="receipt-label">Account Name</span>
+                      <span className="receipt-value">Nestoria Properties Ltd</span>
+                    </div>
+                    <div className="receipt-row">
+                      <span className="receipt-label">Account Number</span>
+                      <span className="receipt-value">1234567890</span>
+                    </div>
+                    <div className="receipt-row">
+                      <span className="receipt-label">Bank</span>
+                      <span className="receipt-value">Stanbic Bank Uganda</span>
+                    </div>
+                  </>
                 )}
                 <div className="receipt-row">
                   <span className="receipt-label">Date & Time</span>
@@ -343,7 +374,7 @@ const Payment = () => {
 
             <div className="receipt-row receipt-total">
               <span className="receipt-label">Amount Paid</span>
-              <span className="receipt-value highlight">UGX {receipt?.amount || booking?.final_amount || booking?.total_amount}</span>
+              <span className="receipt-value highlight">{formatUGX(receipt?.amount || booking?.final_amount || booking?.total_amount)}</span>
             </div>
           </div>
 
@@ -478,7 +509,7 @@ const Payment = () => {
                   </div>
                   <div className="summary-amount-column">
                     <span className="total-label">Total<br />Amount<br />to Pay:</span>
-                    <span className="ugx-amount">UGX<br />{booking?.final_amount || booking?.total_amount || 0}</span>
+                    <span className="ugx-amount">{formatUGX(booking?.final_amount || booking?.total_amount || 0).replace('UGX ', 'UGX<br />')}</span>
                   </div>
                 </div>
 
@@ -487,34 +518,34 @@ const Payment = () => {
                   <h4>Cost Breakdown</h4>
                   <div className="cost-item">
                     <span className="cost-label">Base Rent</span>
-                    <span className="cost-value">UGX {booking?.base_rent || booking?.rent_per_month || 0}</span>
+                    <span className="cost-value">{formatUGX(booking?.base_rent || booking?.rent_per_month || 0)}</span>
                   </div>
                   <div className="cost-item">
                     <span className="cost-label">Water Charges</span>
-                    <span className="cost-value">UGX {booking?.water_charges || 15000}</span>
+                    <span className="cost-value">{formatUGX(booking?.water_charges || 15000)}</span>
                   </div>
                   <div className="cost-item">
                     <span className="cost-label">Electricity Charges</span>
-                    <span className="cost-value">UGX {booking?.electricity_charges || 25000}</span>
+                    <span className="cost-value">{formatUGX(booking?.electricity_charges || 25000)}</span>
                   </div>
                   <div className="cost-item">
                     <span className="cost-label">Maintenance Fee</span>
-                    <span className="cost-value">UGX {booking?.maintenance_charge || 10000}</span>
+                    <span className="cost-value">{formatUGX(booking?.maintenance_charge || 10000)}</span>
                   </div>
                   <div className="cost-item">
                     <span className="cost-label">Security Deposit</span>
-                    <span className="cost-value">UGX {booking?.security_deposit || 50000}</span>
+                    <span className="cost-value">{formatUGX(booking?.security_deposit || 50000)}</span>
                   </div>
                   {booking?.discount_amount && (
                     <div className="cost-item discount">
                       <span className="cost-label">Discount</span>
-                      <span className="cost-value">-UGX {booking.discount_amount}</span>
+                      <span className="cost-value">-{formatUGX(booking.discount_amount)}</span>
                     </div>
                   )}
                   <div className="cost-divider"></div>
                   <div className="cost-item total">
                     <span className="cost-label">Total</span>
-                    <span className="cost-value">UGX {booking?.final_amount || booking?.total_amount || 0}</span>
+                    <span className="cost-value">{formatUGX(booking?.final_amount || booking?.total_amount || 0)}</span>
                   </div>
                 </div>
 
@@ -541,8 +572,15 @@ const Payment = () => {
                         <p>1. Go to your Mobile Money app</p>
                         <p>2. Select "Send Money"</p>
                         <p>3. Enter the number above</p>
-                        <p>4. Enter the amount: <strong>UGX {booking?.final_amount || booking?.total_amount || 0}</strong></p>
+                        <p>4. Enter the amount: <strong>{formatUGX(booking?.final_amount || booking?.total_amount || 0)}</strong></p>
                         <p>5. Complete the payment and click "Confirm Payment" below</p>
+                        <div className="account-info">
+                          <p><strong>System Account Information:</strong></p>
+                          <p>Account Name: <strong>Nestoria Properties Ltd</strong></p>
+                          <p>Account Number: <strong>1234567890</strong></p>
+                          <p>Bank: <strong>Stanbic Bank Uganda</strong></p>
+                          <p><em>Your payment will be processed and reflected in your dashboard</em></p>
+                        </div>
                       </div>
                     </div>
                   ) : (
@@ -555,11 +593,18 @@ const Payment = () => {
                           type="text"
                           name="card_number"
                           value={paymentData.card_number}
-                          onChange={handleCardNumberChange}
+                          onChange={handlePaymentDataChange}
                           placeholder="1234 5678 9012 3456"
-                          maxLength="19"
                           required
                         />
+                      </div>
+
+                      <div className="account-info">
+                        <p><strong>System Account Information:</strong></p>
+                        <p>Account Name: <strong>Nestoria Properties Ltd</strong></p>
+                        <p>Account Number: <strong>1234567890</strong></p>
+                        <p>Bank: <strong>Stanbic Bank Uganda</strong></p>
+                        <p><em>Your payment will be processed and reflected in your dashboard</em></p>
                       </div>
 
                       <div className="form-row">
