@@ -15,40 +15,40 @@ const GoogleIcon = () => (
 
 const UgandaFlag = () => (
   <svg viewBox="0 0 72 48" width="24" height="16" xmlns="http://www.w3.org/2000/svg">
-    <rect width="72" height="48" fill="#ffffff"/>
+    <rect width="72" height="48" fill="#ffffff" />
     <g>
-      <rect y="0" width="72" height="6.857" fill="#000000"/>
-      <rect y="6.857" width="72" height="6.857" fill="#fcdc04"/>
-      <rect y="13.714" width="72" height="6.857" fill="#d90000"/>
-      <rect y="20.571" width="72" height="6.857" fill="#ffffff"/>
-      <rect y="27.429" width="72" height="6.857" fill="#fcdc04"/>
-      <rect y="34.286" width="72" height="6.857" fill="#d90000"/>
-      <rect y="41.143" width="72" height="6.857" fill="#000000"/>
+      <rect y="0" width="72" height="6.857" fill="#000000" />
+      <rect y="6.857" width="72" height="6.857" fill="#fcdc04" />
+      <rect y="13.714" width="72" height="6.857" fill="#d90000" />
+      <rect y="20.571" width="72" height="6.857" fill="#ffffff" />
+      <rect y="27.429" width="72" height="6.857" fill="#fcdc04" />
+      <rect y="34.286" width="72" height="6.857" fill="#d90000" />
+      <rect y="41.143" width="72" height="6.857" fill="#000000" />
     </g>
-    <circle cx="36" cy="24" r="10" fill="#ffffff" stroke="#000000" strokeWidth="0.5"/>
-    <path d="M36 16 L37.5 22.5 L44 22.5 L38.75 26.5 L40.5 33 L36 29 L31.5 33 L33.25 26.5 L28 22.5 L34.5 22.5 Z" fill="#fcdc04"/>
+    <circle cx="36" cy="24" r="10" fill="#ffffff" stroke="#000000" strokeWidth="0.5" />
+    <path d="M36 16 L37.5 22.5 L44 22.5 L38.75 26.5 L40.5 33 L36 29 L31.5 33 L33.25 26.5 L28 22.5 L34.5 22.5 Z" fill="#fcdc04" />
   </svg>
 );
 
 const USFlag = () => (
   <svg viewBox="0 0 72 48" width="24" height="16" xmlns="http://www.w3.org/2000/svg">
-    <rect width="72" height="48" fill="#ffffff"/>
+    <rect width="72" height="48" fill="#ffffff" />
     <g fill="#b22234">
-      <rect y="0" width="72" height="3.692"/>
-      <rect y="7.385" width="72" height="3.692"/>
-      <rect y="14.769" width="72" height="3.692"/>
-      <rect y="22.154" width="72" height="3.692"/>
-      <rect y="29.538" width="72" height="3.692"/>
-      <rect y="36.923" width="72" height="3.692"/>
-      <rect y="44.308" width="72" height="3.692"/>
+      <rect y="0" width="72" height="3.692" />
+      <rect y="7.385" width="72" height="3.692" />
+      <rect y="14.769" width="72" height="3.692" />
+      <rect y="22.154" width="72" height="3.692" />
+      <rect y="29.538" width="72" height="3.692" />
+      <rect y="36.923" width="72" height="3.692" />
+      <rect y="44.308" width="72" height="3.692" />
     </g>
-    <rect width="28.8" height="25.846" fill="#3c3b6e"/>
+    <rect width="28.8" height="25.846" fill="#3c3b6e" />
     <g fill="#ffffff">
       {Array.from({ length: 50 }).map((_, i) => {
         const x = (i % 6) * 4.8 + 2.4;
         const y = Math.floor(i / 6) * 3.462 + 1.731;
         if (i >= 30 && (i % 6) >= 5) return null;
-        return <circle key={i} cx={x} cy={y} r="0.8"/>;
+        return <circle key={i} cx={x} cy={y} r="0.8" />;
       })}
     </g>
   </svg>
@@ -56,11 +56,11 @@ const USFlag = () => (
 
 const UKFlag = () => (
   <svg viewBox="0 0 72 48" width="24" height="16" xmlns="http://www.w3.org/2000/svg">
-    <rect width="72" height="48" fill="#012169"/>
-    <path d="M0 0 L72 48 M72 0 L0 48" stroke="#ffffff" strokeWidth="4.8"/>
-    <path d="M0 0 L72 48 M72 0 L0 48" stroke="#c8102e" strokeWidth="3.2"/>
-    <path d="M36 0 V48 M0 24 H72" stroke="#ffffff" strokeWidth="8"/>
-    <path d="M36 0 V48 M0 24 H72" stroke="#c8102e" strokeWidth="4.8"/>
+    <rect width="72" height="48" fill="#012169" />
+    <path d="M0 0 L72 48 M72 0 L0 48" stroke="#ffffff" strokeWidth="4.8" />
+    <path d="M0 0 L72 48 M72 0 L0 48" stroke="#c8102e" strokeWidth="3.2" />
+    <path d="M36 0 V48 M0 24 H72" stroke="#ffffff" strokeWidth="8" />
+    <path d="M36 0 V48 M0 24 H72" stroke="#c8102e" strokeWidth="4.8" />
   </svg>
 );
 
@@ -85,7 +85,7 @@ const Register = () => {
 
   const getPasswordStrength = (password) => {
     if (!password) return { score: 0, color: '#94a3b8', text: 'Enter a password' };
-    
+
     let score = 0;
     if (password.length >= 6) score += 1;
     if (password.length >= 8) score += 1;
@@ -93,24 +93,24 @@ const Register = () => {
     if (/[a-z]/.test(password)) score += 1;
     if (/[0-9]/.test(password)) score += 1;
     if (/[^A-Za-z0-9]/.test(password)) score += 1;
-    
-    let color = '#ef4444'; 
+
+    let color = '#ef4444';
     let text = 'Weak password';
-    
+
     if (score >= 4) {
-      color = '#22c55e'; 
+      color = '#22c55e';
       text = 'Strong password';
     } else if (score >= 3) {
-      color = '#f59e0b'; 
+      color = '#f59e0b';
       text = 'Medium password';
     } else if (score >= 2) {
-      color = '#eab308'; 
+      color = '#eab308';
       text = 'Fair password';
     }
-    
+
     return { score, color, text };
   };
-  
+
   const [isAdmin, setIsAdmin] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
@@ -150,9 +150,9 @@ const Register = () => {
     const value = type === 'checkbox' ? e.target.checked : e.target.value;
     setFormData({ ...formData, [name]: value });
     setTouched(prev => ({ ...prev, [name]: true }));
-    
+
     if (name === 'isAdmin') {
-      setFormData(prev => ({ ...prev, isAdmin: e.target.checked }));
+      setIsAdmin(e.target.checked);
     }
   };
 
@@ -164,7 +164,7 @@ const Register = () => {
   const handleGoogleSignIn = () => {
     // Use the provided Google OAuth URL directly
     const googleOAuthUrl = 'https://accounts.google.com/v3/signin/accountchooser?access_type=offline&client_id=1071006060591-tmhssin2h21lcre235vtolojh4g403ep.apps.googleusercontent.com&prompt=consent&redirect_uri=http%3A%2F%2Flocalhost%3A59619%2Foauth-callback&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcclog+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fexperimentsandconfigs&state=04b3195c-799b-4b55-8c73-c17540cdc30e&dsh=S-315381552%3A1778091977506284&o2v=2&service=lso&flowName=GeneralOAuthFlow&opparams=%253F&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hANzXJekWcFY2lnZpLpVhx_wUqwIOrBWq_u2wFv29qhhj55azbdQYC0OHRlZS9HzpsLIHSkx9wSycYpCH_tvbWvv0gOrX_NLkRbSwbVEA6x6XH-d-RcdfTV0sj7TDvPJ7yUU0gvvPVBOYTILxa9qBLSwoCY3mAHAIn5IlI0JHJmiWLXgBd2GxTrff8ABtKIhVa0a4qZOXoseHOuKJraulMovMvHJCXDzxdfbL6U7od8whuWLxWd8zf0mTmIepKnloxuQdf9dQTrbGGkR7RvEx8JLr0uD25haPCX8vsnrhyhUseMytQqD1nQ7ownQNYiixZmtSVK-D7E6D7YxZqGnKDbh6x3TleAKd524Enc1mx3otL3iigT9rG9LiQuCUlCEleSnwzQvF9BhjPHWwsOx7KYdVKYEOJU3ebWclI7Vk9WKTT0vXI6ydpfe1tceZ8cAC-XxgdsXj6sEKd7_jdIH8ylF7_cnC6r5-EG2NFd6siVRWlvAbhFfIIWhl86DZ3usYDQPZzI3%26flowName%3DGeneralOAuthFlow%26as%3DS-315381552%253A1778091977506284%26client_id%3D1071006060591-tmhssin2h21lcre235vtolojh4g403ep.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fconsent%23&app_domain=http%3A%2F%2Flocalhost%3A59619';
-    
+
     // Open Google OAuth in new window
     window.open(googleOAuthUrl, '_blank', 'width=500,height=600');
   };
@@ -172,7 +172,7 @@ const Register = () => {
   const handleAppleSignIn = () => {
     // Apple Sign In URL (using Apple's OAuth flow)
     const appleOAuthUrl = 'https://appleid.apple.com/auth/authorize?client_id=com.nestoria.app&redirect_uri=http%3A%2F%2Flocalhost%3A59619%2Foauth-callback&response_type=code&scope=name%20email&response_mode=form_post';
-    
+
     // Open Apple OAuth in new window
     window.open(appleOAuthUrl, '_blank', 'width=500,height=600');
   };
@@ -226,7 +226,7 @@ const Register = () => {
       submitData.append('username', formData.email);
       submitData.append('password', formData.password);
       submitData.append('confirm_password', formData.confirm_password);
-      
+
       if (isAdmin) {
         submitData.append('role', 'admin');
         if (formData.secret_key) {
@@ -235,7 +235,7 @@ const Register = () => {
       } else {
         submitData.append('role', 'tenant');
       }
-      
+
       if (contactNumber) submitData.append('contact_number', contactNumber);
 
       await register(submitData);
@@ -264,7 +264,7 @@ const Register = () => {
   return (
     <div className="premium-auth-container">
       <div className="premium-auth-card premium-register-card animate-fade-in">
-        
+
         <div className="premium-auth-header">
           <div className="premium-logo">
             <Building2 size={28} color="#ffffff" strokeWidth={2.5} />
@@ -281,7 +281,7 @@ const Register = () => {
         )}
 
         <form onSubmit={handleSubmit} className="premium-auth-form">
-          
+
           <div className="premium-input-group">
             <label>Full Name</label>
             <div className={`premium-input-wrapper${getFieldClass('name')}`}>
@@ -357,7 +357,7 @@ const Register = () => {
                   </div>
                 )}
               </div>
-              <div className={`premium-input-wrapper${getFieldClass('phone_number')}`} style={{flex: 1}}>
+              <div className={`premium-input-wrapper${getFieldClass('phone_number')}`} style={{ flex: 1 }}>
                 <Phone className="premium-input-icon" size={20} />
                 <input
                   type="text"
@@ -508,7 +508,7 @@ const Register = () => {
           </button>
           <button type="button" className="premium-social-btn" onClick={handleAppleSignIn}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
             </svg>
             <span>Apple</span>
           </button>
@@ -537,11 +537,11 @@ const Register = () => {
               justifyContent: 'center', margin: '0 auto 24px'
             }}>
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 6L9 17l-5-5" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M20 6L9 17l-5-5" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
-            <h2 style={{fontSize: '1.5rem', fontWeight: '700', color: '#0f172a', marginBottom: '12px'}}>Registration Successful!</h2>
-            <p style={{color: '#64748b', marginBottom: '32px', lineHeight: '1.5'}}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#0f172a', marginBottom: '12px' }}>Registration Successful!</h2>
+            <p style={{ color: '#64748b', marginBottom: '32px', lineHeight: '1.5' }}>
               Your account has been created successfully. You can now login with your credentials.
             </p>
             <button onClick={handleSuccessModalOk} className="premium-submit-btn">
