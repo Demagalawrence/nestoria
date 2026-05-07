@@ -328,12 +328,20 @@ const AdminDashboard = () => {
         rent_per_month: rentPerMonth,
         country: 'Uganda',
         gender_preference: 'any',
-        is_active: true
+        is_active: true,
+        amenities: propertyFormData.amenities 
+          ? propertyFormData.amenities.split(',').map(item => item.trim()).filter(item => item.length > 0)
+          : []
       };
 
       Object.entries(propertyPayload).forEach(([key, value]) => {
         if (value !== '' && value !== null && value !== undefined) {
-          submitData.append(key, value);
+          // Handle JSON arrays properly
+          if ((key === 'amenities' || key === 'safety_features') && Array.isArray(value)) {
+            submitData.append(key, JSON.stringify(value));
+          } else {
+            submitData.append(key, value);
+          }
         }
       });
       

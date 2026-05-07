@@ -128,9 +128,9 @@ const Reviews = () => {
           <Star
             key={star}
             size={interactive ? 20 : 16}
-            className={star <= rating ? 'filled' : 'empty'}
+            className={`star ${star <= rating ? 'filled' : 'empty'}`}
             onClick={() => interactive && onChange(star)}
-            style={interactive ? { cursor: 'pointer' } : {}}
+            style={interactive ? { cursor: 'pointer', pointerEvents: 'auto' } : { pointerEvents: 'none' }}
           />
         ))}
       </div>
@@ -188,13 +188,18 @@ const Reviews = () => {
         <div className="rating-summary">
           <div className="average-rating">
             <div className="rating-number">{averageRating}</div>
-            {renderStars(Math.round(averageRating))}
+            {renderStars(Math.round(averageRating), false, (rating) => setFilter(rating.toString()))}
             <div className="rating-text">{reviews.length} review{reviews.length !== 1 ? 's' : ''}</div>
           </div>
           
           <div className="rating-bars">
             {ratingDistribution.map(({ rating, count, percentage }) => (
-              <div key={rating} className="rating-bar">
+              <div 
+                key={rating} 
+                className="rating-bar" 
+                style={{ cursor: 'pointer' }}
+                onClick={() => setFilter(rating.toString())}
+              >
                 <div className="rating-label">
                   {renderStars(rating)}
                   <span>{rating}</span>

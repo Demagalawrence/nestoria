@@ -241,6 +241,42 @@
   min-height: 80px;
 }
 
+.payment-number-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.payment-number {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a202c;
+  letter-spacing: 1px;
+}
+
+.payment-instructions {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 12px;
+}
+
+.payment-instructions p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #374151;
+}
+
+.payment-instructions strong {
+  color: #1a202c;
+}
+
 .payment-submit {
   padding: 16px 24px;
   border: none;

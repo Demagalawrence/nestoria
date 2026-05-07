@@ -33,8 +33,8 @@ const Payment = () => {
     { id: '1', type: 'visa', logo: 'VISA', number: 'XXXX XXXX XXXX 8908', isDefault: true, category: 'card' },
     { id: '2', type: 'mastercard', logo: 'Mastercard', number: 'XXXX XXXX XXXX 7777', isDefault: false, category: 'card' },
     { id: '3', type: 'paypal', logo: 'PayPal', number: 'XXXX XXXX XXXX 6498', isDefault: false, category: 'card' },
-    { id: '4', type: 'mtn', logo: 'MTN MoMo', number: 'MTN Mobile Money', isDefault: false, category: 'momo' },
-    { id: '5', type: 'airtel', logo: 'Airtel Money', number: 'Airtel Money', isDefault: false, category: 'momo' },
+    { id: '4', type: 'mtn', logo: 'MTN MoMo', number: '0782 123 456', isDefault: false, category: 'momo', paymentNumber: '0782123456' },
+    { id: '5', type: 'airtel', logo: 'Airtel Money', number: '0756 789 012', isDefault: false, category: 'momo', paymentNumber: '0756789012' },
   ];
 
   useEffect(() => {
@@ -193,9 +193,13 @@ const Payment = () => {
       }
 
       // Create payment
+      const selectedMethodData = mockSavedMethods.find(m => m.id === selectedMethod);
       const paymentPayload = {
         booking: parseInt(bookingId),
-        payment_method: 'credit_card'
+        payment_method: selectedMethodData?.category === 'momo' ? 'mobile_money' : 'credit_card',
+        payment_provider: selectedMethodData?.type || 'visa',
+        payment_number: selectedMethodData?.paymentNumber || null,
+        amount: booking?.final_amount || booking?.total_amount
       };
 
       const paymentRes = await api.post('/payments/create/', paymentPayload);
@@ -320,6 +324,14 @@ const Payment = () => {
                     {mockSavedMethods.find(m => m.id === selectedMethod)?.logo || receipt.payment_method}
                   </span>
                 </div>
+                {mockSavedMethods.find(m => m.id === selectedMethod)?.category === 'momo' && (
+                  <div className="receipt-row">
+                    <span className="receipt-label">Paid To</span>
+                    <span className="receipt-value">
+                      {mockSavedMethods.find(m => m.id === selectedMethod)?.number}
+                    </span>
+                  </div>
+                )}
                 <div className="receipt-row">
                   <span className="receipt-label">Date & Time</span>
                   <span className="receipt-value">{new Date(receipt.payment_date).toLocaleString()}</span>
@@ -511,15 +523,27 @@ const Payment = () => {
 
                   {mockSavedMethods.find(m => m.id === selectedMethod)?.category === 'momo' ? (
                     <div className="form-group">
-                      <label>Mobile Money Number</label>
-                      <input
-                        type="tel"
-                        name="mobile_money_number"
-                        value={mobileMoneyNumber}
-                        onChange={(e) => setMobileMoneyNumber(e.target.value)}
-                        placeholder="e.g. 077X XXX XXX"
-                        required
-                      />
+                      <label>Pay to this Number</label>
+                      <div className="payment-number-display">
+                        <div className="provider-logo">
+                          {mockSavedMethods.find(m => m.id === selectedMethod)?.type === 'mtn' ? (
+                            <div className="momo-logo mtn-logo">MTN</div>
+                          ) : (
+                            <div className="momo-logo airtel-logo">airtel</div>
+                          )}
+                        </div>
+                        <div className="payment-number">
+                          {mockSavedMethods.find(m => m.id === selectedMethod)?.number}
+                        </div>
+                      </div>
+                      <div className="payment-instructions">
+                        <p><strong>Payment Instructions:</strong></p>
+                        <p>1. Go to your Mobile Money app</p>
+                        <p>2. Select "Send Money"</p>
+                        <p>3. Enter the number above</p>
+                        <p>4. Enter the amount: <strong>UGX {booking?.final_amount || booking?.total_amount || 0}</strong></p>
+                        <p>5. Complete the payment and click "Confirm Payment" below</p>
+                      </div>
                     </div>
                   ) : (
                     <>
@@ -588,19 +612,18 @@ const Payment = () => {
 
                   <button
                     type="submit"
-                    className="btn-outline-blue submit-btn-landscape"
+                    className="payment-submit"
                     disabled={processing}
                   >
                     {processing ? (
                       <>
-                        <div className="spinner-blue"></div>
+                        <div className="spinner"></div>
                         Processing...
                       </>
                     ) : (
-                      <>
-                        <div className="circle-outline-icon"></div>
-                        <span>Pay UGX<br />{booking?.final_amount || booking?.total_amount || 0}</span>
-                      </>
+                      mockSavedMethods.find(m => m.id === selectedMethod)?.category === 'momo' 
+                        ? 'Confirm Payment' 
+                        : 'Pay Now'
                     )}
                   </button>
                 </form>

@@ -199,10 +199,37 @@
 
 .star.filled {
   color: #fbbf24;
+  transition: color 0.2s ease;
 }
 
 .star.empty {
   color: #e2e8f0;
+  transition: color 0.2s ease;
+}
+
+.star.empty:hover {
+  color: #fcd34d;
+}
+
+.star.filled:hover {
+  color: #f59e0b;
+}
+
+.stars .star {
+  transition: transform 0.1s ease;
+}
+
+.stars .star:hover {
+  transform: scale(1.1);
+}
+
+.rating-bar {
+  transition: background-color 0.2s ease;
+}
+
+.rating-bar:hover {
+  background-color: #f8fafc;
+  border-radius: 4px;
 }
 
 .reviews-list {
