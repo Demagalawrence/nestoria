@@ -247,18 +247,40 @@ const AdminDashboard = () => {
   const fetchAdminData = async () => {
     setLoading(true);
     try {
+      console.log('Fetching admin data...');
       const [propertiesRes, usersRes, reservationsRes, reviewsRes] = await Promise.all([
-        api.get('/properties/'),
-        api.get('/accounts/users/'),
-        api.get('/bookings/'),
-        api.get('/properties/reviews/')
+        api.get('/api/properties/'),
+        api.get('/api/accounts/users/'),
+        api.get('/api/bookings/'),
+        api.get('/api/properties/reviews/')
       ]);
-      setProperties(propertiesRes.data?.results || []);
-      setUsers(usersRes.data?.results || []);
-      setReservations(reservationsRes.data?.results || []);
-      setReviews(reviewsRes.data?.results || reviewsRes.data || []);
+      
+      console.log('API Responses:', {
+        properties: propertiesRes.data,
+        users: usersRes.data,
+        reservations: reservationsRes.data,
+        reviews: reviewsRes.data
+      });
+      
+      const propertiesData = propertiesRes.data?.results || propertiesRes.data || [];
+      const usersData = usersRes.data?.results || usersRes.data || [];
+      const reservationsData = reservationsRes.data?.results || reservationsRes.data || [];
+      const reviewsData = reviewsRes.data?.results || reviewsRes.data || [];
+      
+      console.log('Setting state with:', {
+        propertiesCount: propertiesData.length,
+        usersCount: usersData.length,
+        reservationsCount: reservationsData.length,
+        reviewsCount: reviewsData.length
+      });
+      
+      setProperties(propertiesData);
+      setUsers(usersData);
+      setReservations(reservationsData);
+      setReviews(reviewsData);
     } catch (error) {
       console.error('Failed to fetch admin data:', error);
+      console.error('Error details:', error.response?.data);
     } finally {
       setLoading(false);
     }
@@ -267,7 +289,7 @@ const AdminDashboard = () => {
   const handleDeleteProperty = async (id) => {
     if (window.confirm('Delete this property?')) {
       try {
-        await api.delete(`/properties/${id}/delete/`);
+        await api.delete(`/api/properties/${id}/delete/`);
         setProperties(properties.filter(p => p.id !== id));
       } catch (error) {
         console.error('Error deleting property:', error);
@@ -278,7 +300,7 @@ const AdminDashboard = () => {
   const handleDeleteUser = async (id) => {
     if (window.confirm('Delete this user?')) {
       try {
-        await api.delete(`/accounts/users/${id}/`);
+        await api.delete(`/api/accounts/users/${id}/`);
         setUsers(users.filter(u => u.id !== id));
       } catch (error) {
         console.error('Error deleting user:', error);
@@ -290,7 +312,7 @@ const AdminDashboard = () => {
     try {
       const property = properties.find(p => p.id === id);
       const nextApprovalState = !property?.is_approved;
-      await api.patch(`/properties/${id}/update/`, { is_approved: nextApprovalState });
+      await api.patch(`/api/properties/${id}/update/`, { is_approved: nextApprovalState });
       setProperties(properties.map(p => p.id === id ? { ...p, is_approved: nextApprovalState } : p));
     } catch (error) {
       console.error('Error approving property:', error);
@@ -359,7 +381,7 @@ const AdminDashboard = () => {
         },
       };
 
-      await api.post('/properties/create/', submitData, config);
+      await api.post('/api/properties/create/', submitData, config);
       await fetchAdminData();
       
       setShowAddPropertyModal(false);
@@ -491,21 +513,16 @@ const AdminDashboard = () => {
     try {
       if (editingUser) {
         // Update existing user
-        await api.patch(`/accounts/users/${editingUser.id}/`, userFormData);
+        await api.patch(`/api/accounts/users/${editingUser.id}/`, userFormData);
         setUsers(users.map(u => u.id === editingUser.id ? { ...u, ...userFormData } : u));
       } else {
         // Create new user
-        const userData = {
-          ...userFormData,
-          password: 'tempPassword123',
-          confirm_password: 'tempPassword123'
-        };
-        const response = await api.post('/accounts/register/', userData);
-        setUsers([...users, response.data.user || response.data]);
+        await api.post('/api/accounts/users/', userFormData);
+        setUsers([...users, { ...userFormData, id: Date.now() }]);
       }
-      
       setShowUserModal(false);
-      alert(`User ${editingUser ? 'updated' : 'created'} successfully!`);
+      setEditingUser(null);
+      setUserFormData(initialUserFormData);
     } catch (error) {
       console.error('Error saving user:', error);
       alert('Error saving user. Please check the console for details.');
