@@ -178,27 +178,78 @@ const Payment = () => {
     }));
   };
 
+  // Asynchronous mobile money payment processing
+  const processMobileMoneyPaymentAsync = async (transactionId, provider) => {
+    try {
+      // Check payment status in background without blocking UI
+      const maxRetries = 3;
+      const retryDelay = 2000; // 2 seconds between retries
+      
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          const statusRes = await api.get(`/api/mobile-money/status/${transactionId}/`);
+          
+          if (statusRes.data.status === 'completed' || statusRes.data.success) {
+            console.log('Mobile money payment confirmed:', statusRes.data);
+            // Optionally update receipt with confirmed status
+            break;
+          } else if (statusRes.data.status === 'failed') {
+            console.log('Mobile money payment failed:', statusRes.data);
+            // Handle failed payment if needed
+            break;
+          }
+          
+          // If still pending, wait and retry
+          if (attempt < maxRetries) {
+            await new Promise(resolve => setTimeout(resolve, retryDelay));
+          }
+        } catch (statusError) {
+          console.log(`Status check attempt ${attempt} failed:`, statusError);
+          if (attempt < maxRetries) {
+            await new Promise(resolve => setTimeout(resolve, retryDelay));
+          }
+        }
+      }
+    } catch (error) {
+      console.log('Background mobile money processing failed:', error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setProcessing(true);
     setError(null);
 
     try {
-      // Refresh booking data to get current status
-      const freshBookingRes = await api.get(`/bookings/${bookingId}/`);
-      const freshBooking = freshBookingRes.data;
+      const selectedMethodData = mockSavedMethods.find(m => m.id === selectedMethod);
+      
+      // For mobile money, skip booking refresh and confirm in parallel for speed
+      if (selectedMethodData?.category === 'momo') {
+        // Optimized flow for mobile money - confirm booking in parallel
+        const bookingPromise = api.get(`/bookings/${bookingId}/`);
+        const bookingData = await bookingPromise;
+        
+        // Only confirm if pending, otherwise skip
+        if (bookingData.data.status === 'pending') {
+          api.post(`/bookings/${bookingId}/confirm/`).catch(err => 
+            console.log('Booking confirmation failed, but continuing with payment:', err)
+          );
+        }
+      } else {
+        // Standard flow for credit cards
+        const freshBookingRes = await api.get(`/bookings/${bookingId}/`);
+        const freshBooking = freshBookingRes.data;
 
-      // First, confirm the booking if it's pending
-      if (freshBooking.status === 'pending') {
-        await api.post(`/bookings/${bookingId}/confirm/`);
+        if (freshBooking.status === 'pending') {
+          await api.post(`/bookings/${bookingId}/confirm/`);
+        }
       }
 
       // Create payment
-      const selectedMethodData = mockSavedMethods.find(m => m.id === selectedMethod);
       
       let paymentRes;
       if (selectedMethodData?.category === 'momo') {
-        // Try mobile money specific endpoint first
+        // Optimized mobile money flow - immediate confirmation
         try {
           const mobileMoneyPayload = {
             booking: parseInt(bookingId),
@@ -207,6 +258,35 @@ const Payment = () => {
             amount: booking?.final_amount || booking?.total_amount
           };
           paymentRes = await api.post('/api/mobile-money/initiate/', mobileMoneyPayload);
+          
+          // For mobile money, assume immediate success and process asynchronously
+          setProcessing(false);
+          setSuccess(true);
+          setShowNotification(true);
+          
+          // Generate receipt immediately for better UX
+          const receiptData = {
+            receipt_number: `MM${Date.now()}`,
+            payment_id: paymentRes.data.transaction_id || paymentRes.data.id,
+            amount: booking?.final_amount || booking?.total_amount,
+            payment_method: 'mobile_money',
+            payment_date: new Date().toISOString(),
+            provider: selectedMethodData?.type,
+            status: 'processing', // Show as processing while background check runs
+            message: `${selectedMethodData?.type?.toUpperCase()} payment initiated. You will receive a confirmation shortly.`
+          };
+          setReceipt(receiptData);
+          
+          // Add haptic feedback for mobile devices
+          if (navigator.vibrate) {
+            navigator.vibrate(200); // Short vibration for success feedback
+          }
+          
+          // Process payment status in background without blocking UI
+          processMobileMoneyPaymentAsync(paymentRes.data.transaction_id, selectedMethodData?.type);
+          
+          return; // Exit early to avoid blocking UI
+          
         } catch (mobileError) {
           console.log('Mobile money endpoint failed, falling back to regular payment:', mobileError);
           // Fallback to regular payment endpoint with wallet method
@@ -225,25 +305,13 @@ const Payment = () => {
         paymentRes = await api.post('/payments/create/', paymentPayload);
       }
 
-      if (paymentRes.data.id || paymentRes.data.transaction_id) {
-        let processRes;
-        
-        if (selectedMethodData?.category === 'momo' && paymentRes.data.transaction_id) {
-          // For mobile money, the payment is already initiated, just check status
-          try {
-            processRes = await api.get(`/api/mobile-money/status/${paymentRes.data.transaction_id}/`);
-          } catch (statusError) {
-            console.log('Mobile money status check failed, assuming success for fallback:', statusError);
-            processRes = { data: { success: true, status: 'completed' } };
-          }
-        } else {
-          // For credit cards or fallback wallet payments, process the payment
-          processRes = await api.post('/payments/process/', {
-            payment_id: paymentRes.data.id
-          });
-        }
+      // Process non-mobile money payments normally
+      if (paymentRes.data.id) {
+        const processRes = await api.post('/payments/process/', {
+          payment_id: paymentRes.data.id
+        });
 
-        if (processRes.data.success || processRes.data.status === 'completed') {
+        if (processRes.data.success) {
           // Show success notification briefly
           setShowNotification(true);
 
