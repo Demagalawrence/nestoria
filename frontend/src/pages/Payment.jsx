@@ -195,38 +195,58 @@ const Payment = () => {
 
       // Create payment
       const selectedMethodData = mockSavedMethods.find(m => m.id === selectedMethod);
-      const paymentPayload = {
-        booking: parseInt(bookingId),
-        payment_method: selectedMethodData?.category === 'momo' ? 'mobile_money' : 'credit_card',
-        payment_provider: selectedMethodData?.type || 'visa',
-        payment_number: selectedMethodData?.paymentNumber || null,
-        amount: booking?.final_amount || booking?.total_amount
-      };
+      
+      let paymentRes;
+      if (selectedMethodData?.category === 'momo') {
+        // Use mobile money specific endpoint
+        const mobileMoneyPayload = {
+          booking: parseInt(bookingId),
+          provider: selectedMethodData?.type, // 'mtn' or 'airtel'
+          phone_number: selectedMethodData?.paymentNumber || '',
+          amount: booking?.final_amount || booking?.total_amount
+        };
+        paymentRes = await api.post('/mobile_money/initiate/', mobileMoneyPayload);
+      } else {
+        // Use regular payment endpoint for credit cards
+        const paymentPayload = {
+          booking: parseInt(bookingId),
+          payment_method: 'credit_card'
+        };
+        paymentRes = await api.post('/payments/create/', paymentPayload);
+      }
 
-      const paymentRes = await api.post('/payments/create/', paymentPayload);
+      if (paymentRes.data.id || paymentRes.data.transaction_id) {
+        let processRes;
+        
+        if (selectedMethodData?.category === 'momo') {
+          // For mobile money, the payment is already initiated, just check status
+          processRes = await api.get(`/mobile_money/status/${paymentRes.data.transaction_id}/`);
+        } else {
+          // For credit cards, process the payment
+          processRes = await api.post('/payments/process/', {
+            payment_id: paymentRes.data.id
+          });
+        }
 
-      if (paymentRes.data.id) {
-        // Process payment (in real app, this would integrate with Stripe)
-        const processRes = await api.post('/payments/process/', {
-          payment_id: paymentRes.data.id
-        });
-
-        if (processRes.data.success) {
+        if (processRes.data.success || processRes.data.status === 'completed') {
           // Show success notification briefly
           setShowNotification(true);
 
           // Fetch receipt details
           try {
-            const receiptRes = await api.get(`/payments/receipt/${paymentRes.data.id}/`);
+            const receiptId = selectedMethodData?.category === 'momo' 
+              ? paymentRes.data.transaction_id 
+              : paymentRes.data.id;
+            const receiptRes = await api.get(`/payments/receipt/${receiptId}/`);
             setReceipt(receiptRes.data);
           } catch (receiptError) {
             console.error('Error fetching receipt:', receiptError);
             // Use process response data as fallback
             setReceipt({
-              receipt_number: processRes.data.receipt_number,
-              payment_id: processRes.data.payment_id,
+              receipt_number: processRes.data.receipt_number || `REC${Date.now()}`,
+              payment_id: paymentRes.data.id || paymentRes.data.transaction_id,
               amount: booking.final_amount || booking.total_amount,
-              payment_method: 'credit_card',
+              payment_method: selectedMethodData?.category === 'momo' ? 'mobile_money' : 'credit_card',
               payment_date: new Date().toISOString()
             });
           }
