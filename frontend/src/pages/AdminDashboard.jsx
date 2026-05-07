@@ -53,6 +53,7 @@ const AdminDashboard = () => {
   const [properties, setProperties] = useState([]);
   const [users, setUsers] = useState([]);
   const [reservations, setReservations] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [authChecking, setAuthChecking] = useState(true);
@@ -110,8 +111,10 @@ const AdminDashboard = () => {
     // Use AuthContext logout to properly clear global state
     authLogout();
     
-    // Force redirect to homepage
-    window.location.href = '/'; // Force full page reload and redirect to homepage
+    // Small delay to ensure logout completes before redirect
+    setTimeout(() => {
+      window.location.href = '/'; // Force full page reload and redirect to homepage
+    }, 100);
   };
 
   useEffect(() => {
@@ -244,16 +247,18 @@ const AdminDashboard = () => {
   const fetchAdminData = async () => {
     setLoading(true);
     try {
-      const [propertiesRes, usersRes, reservationsRes] = await Promise.all([
+      const [propertiesRes, usersRes, reservationsRes, reviewsRes] = await Promise.all([
         api.get('/properties/'),
         api.get('/accounts/users/'),
-        api.get('/bookings/')
+        api.get('/bookings/'),
+        api.get('/properties/reviews/')
       ]);
       setProperties(propertiesRes.data?.results || []);
       setUsers(usersRes.data?.results || []);
       setReservations(reservationsRes.data?.results || []);
+      setReviews(reviewsRes.data?.results || reviewsRes.data || []);
     } catch (error) {
-      console.error('Error fetching admin data:', error);
+      console.error('Failed to fetch admin data:', error);
     } finally {
       setLoading(false);
     }
@@ -851,6 +856,101 @@ const AdminDashboard = () => {
     </div>
   );
 
+  const renderRatings = () => (
+    <div className="admin-table-container">
+      <div className="table-header">
+        <h3>User Ratings & Reviews</h3>
+        <div className="table-actions">
+          <div className="search-box">
+            <Search size={16} />
+            <input
+              type="text"
+              placeholder="Search reviews..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
+      </div>
+      
+      <div className="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Property</th>
+              <th>Rating</th>
+              <th>Title</th>
+              <th>Review</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {reviews
+              .filter(review => 
+                review.user_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                review.property_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                review.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                review.review?.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+              .map(review => (
+                <tr key={review.id}>
+                  <td>
+                    <div className="user-info">
+                      <strong>{review.user_name || 'Unknown User'}</strong>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="property-info">
+                      <strong>{review.rental_property_name || 'Unknown Property'}</strong>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="rating-stars">
+                      {[1, 2, 3, 4, 5].map(star => (
+                        <Star
+                          key={star}
+                          size={16}
+                          className={star <= review.rating ? 'star-filled' : 'star-empty'}
+                          fill={star <= review.rating ? '#fbbf24' : 'none'}
+                          color={star <= review.rating ? '#fbbf24' : '#e2e8f0'}
+                        />
+                      ))}
+                      <span className="rating-number">{review.rating}/5</span>
+                    </div>
+                  </td>
+                  <td>
+                    <strong>{review.title || 'No Title'}</strong>
+                  </td>
+                  <td>
+                    <div className="review-text">
+                      {review.review ? (review.review.length > 100 
+                        ? `${review.review.substring(0, 100)}...` 
+                        : review.review
+                      ) : 'No review text'}
+                    </div>
+                  </td>
+                  <td>{new Date(review.created_at).toLocaleDateString()}</td>
+                  <td>
+                    <span className={`status-badge ${review.is_verified ? 'verified' : 'pending'}`}>
+                      {review.is_verified ? 'Verified' : 'Pending'}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+        
+        {reviews.length === 0 && (
+          <div className="no-data">
+            <p>No reviews found</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
   if (authChecking) {
     return (
       <div style={{ 
@@ -932,6 +1032,13 @@ const AdminDashboard = () => {
           <Calendar size={16} />
           Reservations
         </button>
+        <button 
+          className={`nav-item ${activeTab === 'ratings' ? 'active' : ''}`}
+          onClick={() => setActiveTab('ratings')}
+        >
+          <Star size={16} />
+          Ratings
+        </button>
       </div>
 
       <div className="admin-content">
@@ -939,6 +1046,7 @@ const AdminDashboard = () => {
         {activeTab === 'properties' && renderProperties()}
         {activeTab === 'users' && renderUsers()}
         {activeTab === 'reservations' && renderReservations()}
+        {activeTab === 'ratings' && renderRatings()}
       </div>
 
       {/* Add Property Modal */}
