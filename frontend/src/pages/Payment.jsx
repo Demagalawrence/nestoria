@@ -593,7 +593,7 @@ const Payment = () => {
                           type="text"
                           name="card_number"
                           value={paymentData.card_number}
-                          onChange={handlePaymentDataChange}
+                          onChange={handleCardNumberChange}
                           placeholder="1234 5678 9012 3456"
                           required
                         />
