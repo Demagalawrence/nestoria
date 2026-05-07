@@ -50,7 +50,7 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [properties, setProperties] = useState([]);
   const [users, setUsers] = useState([]);
-  const [bookings, setBookings] = useState([]);
+  const [reservations, setReservations] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [authChecking, setAuthChecking] = useState(true);
@@ -102,7 +102,7 @@ const AdminDashboard = () => {
     setActiveTab('dashboard');
     setProperties([]);
     setUsers([]);
-    setBookings([]);
+    setReservations([]);
     setSearchTerm('');
     setLoading(true);
     
@@ -245,14 +245,14 @@ const AdminDashboard = () => {
   const fetchAdminData = async () => {
     setLoading(true);
     try {
-      const [propertiesRes, usersRes, bookingsRes] = await Promise.all([
+      const [propertiesRes, usersRes, reservationsRes] = await Promise.all([
         api.get('/properties/'),
         api.get('/accounts/users/'),
         api.get('/bookings/')
       ]);
       setProperties(propertiesRes.data?.results || []);
       setUsers(usersRes.data?.results || []);
-      setBookings(bookingsRes.data?.results || []);
+      setReservations(reservationsRes.data?.results || []);
     } catch (error) {
       console.error('Error fetching admin data:', error);
     } finally {
@@ -584,8 +584,8 @@ const AdminDashboard = () => {
       <div className="stat-card">
         <div className="stat-icon orange"><Calendar size={24} /></div>
         <div className="stat-content">
-          <h3>{bookings.length}</h3>
-          <p>Total Bookings</p>
+          <h3>{reservations.length}</h3>
+          <p>Total Reservations</p>
         </div>
       </div>
       <div className="stat-card">
@@ -751,16 +751,16 @@ const AdminDashboard = () => {
     </div>
   );
 
-  const renderBookings = () => (
+  const renderReservations = () => (
     <div className="admin-table-container">
       <div className="table-header">
-        <h3>Bookings</h3>
+        <h3>Reservations</h3>
         <div className="table-actions">
           <div className="search-box">
             <Search size={16} />
             <input
               type="text"
-              placeholder="Search bookings..."
+              placeholder="Search reservations..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -782,18 +782,18 @@ const AdminDashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {bookings.map(booking => (
-              <tr key={booking.id}>
-                <td>{booking.property_title || 'N/A'}</td>
-                <td>{booking.user?.username || 'N/A'}</td>
-                <td>{booking.check_in_date || 'N/A'}</td>
-                <td>{booking.check_out_date || 'N/A'}</td>
+            {reservations.map(reservation => (
+              <tr key={reservation.id}>
+                <td>{reservation.property_title || 'N/A'}</td>
+                <td>{reservation.user?.username || 'N/A'}</td>
+                <td>{reservation.check_in_date || 'N/A'}</td>
+                <td>{reservation.check_out_date || 'N/A'}</td>
                 <td>
-                  <span className={`status-badge ${booking.status}`}>
-                    {booking.status}
+                  <span className={`status-badge ${reservation.status}`}>
+                    {reservation.status}
                   </span>
                 </td>
-                <td>UGX {booking.total_amount || '0'}</td>
+                <td>UGX {reservation.total_amount || '0'}</td>
                 <td>
                   <div className="action-buttons">
                     <button className="btn-view"><Eye size={14} /></button>
@@ -883,11 +883,11 @@ const AdminDashboard = () => {
           Users
         </button>
         <button 
-          className={`nav-item ${activeTab === 'bookings' ? 'active' : ''}`}
-          onClick={() => setActiveTab('bookings')}
+          className={`nav-item ${activeTab === 'reservations' ? 'active' : ''}`}
+          onClick={() => setActiveTab('reservations')}
         >
           <Calendar size={16} />
-          Bookings
+          Reservations
         </button>
       </div>
 
@@ -895,7 +895,7 @@ const AdminDashboard = () => {
         {activeTab === 'dashboard' && renderDashboard()}
         {activeTab === 'properties' && renderProperties()}
         {activeTab === 'users' && renderUsers()}
-        {activeTab === 'bookings' && renderBookings()}
+        {activeTab === 'reservations' && renderReservations()}
       </div>
 
       {/* Add Property Modal */}
