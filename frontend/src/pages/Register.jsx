@@ -162,45 +162,19 @@ const Register = () => {
   };
 
   const handleGoogleSignIn = () => {
-    if (!window.google) {
-      setError('Google Sign-In is not available. Please try again later.');
-      return;
-    }
+    // Use the provided Google OAuth URL directly
+    const googleOAuthUrl = 'https://accounts.google.com/v3/signin/accountchooser?access_type=offline&client_id=1071006060591-tmhssin2h21lcre235vtolojh4g403ep.apps.googleusercontent.com&prompt=consent&redirect_uri=http%3A%2F%2Flocalhost%3A59619%2Foauth-callback&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcclog+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fexperimentsandconfigs&state=04b3195c-799b-4b55-8c73-c17540cdc30e&dsh=S-315381552%3A1778091977506284&o2v=2&service=lso&flowName=GeneralOAuthFlow&opparams=%253F&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hANzXJekWcFY2lnZpLpVhx_wUqwIOrBWq_u2wFv29qhhj55azbdQYC0OHRlZS9HzpsLIHSkx9wSycYpCH_tvbWvv0gOrX_NLkRbSwbVEA6x6XH-d-RcdfTV0sj7TDvPJ7yUU0gvvPVBOYTILxa9qBLSwoCY3mAHAIn5IlI0JHJmiWLXgBd2GxTrff8ABtKIhVa0a4qZOXoseHOuKJraulMovMvHJCXDzxdfbL6U7od8whuWLxWd8zf0mTmIepKnloxuQdf9dQTrbGGkR7RvEx8JLr0uD25haPCX8vsnrhyhUseMytQqD1nQ7ownQNYiixZmtSVK-D7E6D7YxZqGnKDbh6x3TleAKd524Enc1mx3otL3iigT9rG9LiQuCUlCEleSnwzQvF9BhjPHWwsOx7KYdVKYEOJU3ebWclI7Vk9WKTT0vXI6ydpfe1tceZ8cAC-XxgdsXj6sEKd7_jdIH8ylF7_cnC6r5-EG2NFd6siVRWlvAbhFfIIWhl86DZ3usYDQPZzI3%26flowName%3DGeneralOAuthFlow%26as%3DS-315381552%253A1778091977506284%26client_id%3D1071006060591-tmhssin2h21lcre235vtolojh4g403ep.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fconsent%23&app_domain=http%3A%2F%2Flocalhost%3A59619';
+    
+    // Open Google OAuth in new window
+    window.open(googleOAuthUrl, '_blank', 'width=500,height=600');
+  };
 
-    window.google.accounts.oauth2.initTokenClient({
-      client_id: 'YOUR_GOOGLE_CLIENT_ID', // Replace with your actual Google Client ID
-      scope: 'openid email profile',
-      callback: async (response) => {
-        if (response.access_token) {
-          try {
-            // Send token to backend for verification
-            const res = await fetch('/api/auth/google', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ token: response.access_token }),
-            });
-
-            const data = await res.json();
-            
-            if (res.ok) {
-              // Store user data and redirect
-              localStorage.setItem('token', data.token);
-              localStorage.setItem('user', JSON.stringify(data.user));
-              navigate('/properties');
-            } else {
-              setError(data.message || 'Google Sign-In failed');
-            }
-          } catch (err) {
-            setError('Failed to authenticate with Google');
-          }
-        }
-      },
-      error_callback: () => {
-        setError('Google Sign-In was cancelled or failed');
-      }
-    }).requestAccessToken();
+  const handleAppleSignIn = () => {
+    // Apple Sign In URL (using Apple's OAuth flow)
+    const appleOAuthUrl = 'https://appleid.apple.com/auth/authorize?client_id=com.nestoria.app&redirect_uri=http%3A%2F%2Flocalhost%3A59619%2Foauth-callback&response_type=code&scope=name%20email&response_mode=form_post';
+    
+    // Open Apple OAuth in new window
+    window.open(appleOAuthUrl, '_blank', 'width=500,height=600');
   };
 
   const handleSubmit = async (e) => {
@@ -532,7 +506,7 @@ const Register = () => {
             <GoogleIcon />
             <span>Google</span>
           </button>
-          <button type="button" className="premium-social-btn">
+          <button type="button" className="premium-social-btn" onClick={handleAppleSignIn}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
             </svg>

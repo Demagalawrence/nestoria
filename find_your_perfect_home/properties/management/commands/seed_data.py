@@ -255,4 +255,66 @@ class Command(BaseCommand):
             else:
                 self.stdout.write(f"Property already exists: {prop.name}")
 
+        # 4. Add sample images to properties
+        sample_images = [
+            {
+                'property_name': 'Entebbe Lake View Apartments',
+                'image_url': 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+                'caption': 'Beautiful view of Lake Victoria from apartments',
+                'is_primary': True,
+                'image_type': 'exterior'
+            },
+            {
+                'property_name': 'Kampala Luxury Apartments',
+                'image_url': 'https://images.unsplash.com/photo-1502672260266-1c1de2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+                'caption': 'Modern luxury apartments in Kampala',
+                'is_primary': True,
+                'image_type': 'exterior'
+            },
+            {
+                'property_name': 'Makerere Student Hostel',
+                'image_url': 'https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+                'caption': 'Student hostel near Makerere University',
+                'is_primary': True,
+                'image_type': 'exterior'
+            },
+            {
+                'property_name': 'Banda Student Rentals',
+                'image_url': 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+                'caption': 'Affordable student rooms in Banda',
+                'is_primary': True,
+                'image_type': 'interior'
+            },
+            {
+                'property_name': 'Jinja Executive Hostels',
+                'image_url': 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+                'caption': 'Executive hostels in Jinja',
+                'is_primary': True,
+                'image_type': 'exterior'
+            },
+            {
+                'property_name': 'Entebbe Airport Guest House',
+                'image_url': 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+                'caption': 'Guest house near Entebbe Airport',
+                'is_primary': True,
+                'image_type': 'exterior'
+            }
+        ]
+
+        for img_data in sample_images:
+            try:
+                property_obj = Property.objects.get(name=img_data['property_name'])
+                PropertyImage.objects.get_or_create(
+                    rental_property=property_obj,
+                    defaults={
+                        'image_url': img_data['image_url'],
+                        'caption': img_data['caption'],
+                        'is_primary': img_data['is_primary'],
+                        'image_type': img_data['image_type']
+                    }
+                )
+                self.stdout.write(self.style.SUCCESS(f"Added image for: {img_data['property_name']}"))
+            except Property.DoesNotExist:
+                self.stdout.write(self.style.WARNING(f"Property not found: {img_data['property_name']}"))
+
         self.stdout.write(self.style.SUCCESS('Database seeding completed successfully!'))
