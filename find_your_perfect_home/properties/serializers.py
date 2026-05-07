@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
 from django.db.models import Avg
 from .models import Property, PropertyImage, PropertyVideo, Room, PropertyReview
 
@@ -24,7 +25,10 @@ class PropertyVideoSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'created_at']
 
 class PropertySerializer(serializers.ModelSerializer):
-    owner_name = serializers.CharField(source='owner.get_full_name', read_only=True)
+    owner = serializers.SerializerMethodField()
+    owner_name = serializers.SerializerMethodField()
+    owner_username = serializers.CharField(source='owner.username', read_only=True)
+    owner_id = serializers.IntegerField(read_only=True)
     primary_image = serializers.SerializerMethodField()
     average_rating = serializers.SerializerMethodField()
     total_reviews = serializers.SerializerMethodField()
@@ -36,10 +40,22 @@ class PropertySerializer(serializers.ModelSerializer):
                  'sub_county', 'parish', 'village', 'postal_code', 'country',
                  'image_url', 'rent_per_month', 'security_deposit', 'furnishing', 'amenities',
                  'total_rooms', 'available_rooms', 'min_occupancy', 'max_occupancy',
-                 'is_featured', 'owner_name', 'primary_image', 'average_rating',
+                 'is_approved', 'is_active', 'is_featured', 'owner', 'owner_id',
+                 'owner_name', 'owner_username', 'primary_image', 'average_rating',
                  'total_reviews', 'created_at']
-        read_only_fields = ['id', 'owner_name', 'primary_image', 'average_rating',
-                           'total_reviews', 'created_at']
+        read_only_fields = ['id', 'owner', 'owner_id', 'owner_name', 'owner_username',
+                           'primary_image', 'average_rating', 'total_reviews', 'created_at']
+
+    def get_owner(self, obj):
+        return {
+            'id': obj.owner_id,
+            'username': obj.owner.username,
+            'name': obj.owner.get_full_name() or obj.owner.username,
+            'email': obj.owner.email,
+        }
+
+    def get_owner_name(self, obj):
+        return obj.owner.get_full_name() or obj.owner.username
     
     def get_primary_image(self, obj):
         primary_image = obj.images.filter(is_primary=True).first()
@@ -80,6 +96,13 @@ class PropertyDetailSerializer(PropertySerializer):
         return RoomSerializer(rooms, many=True).data
 
 class PropertyCreateSerializer(serializers.ModelSerializer):
+    owner_id = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.filter(role__in=['owner', 'agent', 'admin']),
+        source='owner',
+        write_only=True,
+        required=False,
+        allow_null=True
+    )
     image_urls = serializers.ListField(
         child=serializers.URLField(),
         write_only=True,
@@ -87,10 +110,17 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
         allow_empty=True,
         help_text="List of image URLs for the property"
     )
+    property_images = serializers.ListField(
+        child=serializers.FileField(),
+        write_only=True,
+        required=False,
+        allow_empty=True,
+        help_text="Uploaded image files for the property"
+    )
     
     class Meta:
         model = Property
-        fields = ['name', 'property_type', 'target_audience', 'gender_preference',
+        fields = ['id', 'owner_id', 'name', 'property_type', 'target_audience', 'gender_preference',
                  'description', 'address_line_1', 'address_line_2', 'district', 'county',
                  'sub_county', 'parish', 'village', 'postal_code', 'country',
                  'image_url', 'total_rooms', 'available_rooms', 'min_occupancy', 'max_occupancy',
@@ -103,10 +133,35 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
                  'restrictions', 'available_from', 'notice_period', 'minimum_stay_months',
                  'maximum_stay_months', 'email', 'website', 'facebook_link', 'instagram_link',
                  'youtube_link', 'pet_friendly', 'smoking_allowed', 'non_veg_allowed',
-                 'visitors_allowed', 'late_night_entry_allowed', 'image_urls']
+                 'visitors_allowed', 'late_night_entry_allowed', 'is_approved',
+                 'image_urls', 'property_images']
+        read_only_fields = ['id']
+
+    def _coerce_list_field(self, value):
+        if isinstance(value, str):
+            value = value.strip()
+            if not value:
+                return []
+            if value.startswith('['):
+                import json
+                try:
+                    parsed = json.loads(value)
+                    if isinstance(parsed, list):
+                        return parsed
+                except json.JSONDecodeError:
+                    pass
+            return [item.strip() for item in value.split(',') if item.strip()]
+        return value
+
+    def validate_amenities(self, value):
+        return self._coerce_list_field(value)
+
+    def validate_safety_features(self, value):
+        return self._coerce_list_field(value)
     
     def create(self, validated_data):
         image_urls = validated_data.pop('image_urls', [])
+        property_images = validated_data.pop('property_images', [])
         property_obj = Property.objects.create(**validated_data)
         
         # Create property images from URLs if any
@@ -117,6 +172,15 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
                     rental_property=property_obj,
                     image_url=image_url,  # Store URL in image_url field
                     is_primary=is_primary,
+                    image_type='exterior'
+                )
+
+        if property_images:
+            for index, image in enumerate(property_images):
+                PropertyImage.objects.create(
+                    rental_property=property_obj,
+                    image=image,
+                    is_primary=not image_urls and index == 0,
                     image_type='exterior'
                 )
         

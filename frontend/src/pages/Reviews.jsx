@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { Star, MapPin, Bed, Bath, User, Calendar, ThumbsUp, MessageSquare, Filter } from 'lucide-react';
 import api from '../api/axios';
 import './Reviews.css';
 
 const Reviews = () => {
   const { propertyId } = useParams();
+  const [searchParams] = useSearchParams();
+  const shouldOpenReviewForm = searchParams.get('rate') === '1';
   const [property, setProperty] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,10 +23,13 @@ const Reviews = () => {
   useEffect(() => {
     if (propertyId) {
       fetchPropertyReviews();
+      if (shouldOpenReviewForm) {
+        setShowReviewForm(true);
+      }
     } else {
       fetchUserReviews();
     }
-  }, [propertyId]);
+  }, [propertyId, shouldOpenReviewForm]);
 
   const fetchPropertyReviews = async () => {
     try {
@@ -173,8 +178,8 @@ const Reviews = () => {
             <Link to={`/property/${propertyId}`} className="property-link">
               ← Back to Property
             </Link>
-            <h1>{property.title}</h1>
-            <p><MapPin size={16} /> {property.location}</p>
+            <h1>{property.name || property.title}</h1>
+            <p><MapPin size={16} /> {property.full_address || property.location || property.district}</p>
           </div>
         </div>
       )}

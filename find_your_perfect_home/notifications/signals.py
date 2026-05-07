@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from bookings.models import Booking, BookingHistory
 from payments.models import Payment
-from properties.models import Property
+from properties.models import Property, PropertyReview
 from .models import Notification, NotificationPreference
 
 @receiver(post_save, sender=Booking)
@@ -65,23 +65,55 @@ def payment_notification(sender, instance, created, **kwargs):
     """Send notifications for payment events"""
     if created or instance.payment_status == 'completed':
         if instance.payment_status == 'completed':
-            create_notification(
+            if not Notification.objects.filter(
                 user=instance.booking.user,
                 notification_type='payment_completed',
-                title='Payment Completed',
-                message=f'Payment of {instance.amount} for booking {instance.booking.booking_reference} has been completed.',
-                booking=instance.booking,
                 payment=instance
-            )
+            ).exists():
+                create_notification(
+                    user=instance.booking.user,
+                    notification_type='payment_completed',
+                    title='Payment Completed',
+                    message=f'Payment of {instance.amount} for booking {instance.booking.booking_reference} has been completed.',
+                    booking=instance.booking,
+                    property=instance.booking.rental_property,
+                    payment=instance
+                )
+
+            if not PropertyReview.objects.filter(
+                user=instance.booking.user,
+                rental_property=instance.booking.rental_property
+            ).exists() and not Notification.objects.filter(
+                user=instance.booking.user,
+                notification_type='review_requested',
+                booking=instance.booking
+            ).exists():
+                create_notification(
+                    user=instance.booking.user,
+                    notification_type='review_requested',
+                    title='Rate Your Hostel Services',
+                    message=f'Your payment for {instance.booking.rental_property.name} is complete. Please rate the services you received.',
+                    booking=instance.booking,
+                    property=instance.booking.rental_property,
+                    payment=instance
+                )
             
             # Notify property owner
-            if instance.booking.rental_property.owner != instance.booking.user:
+            if (
+                instance.booking.rental_property.owner != instance.booking.user and
+                not Notification.objects.filter(
+                    user=instance.booking.rental_property.owner,
+                    notification_type='payment_completed',
+                    payment=instance
+                ).exists()
+            ):
                 create_notification(
                     user=instance.booking.rental_property.owner,
                     notification_type='payment_completed',
                     title='Payment Received',
                     message=f'Payment of {instance.amount} received for booking {instance.booking.booking_reference}.',
                     booking=instance.booking,
+                    property=instance.booking.rental_property,
                     payment=instance
                 )
         elif instance.payment_status == 'failed':

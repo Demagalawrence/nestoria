@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Bell, X, Check, Settings, Mail, MessageSquare, Calendar, DollarSign, Home, User, AlertCircle, Info } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Bell, X, Check, Settings, Mail, MessageSquare, Calendar, DollarSign, Home, User, Info, Star } from 'lucide-react';
 import api from '../api/axios';
 import './NotificationCenter.css';
 
 const NotificationCenter = () => {
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
@@ -13,8 +15,8 @@ const NotificationCenter = () => {
     push_notifications: true,
     sms_notifications: false,
     booking_updates: true,
-    payment_reminders: true,
-    property_alerts: true,
+    payment_updates: true,
+    property_updates: true,
     marketing_emails: false
   });
 
@@ -116,9 +118,31 @@ const NotificationCenter = () => {
     }
   };
 
+  const getNotificationType = (notification) => notification.notification_type || notification.type || 'system';
+
+  const getNotificationCategory = (notification) => {
+    const type = getNotificationType(notification);
+    if (type.includes('booking') || type.includes('reservation')) return 'booking';
+    if (type.includes('payment')) return 'payment';
+    if (type.includes('property')) return 'property';
+    if (type.includes('review') || type.includes('rating')) return 'review';
+    if (type.includes('message')) return 'message';
+    return 'system';
+  };
+
   const getNotificationIcon = (type) => {
+    if (type === 'review_requested' || type === 'review_received') {
+      return Star;
+    }
+
+    if (type.includes('booking') || type.includes('reservation')) return Calendar;
+    if (type.includes('payment')) return DollarSign;
+    if (type.includes('property')) return Home;
+    if (type.includes('message')) return MessageSquare;
+
     switch (type) {
       case 'reservation':
+      case 'booking':
         return Calendar;
       case 'payment':
         return DollarSign;
@@ -133,14 +157,16 @@ const NotificationCenter = () => {
     }
   };
 
-  const getNotificationColor = (type) => {
-    switch (type) {
-      case 'reservation':
+  const getNotificationColor = (category) => {
+    switch (category) {
+      case 'booking':
         return '#3b82f6';
       case 'payment':
         return '#10b981';
       case 'property':
         return '#8b5cf6';
+      case 'review':
+        return '#f59e0b';
       case 'message':
         return '#f59e0b';
       case 'system':
@@ -150,11 +176,20 @@ const NotificationCenter = () => {
     }
   };
 
+  const handleNotificationAction = async (notification) => {
+    if (!notification.is_read) {
+      await markAsRead(notification.id);
+    }
+    if (notification.action_url) {
+      navigate(notification.action_url);
+    }
+  };
+
   const filteredNotifications = notifications.filter(notif => {
     if (filter === 'all') return true;
     if (filter === 'unread') return !notif.is_read;
     if (filter === 'read') return notif.is_read;
-    return notif.type === filter;
+    return getNotificationCategory(notif) === filter;
   });
 
   const unreadCount = notifications.filter(n => !n.is_read).length;
@@ -259,10 +294,10 @@ const NotificationCenter = () => {
               <label className="toggle-label">
                 <input
                   type="checkbox"
-                  checked={preferences.payment_reminders}
+                  checked={preferences.payment_updates}
                   onChange={(e) => updatePreferences({
                     ...preferences,
-                    payment_reminders: e.target.checked
+                    payment_updates: e.target.checked
                   })}
                 />
                 <span className="toggle-slider"></span>
@@ -310,6 +345,12 @@ const NotificationCenter = () => {
         >
           Payments
         </button>
+        <button
+          className={`filter-btn ${filter === 'review' ? 'active' : ''}`}
+          onClick={() => setFilter('review')}
+        >
+          Reviews
+        </button>
       </div>
 
       <div className="notifications-list">
@@ -325,8 +366,10 @@ const NotificationCenter = () => {
           </div>
         ) : (
           filteredNotifications.map(notification => {
-            const IconComponent = getNotificationIcon(notification.type);
-            const iconColor = getNotificationColor(notification.type);
+            const notificationType = getNotificationType(notification);
+            const notificationCategory = getNotificationCategory(notification);
+            const IconComponent = getNotificationIcon(notificationType);
+            const iconColor = getNotificationColor(notificationCategory);
             
             return (
               <div
@@ -342,6 +385,15 @@ const NotificationCenter = () => {
                     <span className="notification-time">{notification.created_at}</span>
                   </div>
                   <p>{notification.message}</p>
+                  {notification.action_url && (
+                    <button
+                      type="button"
+                      className="notification-action-link"
+                      onClick={() => handleNotificationAction(notification)}
+                    >
+                      {notification.action_label || 'Open'}
+                    </button>
+                  )}
                 </div>
                 <div className="notification-actions">
                   {!notification.is_read && (

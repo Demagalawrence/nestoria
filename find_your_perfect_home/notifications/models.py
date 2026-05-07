@@ -12,6 +12,7 @@ class Notification(models.Model):
         ('property_approved', 'Property Approved'),
         ('property_rejected', 'Property Rejected'),
         ('review_received', 'Review Received'),
+        ('review_requested', 'Review Requested'),
         ('commission_paid', 'Commission Paid'),
         # Maintenance notification types
         ('maintenance_request_created', 'Maintenance Request Created'),

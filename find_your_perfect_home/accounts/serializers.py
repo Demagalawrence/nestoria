@@ -3,16 +3,25 @@ from django.contrib.auth import authenticate
 from .models import User, UserDocument
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(required=False, allow_blank=True)
     password = serializers.CharField(write_only=True, min_length=8)
-    confirm_password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True, required=False, allow_blank=True)
     secret_key = serializers.CharField(required=False, allow_blank=True, write_only=True)
+    national_id_card = serializers.FileField(required=False, write_only=True)
     
     class Meta:
         model = User
         fields = ['username', 'email', 'password', 'confirm_password', 'first_name', 'last_name', 
-                 'role', 'user_type', 'contact_number', 'date_of_birth', 'gender', 'secret_key']
+                 'role', 'user_type', 'contact_number', 'alternate_number', 'profile_picture',
+                 'date_of_birth', 'gender', 'occupation', 'company_name', 'annual_income',
+                 'id_proof_type', 'id_proof_number', 'id_proof_document', 'national_id_card',
+                 'permanent_address', 'current_address', 'emergency_contact_name',
+                 'emergency_contact_number', 'emergency_contact_relation', 'secret_key']
     
     def validate(self, attrs):
+        if not attrs.get('confirm_password'):
+            attrs['confirm_password'] = attrs.get('password')
+
         if attrs['password'] != attrs['confirm_password']:
             raise serializers.ValidationError("Passwords don't match")
         
@@ -22,9 +31,21 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Please enter a valid email address")
             
         # Check if username already exists
-        username = attrs.get('username')
-        if User.objects.filter(username=username).exists():
+        username_was_provided = bool(attrs.get('username'))
+        username = attrs.get('username') or (email.split('@')[0] if email else '')
+        if not username:
+            raise serializers.ValidationError("Username or email is required")
+
+        if username_was_provided and User.objects.filter(username=username).exists():
             raise serializers.ValidationError("Username already exists")
+
+        if not username_was_provided:
+            base_username = username
+            suffix = 1
+            while User.objects.filter(username=username).exists():
+                username = f"{base_username}{suffix}"
+                suffix += 1
+            attrs['username'] = username
             
         # Check if email already exists
         if User.objects.filter(email=email).exists():
@@ -42,6 +63,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         validated_data.pop('confirm_password')
+        national_id_card = validated_data.pop('national_id_card', None)
+        if national_id_card and not validated_data.get('id_proof_document'):
+            validated_data['id_proof_document'] = national_id_card
+            validated_data.setdefault('id_proof_type', 'other')
         try:
             user = User.objects.create_user(**validated_data)
             return user

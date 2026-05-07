@@ -4,6 +4,8 @@ from .models import Booking, BookingPayment, BookingHistory, BookingDocument, Bo
 from properties.models import Property, Room
 
 class BookingSerializer(serializers.ModelSerializer):
+    rental_property = serializers.PrimaryKeyRelatedField(read_only=True)
+    room = serializers.PrimaryKeyRelatedField(read_only=True)
     user_name = serializers.CharField(source='user.get_full_name', read_only=True)
     property_name = serializers.CharField(source='rental_property.name', read_only=True)
     room_number = serializers.CharField(source='room.room_number', read_only=True)
@@ -15,7 +17,7 @@ class BookingSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Booking
-        fields = ['id', 'booking_reference', 'user_name', 'property_name', 'room_number',
+        fields = ['id', 'booking_reference', 'rental_property', 'room', 'user_name', 'property_name', 'room_number',
                  'booking_type', 'booking_date', 'start_date', 'end_date', 'total_months',
                  'total_days', 'number_of_occupants', 'base_rent', 'monthly_rent',
                  'security_deposit', 'maintenance_charge', 'other_charges', 'total_amount',
@@ -23,7 +25,7 @@ class BookingSerializer(serializers.ModelSerializer):
                  'special_requests', 'notes', 'check_in_date', 'check_out_date',
                  'actual_check_out_date', 'is_active', 'is_upcoming', 'is_completed',
                  'total_paid_amount', 'remaining_amount', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'booking_reference', 'user_name', 'property_name',
+        read_only_fields = ['id', 'booking_reference', 'rental_property', 'room', 'user_name', 'property_name',
                            'room_number', 'is_active', 'is_upcoming', 'is_completed',
                            'total_paid_amount', 'remaining_amount', 'created_at', 'updated_at']
 

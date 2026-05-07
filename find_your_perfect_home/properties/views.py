@@ -10,7 +10,6 @@ from .serializers import (PropertySerializer, PropertyDetailSerializer, Property
                          PropertyReviewSerializer)
 
 class PropertyListView(generics.ListAPIView):
-    queryset = Property.objects.filter(is_active=True, is_approved=True)
     serializer_class = PropertySerializer
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
@@ -18,6 +17,12 @@ class PropertyListView(generics.ListAPIView):
     search_fields = ['name', 'description', 'district', 'village']
     ordering_fields = ['rent_per_month', 'created_at', 'name']
     ordering = ['-created_at']
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated and getattr(user, 'role', '') == 'admin':
+            return Property.objects.all()
+        return Property.objects.filter(is_active=True, is_approved=True)
 
 class PropertyDetailView(generics.RetrieveAPIView):
     queryset = Property.objects.filter(is_active=True)
@@ -38,7 +43,13 @@ class PropertyCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     
     def perform_create(self, serializer):
-        # Auto-approve properties created by owners
+        selected_owner = serializer.validated_data.pop('owner', None)
+
+        if getattr(self.request.user, 'role', '') == 'admin':
+            serializer.save(owner=selected_owner or self.request.user)
+            return
+
+        serializer.validated_data.pop('is_approved', None)
         serializer.save(owner=self.request.user, is_approved=True)
 
 class PropertyUpdateView(generics.UpdateAPIView):
@@ -47,13 +58,23 @@ class PropertyUpdateView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
+        if getattr(self.request.user, 'role', '') == 'admin':
+            return Property.objects.all()
         return Property.objects.filter(owner=self.request.user)
+
+    def perform_update(self, serializer):
+        if getattr(self.request.user, 'role', '') != 'admin':
+            serializer.validated_data.pop('owner', None)
+            serializer.validated_data.pop('is_approved', None)
+        serializer.save()
 
 class PropertyDeleteView(generics.DestroyAPIView):
     queryset = Property.objects.all()
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
+        if getattr(self.request.user, 'role', '') == 'admin':
+            return Property.objects.all()
         return Property.objects.filter(owner=self.request.user)
 
 class RoomListView(generics.ListAPIView):
@@ -169,7 +190,18 @@ def add_property_review(request, pk):
     property_obj = Property.objects.get(id=pk)
     serializer = PropertyReviewSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(user=request.user, rental_property=property_obj)
+        from bookings.models import Booking
+
+        has_paid_booking = Booking.objects.filter(
+            user=request.user,
+            rental_property=property_obj,
+            payment_status='fully_paid'
+        ).exists()
+        serializer.save(
+            user=request.user,
+            rental_property=property_obj,
+            is_verified=has_paid_booking
+        )
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

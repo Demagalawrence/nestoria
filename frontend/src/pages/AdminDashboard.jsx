@@ -7,6 +7,45 @@ import {
 import api from '../api/axios';
 import './AdminDashboard.css';
 
+const initialPropertyFormData = {
+  name: '',
+  description: '',
+  property_type: 'hostel',
+  target_audience: 'university_students',
+  rent_per_month: '',
+  district: 'Kampala',
+  address_line_1: '',
+  total_rooms: '',
+  available_rooms: '',
+  amenities: '',
+  rules: '',
+  contact_person: '',
+  contact_number: '',
+  owner_id: '',
+  is_approved: true
+};
+
+const initialOwnerFormData = {
+  email: '',
+  first_name: '',
+  last_name: '',
+  password: 'tempPassword123',
+  confirm_password: 'tempPassword123',
+  role: 'owner',
+  contact_number: '',
+  alternate_number: '',
+  date_of_birth: '',
+  gender: '',
+  occupation: '',
+  company_name: '',
+  annual_income: '',
+  permanent_address: '',
+  current_address: '',
+  emergency_contact_name: '',
+  emergency_contact_number: '',
+  emergency_contact_relation: ''
+};
+
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [properties, setProperties] = useState([]);
@@ -26,22 +65,7 @@ const AdminDashboard = () => {
   const [ownerIdPreview, setOwnerIdPreview] = useState(null);
   const [propertyImages, setPropertyImages] = useState([]);
   const [propertyImagePreviews, setPropertyImagePreviews] = useState([]);
-  const [propertyFormData, setPropertyFormData] = useState({
-    // Property Details Only
-    name: '',
-    description: '',
-    property_type: 'hostel',
-    rent_per_month: '',
-    district: '',
-    city: '',
-    address: '',
-    number_of_rooms: '',
-    amenities: '',
-    rules: '',
-    contact_person: '',
-    contact_phone: '',
-    is_approved: true
-  });
+  const [propertyFormData, setPropertyFormData] = useState(initialPropertyFormData);
   
   const [userFormData, setUserFormData] = useState({
     username: '',
@@ -63,25 +87,14 @@ const AdminDashboard = () => {
     emergency_contact_relation: ''
   });
   
-  const [ownerFormData, setOwnerFormData] = useState({
-    email: '',
-    first_name: '',
-    last_name: '',
-    password: 'tempPassword123',
-    role: 'owner',
-    contact_number: '',
-    alternate_number: '',
-    date_of_birth: '',
-    gender: '',
-    occupation: '',
-    company_name: '',
-    annual_income: '',
-    permanent_address: '',
-    current_address: '',
-    emergency_contact_name: '',
-    emergency_contact_number: '',
-    emergency_contact_relation: ''
-  });
+  const [ownerFormData, setOwnerFormData] = useState(initialOwnerFormData);
+
+  const ownerOptions = users.filter(user => ['owner', 'agent', 'admin'].includes(user.role));
+  const getOwnerDisplayName = (owner) => {
+    if (!owner) return 'Unassigned';
+    const fullName = `${owner.first_name || ''} ${owner.last_name || ''}`.trim();
+    return fullName || owner.name || owner.username || owner.email || 'Unassigned';
+  };
   
   const handleLogout = () => {
     // Clear all admin-related data
@@ -250,7 +263,7 @@ const AdminDashboard = () => {
   const handleDeleteProperty = async (id) => {
     if (window.confirm('Delete this property?')) {
       try {
-        await api.delete(`/properties/${id}/`);
+        await api.delete(`/properties/${id}/delete/`);
         setProperties(properties.filter(p => p.id !== id));
       } catch (error) {
         console.error('Error deleting property:', error);
@@ -271,8 +284,10 @@ const AdminDashboard = () => {
 
   const handleApproveProperty = async (id) => {
     try {
-      await api.patch(`/properties/${id}/`, { is_approved: true });
-      setProperties(properties.map(p => p.id === id ? { ...p, is_approved: true } : p));
+      const property = properties.find(p => p.id === id);
+      const nextApprovalState = !property?.is_approved;
+      await api.patch(`/properties/${id}/update/`, { is_approved: nextApprovalState });
+      setProperties(properties.map(p => p.id === id ? { ...p, is_approved: nextApprovalState } : p));
     } catch (error) {
       console.error('Error approving property:', error);
     }
@@ -280,50 +295,51 @@ const AdminDashboard = () => {
 
   const handleAddProperty = async () => {
     try {
-      // Create FormData for property with images
+      if (!propertyFormData.name || !propertyFormData.address_line_1 || !propertyFormData.rent_per_month || !propertyFormData.total_rooms) {
+        alert('Please fill in the property name, address, rent, and number of rooms.');
+        return;
+      }
+
+      const totalRooms = parseInt(propertyFormData.total_rooms, 10);
+      const availableRooms = parseInt(propertyFormData.available_rooms || propertyFormData.total_rooms, 10);
+
+      if (Number.isNaN(totalRooms) || totalRooms < 1 || Number.isNaN(availableRooms) || availableRooms < 0) {
+        alert('Please enter a valid room count.');
+        return;
+      }
+
       const submitData = new FormData();
-      
-      // Add property details
-      Object.keys(propertyFormData).forEach(key => {
-        if (propertyFormData[key]) {
-          submitData.append(key, propertyFormData[key]);
+
+      const propertyPayload = {
+        ...propertyFormData,
+        total_rooms: totalRooms,
+        available_rooms: Math.min(availableRooms, totalRooms),
+        country: 'Uganda',
+        gender_preference: 'any',
+        is_active: true
+      };
+
+      Object.entries(propertyPayload).forEach(([key, value]) => {
+        if (value !== '' && value !== null && value !== undefined) {
+          submitData.append(key, value);
         }
       });
       
-      // Add property images
       propertyImages.forEach((image) => {
-        submitData.append(`property_images`, image);
+        submitData.append('property_images', image);
       });
 
-      // Set proper headers for FormData
       const config = {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       };
 
-      const response = await api.post('/properties/', submitData, config);
+      await api.post('/properties/create/', submitData, config);
+      await fetchAdminData();
       
-      // Update the properties list
-      setProperties([...properties, response.data]);
-      
-      // Close modal and reset form
       setShowAddPropertyModal(false);
-      setPropertyFormData({
-        name: '',
-        description: '',
-        property_type: 'hostel',
-        rent_per_month: '',
-        district: '',
-        city: '',
-        address: '',
-        number_of_rooms: '',
-        amenities: '',
-        rules: '',
-        contact_person: '',
-        contact_phone: '',
-        is_approved: true
-      });
+      setPropertyFormData(initialPropertyFormData);
       setPropertyImages([]);
       setPropertyImagePreviews([]);
       
@@ -439,10 +455,11 @@ const AdminDashboard = () => {
         // Create new user
         const userData = {
           ...userFormData,
-          password: 'tempPassword123' // Default password for new users
+          password: 'tempPassword123',
+          confirm_password: 'tempPassword123'
         };
         const response = await api.post('/accounts/register/', userData);
-        setUsers([...users, response.data]);
+        setUsers([...users, response.data.user || response.data]);
       }
       
       setShowUserModal(false);
@@ -462,25 +479,7 @@ const AdminDashboard = () => {
   };
 
   const handleAddOwner = () => {
-    setOwnerFormData({
-      email: '',
-      first_name: '',
-      last_name: '',
-      password: 'tempPassword123',
-      role: 'owner',
-      contact_number: '',
-      alternate_number: '',
-      date_of_birth: '',
-      gender: '',
-      occupation: '',
-      company_name: '',
-      annual_income: '',
-      permanent_address: '',
-      current_address: '',
-      emergency_contact_name: '',
-      emergency_contact_number: '',
-      emergency_contact_relation: ''
-    });
+    setOwnerFormData(initialOwnerFormData);
     setOwnerProfilePicture(null);
     setOwnerNationalIdCard(null);
     setOwnerProfilePreview(null);
@@ -542,6 +541,7 @@ const AdminDashboard = () => {
           submitData.append(key, ownerFormData[key]);
         }
       });
+      submitData.append('id_proof_type', 'other');
       
       // Add files
       submitData.append('profile_picture', ownerProfilePicture);
@@ -555,7 +555,7 @@ const AdminDashboard = () => {
       };
 
       const response = await api.post('/accounts/register/', submitData, config);
-      setUsers([...users, response.data]);
+      setUsers([...users, response.data.user || response.data]);
       
       setShowOwnerModal(false);
       alert('Property owner registered successfully with documents!');
@@ -625,6 +625,7 @@ const AdminDashboard = () => {
             <tr>
               <th>Name</th>
               <th>Type</th>
+              <th>Audience</th>
               <th>Owner</th>
               <th>Price</th>
               <th>Location</th>
@@ -635,12 +636,15 @@ const AdminDashboard = () => {
           <tbody>
             {properties.filter(p => 
               p.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              p.owner?.username?.toLowerCase().includes(searchTerm.toLowerCase())
+              p.owner?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              p.owner_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              p.target_audience?.toLowerCase().includes(searchTerm.toLowerCase())
             ).map(property => (
               <tr key={property.id}>
                 <td>{property.name}</td>
                 <td>{property.property_type}</td>
-                <td>{property.owner?.username}</td>
+                <td>{property.target_audience === 'university_students' ? 'University' : property.target_audience}</td>
+                <td>{property.owner?.username || property.owner_username || property.owner_name}</td>
                 <td>UGX {property.rent_per_month}</td>
                 <td>{property.district}</td>
                 <td>
@@ -963,6 +967,23 @@ const AdminDashboard = () => {
                 </div>
               </div>
 
+              <h4 style={{ marginBottom: '15px', color: '#1a656e' }}>Ownership</h4>
+              <div className="form-group" style={{ marginBottom: '25px' }}>
+                <label>Property Owner</label>
+                <select
+                  name="owner_id"
+                  value={propertyFormData.owner_id}
+                  onChange={handlePropertyFormChange}
+                >
+                  <option value="">Use my admin account</option>
+                  {ownerOptions.map(owner => (
+                    <option key={owner.id} value={owner.id}>
+                      {getOwnerDisplayName(owner)} ({owner.email || owner.username})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <h4 style={{ marginBottom: '15px', color: '#1a656e' }}>Property Details</h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '25px' }}>
                 <div className="form-group">
@@ -989,6 +1010,17 @@ const AdminDashboard = () => {
                   </select>
                 </div>
                 <div className="form-group">
+                  <label>Audience</label>
+                  <select
+                    name="target_audience"
+                    value={propertyFormData.target_audience}
+                    onChange={handlePropertyFormChange}
+                  >
+                    <option value="university_students">University Students</option>
+                    <option value="public">Public</option>
+                  </select>
+                </div>
+                <div className="form-group">
                   <label>Rent per Month (UGX)</label>
                   <input
                     type="number"
@@ -999,13 +1031,23 @@ const AdminDashboard = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Number of Rooms</label>
+                  <label>Total Rooms</label>
                   <input
                     type="number"
-                    name="number_of_rooms"
-                    value={propertyFormData.number_of_rooms}
+                    name="total_rooms"
+                    value={propertyFormData.total_rooms}
                     onChange={handlePropertyFormChange}
                     placeholder="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Available Rooms</label>
+                  <input
+                    type="number"
+                    name="available_rooms"
+                    value={propertyFormData.available_rooms}
+                    onChange={handlePropertyFormChange}
+                    placeholder="Defaults to total rooms"
                   />
                 </div>
                 <div className="form-group">
@@ -1018,24 +1060,14 @@ const AdminDashboard = () => {
                     placeholder="e.g., Kampala"
                   />
                 </div>
-                <div className="form-group">
-                  <label>City</label>
-                  <input
-                    type="text"
-                    name="city"
-                    value={propertyFormData.city}
-                    onChange={handlePropertyFormChange}
-                    placeholder="e.g., Kampala"
-                  />
-                </div>
               </div>
 
               <div className="form-group" style={{ marginBottom: '25px' }}>
                 <label>Address</label>
                 <input
                   type="text"
-                  name="address"
-                  value={propertyFormData.address}
+                  name="address_line_1"
+                  value={propertyFormData.address_line_1}
                   onChange={handlePropertyFormChange}
                   placeholder="Full property address"
                 />
@@ -1090,8 +1122,8 @@ const AdminDashboard = () => {
                   <label>Contact Phone</label>
                   <input
                     type="tel"
-                    name="contact_phone"
-                    value={propertyFormData.contact_phone}
+                    name="contact_number"
+                    value={propertyFormData.contact_number}
                     onChange={handlePropertyFormChange}
                     placeholder="+256..."
                   />

@@ -339,6 +339,14 @@ const Payment = () => {
             <button className="btn-outline-blue" onClick={() => window.print()}>
               Print Receipt
             </button>
+            {(property?.id || booking?.rental_property) && (
+              <button
+                className="btn-outline-blue"
+                onClick={() => navigate(`/reviews/${property?.id || booking?.rental_property}?rate=1`)}
+              >
+                Rate Services
+              </button>
+            )}
             <button className="btn-primary" onClick={() => navigate('/dashboard')}>
               Return to Dashboard
             </button>
