@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { 
   Home, Users, Building, Calendar, CreditCard, Bell, Settings, 
   Plus, Edit, Trash2, Search, Filter, LogOut, Shield, CheckCircle, X,
   TrendingUp, DollarSign, MapPin, Phone, Mail, Star, Eye, Save
 } from 'lucide-react';
 import api from '../api/axios';
+import { AuthContext } from '../context/AuthContext';
 import './AdminDashboard.css';
 
 const initialPropertyFormData = {
@@ -47,6 +48,7 @@ const initialOwnerFormData = {
 };
 
 const AdminDashboard = () => {
+  const { logout: authLogout } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [properties, setProperties] = useState([]);
   const [users, setUsers] = useState([]);
@@ -98,7 +100,6 @@ const AdminDashboard = () => {
   
   const handleLogout = () => {
     // Clear all admin-related data
-    setUser(null);
     setActiveTab('dashboard');
     setProperties([]);
     setUsers([]);
@@ -106,10 +107,8 @@ const AdminDashboard = () => {
     setSearchTerm('');
     setLoading(true);
     
-    // Clear all storage
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    localStorage.removeItem('refresh_token');
+    // Use AuthContext logout to properly clear global state
+    authLogout();
     
     // Force redirect to homepage
     window.location.href = '/'; // Force full page reload and redirect to homepage
