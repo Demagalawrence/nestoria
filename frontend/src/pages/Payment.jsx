@@ -339,12 +339,18 @@ const Payment = () => {
             <button className="btn-outline-blue" onClick={() => window.print()}>
               Print Receipt
             </button>
-            {(property?.id || booking?.rental_property) && (
+            {(() => {
+              console.log('Rating button check - Property:', property);
+              console.log('Rating button check - Booking:', booking);
+              const propertyId = property?.id || booking?.rental_property || booking?.property;
+              console.log('Rating button check - Property ID:', propertyId);
+              return propertyId;
+            })() && (
               <button
                 className="btn-outline-blue"
                 onClick={() => {
                   // Auto-open review form when clicking from payment receipt
-                  navigate(`/reviews/${property?.id || booking?.rental_property}?rate=1`);
+                  navigate(`/reviews/${property?.id || booking?.rental_property || booking?.property}?rate=1`);
                 }}
               >
                 Rate Your Stay
