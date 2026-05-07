@@ -47,6 +47,26 @@ const initialOwnerFormData = {
   emergency_contact_relation: ''
 };
 
+const initialUserFormData = {
+  username: '',
+  email: '',
+  first_name: '',
+  last_name: '',
+  role: 'tenant',
+  contact_number: '',
+  alternate_number: '',
+  date_of_birth: '',
+  gender: '',
+  occupation: '',
+  company_name: '',
+  annual_income: '',
+  permanent_address: '',
+  current_address: '',
+  emergency_contact_name: '',
+  emergency_contact_number: '',
+  emergency_contact_relation: ''
+};
+
 const AdminDashboard = () => {
   const { logout: authLogout } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -70,25 +90,7 @@ const AdminDashboard = () => {
   const [propertyImagePreviews, setPropertyImagePreviews] = useState([]);
   const [propertyFormData, setPropertyFormData] = useState(initialPropertyFormData);
   
-  const [userFormData, setUserFormData] = useState({
-    username: '',
-    email: '',
-    first_name: '',
-    last_name: '',
-    role: 'tenant',
-    contact_number: '',
-    alternate_number: '',
-    date_of_birth: '',
-    gender: '',
-    occupation: '',
-    company_name: '',
-    annual_income: '',
-    permanent_address: '',
-    current_address: '',
-    emergency_contact_name: '',
-    emergency_contact_number: '',
-    emergency_contact_relation: ''
-  });
+  const [userFormData, setUserFormData] = useState(initialUserFormData);
   
   const [ownerFormData, setOwnerFormData] = useState(initialOwnerFormData);
 
@@ -249,10 +251,10 @@ const AdminDashboard = () => {
     try {
       console.log('Fetching admin data...');
       const [propertiesRes, usersRes, reservationsRes, reviewsRes] = await Promise.all([
-        api.get('/api/properties/'),
-        api.get('/api/accounts/users/'),
-        api.get('/api/bookings/'),
-        api.get('/api/properties/reviews/')
+        api.get('/properties/'),
+        api.get('/accounts/users/'),
+        api.get('/bookings/'),
+        api.get('/properties/reviews/')
       ]);
       
       console.log('API Responses:', {
@@ -289,7 +291,7 @@ const AdminDashboard = () => {
   const handleDeleteProperty = async (id) => {
     if (window.confirm('Delete this property?')) {
       try {
-        await api.delete(`/api/properties/${id}/delete/`);
+        await api.delete(`/properties/${id}/delete/`);
         setProperties(properties.filter(p => p.id !== id));
       } catch (error) {
         console.error('Error deleting property:', error);
@@ -300,7 +302,7 @@ const AdminDashboard = () => {
   const handleDeleteUser = async (id) => {
     if (window.confirm('Delete this user?')) {
       try {
-        await api.delete(`/api/accounts/users/${id}/`);
+        await api.delete(`/accounts/users/${id}/`);
         setUsers(users.filter(u => u.id !== id));
       } catch (error) {
         console.error('Error deleting user:', error);
@@ -312,7 +314,7 @@ const AdminDashboard = () => {
     try {
       const property = properties.find(p => p.id === id);
       const nextApprovalState = !property?.is_approved;
-      await api.patch(`/api/properties/${id}/update/`, { is_approved: nextApprovalState });
+      await api.patch(`/properties/${id}/update/`, { is_approved: nextApprovalState });
       setProperties(properties.map(p => p.id === id ? { ...p, is_approved: nextApprovalState } : p));
     } catch (error) {
       console.error('Error approving property:', error);
@@ -381,7 +383,7 @@ const AdminDashboard = () => {
         },
       };
 
-      await api.post('/api/properties/create/', submitData, config);
+      await api.post('/properties/create/', submitData, config);
       await fetchAdminData();
       
       setShowAddPropertyModal(false);
@@ -513,12 +515,16 @@ const AdminDashboard = () => {
     try {
       if (editingUser) {
         // Update existing user
-        await api.patch(`/api/accounts/users/${editingUser.id}/`, userFormData);
+        await api.patch(`/accounts/users/${editingUser.id}/`, userFormData);
         setUsers(users.map(u => u.id === editingUser.id ? { ...u, ...userFormData } : u));
       } else {
         // Create new user
-        await api.post('/api/accounts/users/', userFormData);
-        setUsers([...users, { ...userFormData, id: Date.now() }]);
+        const response = await api.post('/accounts/register/', {
+          ...userFormData,
+          password: 'tempPassword123',
+          confirm_password: 'tempPassword123'
+        });
+        setUsers([...users, response.data.user || response.data]);
       }
       setShowUserModal(false);
       setEditingUser(null);

@@ -24,7 +24,7 @@ const PropertyDetails = () => {
         setProperty(res.data);
         
         try {
-          const roomsRes = await api.get(`/api/properties/${id}/rooms/`);
+          const roomsRes = await api.get(`/properties/${id}/rooms/`);
           if (Array.isArray(roomsRes.data)) {
             const vacantRooms = roomsRes.data.filter(room => room.status === 'vacant' && room.available_beds > 0);
             setAvailableRooms(vacantRooms);

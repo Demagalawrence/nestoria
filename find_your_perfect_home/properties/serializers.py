@@ -216,9 +216,12 @@ class RoomCreateSerializer(serializers.ModelSerializer):
 
 class PropertyReviewSerializer(serializers.ModelSerializer):
     user_name = serializers.CharField(source='user.get_full_name', read_only=True)
+    rental_property_name = serializers.CharField(source='rental_property.name', read_only=True)
+    property_name = serializers.CharField(source='rental_property.name', read_only=True)
     
     class Meta:
         model = PropertyReview
-        fields = ['id', 'rating', 'title', 'review', 'user_name', 'is_verified',
-                 'helpful_count', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'user_name', 'is_verified', 'helpful_count', 'created_at', 'updated_at']
+        fields = ['id', 'rating', 'title', 'review', 'user_name', 'rental_property_name',
+                 'property_name', 'is_verified', 'helpful_count', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'user_name', 'rental_property_name', 'property_name',
+                           'is_verified', 'helpful_count', 'created_at', 'updated_at']

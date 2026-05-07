@@ -66,7 +66,7 @@ const AIChat = () => {
     let hasError = false;
     try {
       // Call AI agent API
-      const response = await api.post('/api/ai/chat/', {
+      const response = await api.post('/ai/chat/', {
         message: inputMessage,
         user_type: userRole,
         conversation_id: 'chat_' + Date.now()

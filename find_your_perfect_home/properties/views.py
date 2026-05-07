@@ -37,6 +37,22 @@ class PropertyReviewListView(generics.ListAPIView):
         property_id = self.kwargs['pk']
         return PropertyReview.objects.filter(rental_property_id=property_id).order_by('-created_at')
 
+class AllPropertyReviewListView(generics.ListAPIView):
+    serializer_class = PropertyReviewSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if getattr(user, 'role', '') == 'admin':
+            return PropertyReview.objects.select_related('user', 'rental_property').order_by('-created_at')
+        if getattr(user, 'role', '') == 'owner':
+            return PropertyReview.objects.select_related('user', 'rental_property').filter(
+                rental_property__owner=user
+            ).order_by('-created_at')
+        return PropertyReview.objects.select_related('user', 'rental_property').filter(
+            user=user
+        ).order_by('-created_at')
+
 class PropertyCreateView(generics.CreateAPIView):
     queryset = Property.objects.all()
     serializer_class = PropertyCreateSerializer

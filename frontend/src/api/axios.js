@@ -16,15 +16,22 @@ function getCookie(name) {
   return cookieValue;
 }
 
+const stripTrailingSlashes = (url) => url.replace(/\/+$/, '');
+
+const ensureApiBaseUrl = (url) => {
+  const normalizedUrl = stripTrailingSlashes(url);
+  return normalizedUrl.endsWith('/api') ? normalizedUrl : `${normalizedUrl}/api`;
+};
+
 // Use production API URL for Vercel deployment
 const getApiBaseUrl = () => {
+  // Use environment variable if available (for local development)
+  if (import.meta.env.VITE_API_URL) {
+    return ensureApiBaseUrl(import.meta.env.VITE_API_URL);
+  }
   // Check if we're in production (Vercel)
   if (import.meta.env.PROD) {
     return 'https://nestoria-5j25.onrender.com/api';
-  }
-  // Use environment variable if available (for local development)
-  if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
   }
   // Fallback to localhost or local network IP
   return `http://${window.location.hostname}:8001/api`;
@@ -40,6 +47,10 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
+    if (config.url?.startsWith('/api/')) {
+      config.url = config.url.replace(/^\/api/, '');
+    }
+
     // Skip adding Authorization header for login/register requests
     const skipAuth = config.url?.includes('/login/') || config.url?.includes('/register/');
     
