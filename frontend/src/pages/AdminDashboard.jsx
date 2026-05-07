@@ -111,8 +111,8 @@ const AdminDashboard = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('refresh_token');
     
-    // Force redirect to login page
-    window.location.href = '/login'; // Force full page reload and redirect
+    // Force redirect to homepage
+    window.location.href = '/'; // Force full page reload and redirect to homepage
   };
 
   useEffect(() => {
@@ -138,7 +138,7 @@ const AdminDashboard = () => {
         console.log('No stored authentication, redirecting to home...');
         // Show error message before redirect
         alert('Please login as an administrator to access the admin panel');
-        window.location.href = '/login';
+        window.location.href = '/';
         return;
       }
       
@@ -153,7 +153,7 @@ const AdminDashboard = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('refresh_token');
         alert('Invalid session. Please login again.');
-        window.location.href = '/login';
+        window.location.href = '/';
         return;
       }
       
@@ -225,7 +225,7 @@ const AdminDashboard = () => {
       // More specific error handling
       if (error.response?.status === 401) {
         alert('Session expired. Please login again.');
-        window.location.href = '/login';
+        window.location.href = '/';
       } else if (error.response?.status === 403) {
         alert('Access denied. Administrator privileges required.');
         window.location.href = '/';
