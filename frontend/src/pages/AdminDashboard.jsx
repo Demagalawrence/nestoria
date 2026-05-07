@@ -365,6 +365,7 @@ Company: ${user.company_name || 'N/A'}
 RESERVATION DETAILS
 ==================
 Booking Reference: ${reservation.booking_reference || 'N/A'}
+Transaction ID: ${reservation.transaction_id || 'N/A'}
 Property: ${reservation.property_name || 'N/A'}
 Guest: ${reservation.user_name || 'N/A'}
 Start Date: ${reservation.start_date || 'N/A'}
@@ -948,6 +949,7 @@ Created: ${new Date(reservation.created_at).toLocaleDateString()}
           <thead>
             <tr>
               <th>Reference</th>
+              <th>Transaction ID</th>
               <th>Property</th>
               <th>User</th>
               <th>Check-in</th>
@@ -961,10 +963,16 @@ Created: ${new Date(reservation.created_at).toLocaleDateString()}
             {reservations.filter(reservation => 
               reservation.property_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
               reservation.user_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              reservation.booking_reference?.toLowerCase().includes(searchTerm.toLowerCase())
+              reservation.booking_reference?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              reservation.transaction_id?.toLowerCase().includes(searchTerm.toLowerCase())
             ).map(reservation => (
               <tr key={reservation.id}>
                 <td>{reservation.booking_reference || 'N/A'}</td>
+                <td>
+                  <span className="transaction-id">
+                    {reservation.transaction_id || 'N/A'}
+                  </span>
+                </td>
                 <td>{reservation.property_name || 'N/A'}</td>
                 <td>{reservation.user_name || 'N/A'}</td>
                 <td>{reservation.start_date || 'N/A'}</td>

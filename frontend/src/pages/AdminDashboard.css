@@ -341,6 +341,18 @@
   color: #155724;
 }
 
+/* Transaction ID Styling */
+.transaction-id {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2563eb;
+  background: #f0f9ff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #bfdbfe;
+}
+
 /* Action Buttons */
 .action-buttons {
   display: flex;

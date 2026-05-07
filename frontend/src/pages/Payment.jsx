@@ -178,6 +178,14 @@ const Payment = () => {
     }));
   };
 
+  // Generate unique transaction ID
+  const generateTransactionId = (provider, bookingId) => {
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+    const providerCode = provider?.toUpperCase().substring(0, 3) || 'PAY';
+    return `${providerCode}${timestamp}${random}`;
+  };
+
   // Asynchronous mobile money payment processing
   const processMobileMoneyPaymentAsync = async (transactionId, provider) => {
     try {
@@ -251,11 +259,15 @@ const Payment = () => {
       if (selectedMethodData?.category === 'momo') {
         // Optimized mobile money flow - immediate confirmation
         try {
+          // Generate unique transaction ID
+          const transactionId = generateTransactionId(selectedMethodData?.type, bookingId);
+          
           const mobileMoneyPayload = {
             booking: parseInt(bookingId),
             provider: selectedMethodData?.type, // 'mtn' or 'airtel'
             phone_number: selectedMethodData?.paymentNumber || '',
-            amount: booking?.final_amount || booking?.total_amount
+            amount: booking?.final_amount || booking?.total_amount,
+            transaction_id: transactionId // Include transaction ID
           };
           paymentRes = await api.post('/api/mobile-money/initiate/', mobileMoneyPayload);
           
@@ -268,6 +280,7 @@ const Payment = () => {
           const receiptData = {
             receipt_number: `MM${Date.now()}`,
             payment_id: paymentRes.data.transaction_id || paymentRes.data.id,
+            transaction_id: transactionId, // Add transaction ID
             amount: booking?.final_amount || booking?.total_amount,
             payment_method: 'mobile_money',
             payment_date: new Date().toISOString(),
@@ -283,24 +296,28 @@ const Payment = () => {
           }
           
           // Process payment status in background without blocking UI
-          processMobileMoneyPaymentAsync(paymentRes.data.transaction_id, selectedMethodData?.type);
+          processMobileMoneyPaymentAsync(transactionId, selectedMethodData?.type);
           
           return; // Exit early to avoid blocking UI
           
         } catch (mobileError) {
           console.log('Mobile money endpoint failed, falling back to regular payment:', mobileError);
           // Fallback to regular payment endpoint with wallet method
+          const transactionId = generateTransactionId(selectedMethodData?.type, bookingId);
           const paymentPayload = {
             booking: parseInt(bookingId),
-            payment_method: 'wallet'
+            payment_method: 'wallet',
+            transaction_id: transactionId // Include transaction ID
           };
           paymentRes = await api.post('/payments/create/', paymentPayload);
         }
       } else {
         // Use regular payment endpoint for credit cards
+        const transactionId = generateTransactionId('CARD', bookingId);
         const paymentPayload = {
           booking: parseInt(bookingId),
-          payment_method: 'credit_card'
+          payment_method: 'credit_card',
+          transaction_id: transactionId // Include transaction ID
         };
         paymentRes = await api.post('/payments/create/', paymentPayload);
       }
@@ -315,19 +332,26 @@ const Payment = () => {
           // Show success notification briefly
           setShowNotification(true);
 
+          // Generate transaction ID for receipt
+          const transactionId = generateTransactionId(selectedMethodData?.type, bookingId);
+
           // Fetch receipt details
           try {
-            const receiptId = selectedMethodData?.category === 'momo' 
-              ? paymentRes.data.transaction_id 
-              : paymentRes.data.id;
+            const receiptId = paymentRes.data.id;
             const receiptRes = await api.get(`/payments/receipt/${receiptId}/`);
-            setReceipt(receiptRes.data);
+            // Add transaction ID to receipt data
+            const receiptWithTransaction = {
+              ...receiptRes.data,
+              transaction_id: transactionId
+            };
+            setReceipt(receiptWithTransaction);
           } catch (receiptError) {
             console.error('Error fetching receipt:', receiptError);
             // Use process response data as fallback
             setReceipt({
               receipt_number: processRes.data.receipt_number || `REC${Date.now()}`,
-              payment_id: paymentRes.data.id || paymentRes.data.transaction_id,
+              payment_id: paymentRes.data.id,
+              transaction_id: transactionId, // Add transaction ID
               amount: booking.final_amount || booking.total_amount,
               payment_method: selectedMethodData?.category === 'momo' ? 'mobile_money' : 'credit_card',
               payment_date: new Date().toISOString()
@@ -417,6 +441,10 @@ const Payment = () => {
                 <div className="receipt-row">
                   <span className="receipt-label">Receipt Number</span>
                   <span className="receipt-value monospace">{receipt.receipt_number}</span>
+                </div>
+                <div className="receipt-row">
+                  <span className="receipt-label">Transaction ID</span>
+                  <span className="receipt-value monospace transaction-id-highlight">{receipt.transaction_id}</span>
                 </div>
                 <div className="receipt-row">
                   <span className="receipt-label">Payment ID</span>
@@ -522,6 +550,7 @@ const Payment = () => {
               <h3>Payment Successful!</h3>
               <p>Your payment has been processed successfully. Reservation confirmed!</p>
               <p>Receipt: {receipt?.receipt_number || 'Generating...'}</p>
+              <p>Transaction ID: {receipt?.transaction_id || 'Generating...'}</p>
             </div>
             <button
               className="notification-close"

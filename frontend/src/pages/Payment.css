@@ -1219,6 +1219,17 @@
   letter-spacing: 1px;
 }
 
+.transaction-id-highlight {
+  font-weight: 700;
+  color: #1e40af;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 2px solid #3b82f6;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
 .receipt-value.capitalize {
   text-transform: capitalize;
 }
