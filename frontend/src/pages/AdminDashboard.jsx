@@ -310,6 +310,19 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleConfirmUser = async (id) => {
+    if (window.confirm('Confirm this user? This will verify their account.')) {
+      try {
+        await api.patch(`/accounts/users/${id}/`, { is_verified: true, verification_status: 'verified' });
+        setUsers(users.map(u => u.id === id ? { ...u, is_verified: true, verification_status: 'verified' } : u));
+        alert('User confirmed successfully!');
+      } catch (error) {
+        console.error('Error confirming user:', error);
+        alert('Error confirming user. Please check the console for details.');
+      }
+    }
+  };
+
   const handleApproveProperty = async (id) => {
     try {
       const property = properties.find(p => p.id === id);
@@ -719,19 +732,19 @@ const AdminDashboard = () => {
                 </td>
                 <td>
                   <div className="action-buttons">
-                    <button className="btn-view"><Eye size={14} /></button>
-                    <button className="btn-edit"><Edit size={14} /></button>
+                    <button className="btn-view">View</button>
+                    <button className="btn-edit">Edit</button>
                     {property.is_approved ? (
                       <button className="btn-warning" onClick={() => handleApproveProperty(property.id)}>
-                        <X size={14} />
+                        Reject
                       </button>
                     ) : (
                       <button className="btn-success" onClick={() => handleApproveProperty(property.id)}>
-                        <CheckCircle size={14} />
+                        Approve
                       </button>
                     )}
                     <button className="btn-danger" onClick={() => handleDeleteProperty(property.id)}>
-                      <Trash2 size={14} />
+                      Delete
                     </button>
                   </div>
                 </td>
@@ -801,10 +814,15 @@ const AdminDashboard = () => {
                 </td>
                 <td>
                   <div className="action-buttons">
-                    <button className="btn-view"><Eye size={14} /></button>
-                    <button className="btn-edit" onClick={() => handleEditUser(user)}><Edit size={14} /></button>
+                    <button className="btn-view">View</button>
+                    <button className="btn-edit" onClick={() => handleEditUser(user)}>Edit</button>
+                    {!user.is_verified && (
+                      <button className="btn-success" onClick={() => handleConfirmUser(user.id)}>
+                        Confirm
+                      </button>
+                    )}
                     <button className="btn-danger" onClick={() => handleDeleteUser(user.id)}>
-                      <Trash2 size={14} />
+                      Delete
                     </button>
                   </div>
                 </td>
@@ -867,8 +885,8 @@ const AdminDashboard = () => {
                 <td>UGX {reservation.final_amount || '0'}</td>
                 <td>
                   <div className="action-buttons">
-                    <button className="btn-view"><Eye size={14} /></button>
-                    <button className="btn-edit"><Edit size={14} /></button>
+                    <button className="btn-view">View</button>
+                    <button className="btn-edit">Edit</button>
                   </div>
                 </td>
               </tr>

@@ -348,7 +348,7 @@
 }
 
 .action-buttons button {
-  width: 32px;
+  min-width: 60px;
   height: 32px;
   border: 1px solid #dee2e6;
   background: white;
@@ -358,6 +358,10 @@
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 0 8px;
+  white-space: nowrap;
 }
 
 .action-buttons button:hover {
