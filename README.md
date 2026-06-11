@@ -79,4 +79,4 @@ MIT License - see LICENSE file for details.
 
 ---
 
-**Built with ❤️ for the Ugandan real estate market**
+**Built with  for the Ugandan real estate market**
