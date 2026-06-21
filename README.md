@@ -2,7 +2,7 @@
 
 A comprehensive real estate rental platform for the Ugandan market with property listings, bookings, maintenance management, agent connections, and payment processing..
 
-## 🚀 Quick Start
+
 
 ### Prerequisites
 - Python 3.8+
