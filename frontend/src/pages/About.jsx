@@ -48,7 +48,7 @@ const About = () => {
               </div>
               <div className="feature-item">
                 <div className="feature-icon"><Search size={28} /></div>
-                <h3>Smart Search</h3>
+                <h3>Smart. Search</h3>
                 <p>Advanced filtering and search capabilities to find exactly what you're looking for with precision.</p>
               </div>
               <div className="feature-item">
