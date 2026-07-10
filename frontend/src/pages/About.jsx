@@ -54,7 +54,7 @@ const About = () => {
               <div className="feature-item">
                 <div className="feature-icon"><Lock size={28} /></div>
                 <h3>Secure Booking</h3>
-                <p>Safe and secure booking process with verified landlords and robust payment protection.</p>
+                <p>Safe and secure booking process with verified landlords and robust payment protection..</p>
               </div>
               <div className="feature-item">
                 <div className="feature-icon"><Star size={28} /></div>
