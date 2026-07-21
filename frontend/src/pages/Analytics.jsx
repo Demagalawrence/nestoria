@@ -33,7 +33,7 @@ const Analytics = () => {
       setAnalyticsData(res.data);
     } catch (error) {
       console.error('Error fetching analytics data:', error);
-      // Mock data for demonstration
+      // Mock data for demonstration.
       setAnalyticsData({
         overview: {
           total_properties: 5,
